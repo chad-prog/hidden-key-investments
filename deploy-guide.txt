@@ -1,0 +1,50 @@
+HIDDEN KEY INVESTMENTS - DEPLOYMENT CHEAT SHEET
+================================================
+
+YOUR CURRENT TOOLS:
+✅ GitHub: https://github.com/hiddenkeyinvestments-beep/site.git
+✅ Formspree: https://formspree.io/f/xeorrlnp
+✅ Netlify: https://netlify.com
+
+STEP-BY-STEP DEPLOYMENT:
+
+1. GO TO GITHUB FIRST:
+   - Open: https://github.com/hiddenkeyinvestments-beep/site
+   - Make sure you see all these files:
+     * index.html
+     * package.json  
+     * vite.config.ts
+     * netlify.toml
+     * src/ folder
+     * components/ folder
+
+2. GO TO NETLIFY:
+   - Login to https://netlify.com
+   - Click "Add new site" 
+   - Choose "Import from Git"
+   - Connect your GitHub account
+   - Select your repository: "hiddenkeyinvestments-beep/site"
+
+3. BUILD SETTINGS (CRITICAL):
+   - Build command: npm run build
+   - Publish directory: dist
+   - Click "Deploy site"
+
+4. TEST YOUR SITE:
+   - Wait for deployment to finish
+   - Click the generated URL (like: https://yoursite.netlify.app)
+   - Test the Accredited Investors form
+
+TROUBLESHOOTING:
+- If build fails: Check that all files are in GitHub
+- If form doesn't work: Verify Formspree ID in AccreditedInvestors.tsx
+- If styling breaks: Make sure shadcn.css is included
+
+YOUR SUCCESS CHECKLIST:
+☐ Site loads without errors
+☐ Navigation works
+☐ Accredited Investors page loads
+☐ Form submits successfully
+☐ Formspree receives submissions
+
+NEED HELP? Check the error message and let me know exactly what it says!
