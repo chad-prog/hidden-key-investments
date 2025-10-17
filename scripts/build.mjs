@@ -4,7 +4,6 @@
  */
 
 import * as esbuild from 'esbuild'
-import { stylePlugin } from 'esbuild-style-plugin'
 import { rimraf } from 'rimraf'
 
 // Clean dist directory
@@ -18,13 +17,6 @@ const buildConfig = {
   minify: true,
   sourcemap: false,
   target: 'es2020',
-  plugins: [
-    stylePlugin({
-      postcss: {
-        plugins: [require('tailwindcss'), require('autoprefixer')]
-      }
-    })
-  ],
   loader: {
     '.ts': 'tsx',
     '.tsx': 'tsx',
