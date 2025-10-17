@@ -1,50 +1,55 @@
+/**
+ * Build script for Hidden Key Investments
+ * Uses esbuild for production builds
+ */
+
 import * as esbuild from 'esbuild'
+import { stylePlugin } from 'esbuild-style-plugin'
 import { rimraf } from 'rimraf'
-import stylePlugin from 'esbuild-style-plugin'
-import autoprefixer from 'autoprefixer'
-import tailwindcss from 'tailwindcss'
 
-const args = process.argv.slice(2)
-const isProd = args[0] === '--production'
-
+// Clean dist directory
 await rimraf('dist')
 
-/**
- * @type {esbuild.BuildOptions}
- */
-const esbuildOpts = {
-  color: true,
-  entryPoints: ['src/main.tsx', 'index.html'],
-  outdir: 'dist',
-  entryNames: '[name]',
-  write: true,
+// Build configuration
+const buildConfig = {
+  entryPoints: ['src/main.tsx'],
   bundle: true,
-  format: 'iife',
-  sourcemap: isProd ? false : 'linked',
-  minify: isProd,
-  treeShaking: true,
-  jsx: 'automatic',
-  loader: {
-    '.html': 'copy',
-    '.png': 'file',
-  },
+  outdir: 'dist',
+  minify: true,
+  sourcemap: false,
+  target: 'es2020',
   plugins: [
     stylePlugin({
       postcss: {
-        plugins: [tailwindcss, autoprefixer],
-      },
-    }),
+        plugins: [require('tailwindcss'), require('autoprefixer')]
+      }
+    })
   ],
+  loader: {
+    '.ts': 'tsx',
+    '.tsx': 'tsx',
+    '.js': 'jsx',
+    '.jsx': 'jsx'
+  },
+  define: {
+    'process.env.NODE_ENV': '"production"'
+  }
 }
 
-if (isProd) {
-  await esbuild.build(esbuildOpts)
-} else {
-  const ctx = await esbuild.context(esbuildOpts)
-  await ctx.watch()
-  const { hosts, port } = await ctx.serve()
-  console.log(`Running on:`)
-  hosts.forEach((host) => {
-    console.log(`http://${host}:${port}`)
-  })
+try {
+  console.log('🏗️  Building Hidden Key Investments...')
+  
+  // Build the application
+  await esbuild.build(buildConfig)
+  
+  // Copy index.html to dist
+  const fs = await import('fs')
+  const indexHtml = fs.readFileSync('index.html', 'utf8')
+  fs.writeFileSync('dist/index.html', indexHtml)
+  
+  console.log('✅ Build completed successfully!')
+  process.exit(0)
+} catch (error) {
+  console.error('❌ Build failed:', error)
+  process.exit(1)
 }
