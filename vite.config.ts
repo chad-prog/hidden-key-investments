@@ -1,9 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-/**
- * Vite configuration for Hidden Key Investments
- */
+// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
   build: {
@@ -12,7 +10,7 @@ export default defineConfig({
     minify: true
   },
   server: {
-    port: 3000,
-    open: true
+    port: 5173,
+    host: true
   }
 })
