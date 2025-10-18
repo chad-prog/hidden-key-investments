@@ -1,1 +1,6 @@
-<The code content has been applied to the code environment>
+module.exports = {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+}

@@ -1,1 +1,40 @@
-<The code content has been applied to the code environment>
+/**
+ * Main CSS file with Tailwind CSS directives
+ * Import Tailwind base, components, and utilities
+ */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/**
+ * Custom styles for Hidden Key Investments
+ * Global styles and component overrides
+ */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/**
+ * Custom component styles
+ */
+.glass-effect {
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/**
+ * Smooth scrolling for better UX
+ */
+html {
+  scroll-behavior: smooth;
+}
