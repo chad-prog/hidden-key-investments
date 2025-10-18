@@ -1,6 +1,1 @@
-export default {
-  plugins: {
-    tailwindcss: {},
-    autoprefixer: {},
-  },
-}
+<The code content has been applied to the code environment>
