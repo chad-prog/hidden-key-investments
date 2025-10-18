@@ -1,23 +1,21 @@
-import { HashRouter, Route, Routes } from 'react-router'
-import Home from './pages/Home'
-import SystemTesting from './pages/SystemTesting'
-import InvestorDashboard from './pages/InvestorDashboard'
-import AccreditedInvestors from './pages/AccreditedInvestors'
-
 /**
- * Main application component with routing
+ * Main App component with routing setup
+ * Defines the application structure and routes
  */
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router';
+import Home from './pages/Home';
+
 function App() {
   return (
-    <HashRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/system-testing" element={<SystemTesting />} />
-        <Route path="/investor-dashboard" element={<InvestorDashboard />} />
-        <Route path="/accredited-investors" element={<AccreditedInvestors />} />
-      </Routes>
-    </HashRouter>
-  )
+    <BrowserRouter>
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<Home />} />
+        </Routes>
+      </div>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
