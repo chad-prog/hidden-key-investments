@@ -1,35 +1,30 @@
-# Hidden Key Investments - Deployment Guide
+# Hidden Key Investments - Professional Real Estate Platform
 
-## 🚀 Quick Deployment Steps
+A modern React-based real estate investment platform built with Vite, TypeScript, and Tailwind CSS.
 
-### Option A: Automatic GitHub Deployment (Easiest)
-1. Make sure all files are in your GitHub repository
-2. Go to https://netlify.com
-3. Click "Add new site" → "Import from Git"
-4. Connect your GitHub account
-5. Select this repository: `hiddenkeyinvestments-beep/site`
-6. Use these settings:
-   - Build command: `npm run build`
-   - Publish directory: `dist`
-7. Click "Deploy"
+## Features
+- Professional investment property listings
+- Investor dashboard and CRM
+- Automated document generation
+- Integration with Airtable and Mailchimp
+- Responsive design
 
-### Option B: Manual Deployment
-1. Download this entire project as ZIP
-2. Go to https://netlify.com
-3. Click "Add new site" → "Deploy manually"
-4. Drag the ZIP file to Netlify
+## Deployment
+This project is automatically deployed to Netlify via GitHub integration.
 
-## 📁 Required Files Checklist
-- [ ] index.html
-- [ ] package.json
-- [ ] vite.config.ts
-- [ ] netlify.toml
-- [ ] src/ folder with all React components
-- [ ] components/ui/ folder with shadcn components
+## Build System
+- **Vite** - Modern build tool for fast development and optimized production builds
+- **TypeScript** - Type-safe development
+- **Tailwind CSS** - Utility-first styling
+- **React 18** - Latest React features
 
-## 🎯 Testing Your Form
-After deployment, test:
-1. Go to your Netlify URL
-2. Click "Accredited Investors"
-3. Fill out the form
-4. Check Formspree for submissions
+## Development
+```bash
+npm install
+npm run dev
+```
+
+## Production Build
+```bash
+npm run build
+```
