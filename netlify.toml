@@ -1,13 +1,1 @@
-[build]
-  command = "npm run build"
-  publish = "dist"
-  node_version = "22"
-
-[dev]
-  command = "npm run dev"
-  targetPort = 3000
-
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+<The code content has been applied to the code environment>
