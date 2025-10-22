@@ -65,7 +65,8 @@ export default function AccreditedInvestors() {
     
     try {
       // REAL FORMSPREE INTEGRATION - USING YOUR ACTUAL FORM ID
-      const formspreeResponse = await fetch('https://formspree.io/f/xeorrlnp', {
+      const formspreeEndpoint = import.meta.env.VITE_FORMSPREE_ENDPOINT || '';
+      const formspreeResponse = await fetch(formspreeEndpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
