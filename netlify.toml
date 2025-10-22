@@ -1,0 +1,8 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  # Configure secrets scanning to omit non-sensitive audience and base IDs
+  # These are public identifiers that are safe to include in the build output
+  SECRETS_SCAN_OMIT_KEYS = "c662ef0af5,cc891b6526,825140d12f,0b1df5453e,a47056c160,appsxCvXYkJF62wQc,apppzfIaiHvQ2avWm,appl3vaf5gFdstSA2"
