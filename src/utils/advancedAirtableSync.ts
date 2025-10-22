@@ -24,11 +24,11 @@ interface SyncResult {
 }
 
 class AdvancedAirtableSync {
-  private apiKey = import.meta.env.VITE_AIRTABLE_API_KEY || 'demo-key';
+  private apiKey = import.meta.env.VITE_AIRTABLE_API_KEY || '';
   private baseIds = {
-    investorLeads: import.meta.env.VITE_AIRTABLE_BASE_INVESTOR_LEADS || 'appsxCvXYkJF62wQc',
-    investorInteractions: import.meta.env.VITE_AIRTABLE_BASE_INVESTOR_INTERACTIONS || 'apppzfIaiHvQ2avWm',
-    propertyTracker: import.meta.env.VITE_AIRTABLE_BASE_PROPERTY_TRACKER || 'appl3vaf5gFdstSA2'
+    investorLeads: import.meta.env.VITE_AIRTABLE_BASE_INVESTOR_LEADS || '',
+    investorInteractions: import.meta.env.VITE_AIRTABLE_BASE_INVESTOR_INTERACTIONS || '',
+    propertyTracker: import.meta.env.VITE_AIRTABLE_BASE_PROPERTY_TRACKER || ''
   };
 
   /**
@@ -38,7 +38,7 @@ class AdvancedAirtableSync {
     const results: SyncResult[] = [];
 
     // If no API key, return demo mode
-    if (!import.meta.env.VITE_AIRTABLE_API_KEY || import.meta.env.VITE_AIRTABLE_API_KEY === 'your_new_airtable_api_key_here') {
+    if (!this.apiKey) {
       console.log('Demo mode: Would sync investor to Airtable', investorData);
       results.push({
         success: true,
