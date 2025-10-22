@@ -18,14 +18,14 @@ interface SubscribeResult {
 }
 
 class EmailMarketingService {
-  private apiKey = import.meta.env.VITE_MAILCHIMP_API_KEY || 'demo-key';
-  private serverPrefix = import.meta.env.VITE_MAILCHIMP_SERVER_PREFIX || 'us8';
+  private apiKey = import.meta.env.VITE_MAILCHIMP_API_KEY || '';
+  private serverPrefix = import.meta.env.VITE_MAILCHIMP_SERVER_PREFIX || '';
   private audienceIds = {
-    accredited: import.meta.env.VITE_MAILCHIMP_AUDIENCE_ACCREDITED || 'c662ef0af5',
-    firstTime: import.meta.env.VITE_MAILCHIMP_AUDIENCE_FIRST_TIME || 'cc891b6526',
-    passive: import.meta.env.VITE_MAILCHIMP_AUDIENCE_PASSIVE || '825140d12f',
-    texas: import.meta.env.VITE_MAILCHIMP_AUDIENCE_TEXAS || '0b1df5453e',
-    general: import.meta.env.VITE_MAILCHIMP_AUDIENCE_GENERAL || 'a47056c160'
+    accredited: import.meta.env.VITE_MAILCHIMP_AUDIENCE_ACCREDITED || '',
+    firstTime: import.meta.env.VITE_MAILCHIMP_AUDIENCE_FIRST_TIME || '',
+    passive: import.meta.env.VITE_MAILCHIMP_AUDIENCE_PASSIVE || '',
+    texas: import.meta.env.VITE_MAILCHIMP_AUDIENCE_TEXAS || '',
+    general: import.meta.env.VITE_MAILCHIMP_AUDIENCE_GENERAL || ''
   };
 
   /**
@@ -33,7 +33,7 @@ class EmailMarketingService {
    */
   async subscribeUser(data: SubscribeData): Promise<SubscribeResult> {
     // If no API key is set, return demo mode
-    if (!import.meta.env.VITE_MAILCHIMP_API_KEY || import.meta.env.VITE_MAILCHIMP_API_KEY === 'your_new_mailchimp_api_key_here') {
+    if (!this.apiKey || !this.serverPrefix) {
       console.log('Demo mode: Would subscribe', data.email, 'to', data.investorType);
       return {
         success: true,
