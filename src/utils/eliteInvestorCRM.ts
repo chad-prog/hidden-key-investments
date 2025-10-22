@@ -174,7 +174,14 @@ export const useEliteInvestorCRM = () => {
   };
 
   const addToAirtable = async (data: InvestorData, score: number, tier: string) => {
-    // Airtable API integration
+    const apiKey = import.meta.env.VITE_AIRTABLE_API_KEY;
+    const baseId = import.meta.env.VITE_AIRTABLE_BASE_INVESTOR_LEADS;
+
+    if (!apiKey || !baseId) {
+      console.log('Demo mode: Would add to Airtable:', data);
+      return { success: true, message: 'Demo mode: Data would be saved with real API key' };
+    }
+
     const airtableData = {
       records: [
         {
@@ -198,10 +205,10 @@ export const useEliteInvestorCRM = () => {
     };
 
     try {
-      const response = await fetch(`https://api.airtable.com/v0/appsxCvXYkJF62wQc/Investor%20Leads`, {
+      const response = await fetch(`https://api.airtable.com/v0/${baseId}/Investor%20Leads`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer patBxtbH98gm3s6go.9dc34915fd3389ae45f028d68d263d45a120333e9e3e764b43c4590248df5214`,
+          'Authorization': `Bearer ${apiKey}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(airtableData)
@@ -214,7 +221,6 @@ export const useEliteInvestorCRM = () => {
       return await response.json();
     } catch (error) {
       console.error('Airtable error:', error);
-      // Fallback - still continue with other automations
     }
   };
 
