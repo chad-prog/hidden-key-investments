@@ -1,23 +1,4 @@
 [build]
-<<<<<<< HEAD
-  command = "npm run build"
-  publish = "dist"
-=======
-  command = "npm install && npm run build"
-  publish = "dist"
-
-[build.environment]
-  NODE_VERSION = "22"
-
-[dev]
-  command = "npm run dev"
-  targetPort = 3000
-
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
->>>>>>> fix/elite-rebuild
   command = "npm install && npm run build"
   publish = "dist"
 
