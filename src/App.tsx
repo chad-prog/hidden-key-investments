@@ -8,6 +8,7 @@ import Home from './pages/Home';
 import AccreditedInvestors from './pages/AccreditedInvestors';
 import InvestorDashboard from './pages/InvestorDashboard';
 import IntegrationDashboard from './pages/IntegrationDashboard';
+import LeadForm from './components/LeadForm';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/accredited-investors" element={<AccreditedInvestors />} />
           <Route path="/investor-dashboard" element={<InvestorDashboard />} />
           <Route path="/integration-dashboard" element={<IntegrationDashboard />} />
+          <Route path="/lead-form" element={<LeadForm />} />
         </Routes>
       </div>
     </BrowserRouter>

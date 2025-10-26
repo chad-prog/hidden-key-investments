@@ -37,3 +37,5 @@ pids
 
 # Coverage directory used by tools like istanbul
 coverage/
+# Local Netlify folder
+.netlify
