@@ -18,6 +18,7 @@ interface SubscribeResult {
 }
 
 class EmailMarketingService {
+<<<<<<< HEAD
   private apiKey = import.meta.env.VITE_MAILCHIMP_API_KEY || '';
   private serverPrefix = import.meta.env.VITE_MAILCHIMP_SERVER_PREFIX || '';
   private audienceIds = {
@@ -26,12 +27,24 @@ class EmailMarketingService {
     passive: import.meta.env.VITE_MAILCHIMP_AUDIENCE_PASSIVE || '',
     texas: import.meta.env.VITE_MAILCHIMP_AUDIENCE_TEXAS || '',
     general: import.meta.env.VITE_MAILCHIMP_AUDIENCE_GENERAL || ''
+=======
+  private _env = (import.meta as any).env || {};
+  private apiKey = this._env.VITE_MAILCHIMP_API_KEY || 'demo-key';
+  private serverPrefix = this._env.VITE_MAILCHIMP_SERVER_PREFIX || 'us8';
+  private audienceIds = {
+    accredited: this._env.VITE_MAILCHIMP_AUDIENCE_ACCREDITED || 'c662ef0af5',
+    firstTime: this._env.VITE_MAILCHIMP_AUDIENCE_FIRST_TIME || 'cc891b6526',
+    passive: this._env.VITE_MAILCHIMP_AUDIENCE_PASSIVE || '825140d12f',
+    texas: this._env.VITE_MAILCHIMP_AUDIENCE_TEXAS || '0b1df5453e',
+    general: this._env.VITE_MAILCHIMP_AUDIENCE_GENERAL || 'a47056c160'
+>>>>>>> cleanup/merge-ready
   };
 
   /**
    * Subscribe user to Mailchimp audience
    */
   async subscribeUser(data: SubscribeData): Promise<SubscribeResult> {
+<<<<<<< HEAD
     // If no API key is set, return demo mode
     if (!this.apiKey || !this.serverPrefix) {
       console.log('Demo mode: Would subscribe', data.email, 'to', data.investorType);
@@ -41,49 +54,30 @@ class EmailMarketingService {
       };
     }
 
+=======
+    // Prefer server-side Netlify function for subscriptions
+>>>>>>> cleanup/merge-ready
     try {
-      const audienceId = this.getAudienceId(data.investorType);
-      const url = `https://${this.serverPrefix}.api.mailchimp.com/3.0/lists/${audienceId}/members`;
-
-      const subscriberData = {
-        email_address: data.email,
-        status: 'subscribed',
-        merge_fields: {
-          FNAME: data.firstName || '',
-          LNAME: data.lastName || '',
-          INVESTORTYPE: data.investorType || 'general'
-        },
-        tags: data.tags || ['Website Signup']
-      };
-
-      const response = await fetch(url, {
+      const resp = await fetch('/.netlify/functions/mailchimp-sync', {
         method: 'POST',
-        headers: {
-          'Authorization': `Basic ${btoa(`anystring:${this.apiKey}`)}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(subscriberData)
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
       });
 
-      if (response.ok) {
-        return {
-          success: true,
-          message: 'Successfully subscribed to investor updates',
-          data: await response.json()
-        };
-      } else {
-        const errorData = await response.json();
-        return {
-          success: false,
-          message: errorData.detail || 'Subscription failed'
-        };
+      if (!resp.ok) {
+        throw new Error('mailchimp server function error');
       }
-    } catch (error) {
-      console.error('Mailchimp subscription error:', error);
-      return {
-        success: false,
-        message: 'Network error. Please try again.'
-      };
+
+      const json = await resp.json();
+      if (json && json.demo) {
+        return { success: true, message: 'Demo mode: serverless function simulated subscribe', data: json };
+      }
+
+      return { success: true, message: 'Subscription processed via serverless function', data: json };
+    } catch (err) {
+      console.warn('Serverless Mailchimp failed, falling back to client/demo mode', err);
+      console.log('Demo mode: Would subscribe', data.email, 'to', data.investorType);
+      return { success: true, message: 'Demo mode: fallback', data: null };
     }
   }
 

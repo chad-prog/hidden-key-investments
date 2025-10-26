@@ -4,6 +4,9 @@
 import React, { useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { emailMarketing } from '../utils/emailMarketing';
+import { airtableSync } from '../utils/advancedAirtableSync';
+import { useEliteInvestorCRM } from '../utils/eliteInvestorCRM';
 import { CheckCircle, Download, Shield, TrendingUp, Users, Star, Zap, Clock, Target } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -62,8 +65,8 @@ export default function AccreditedInvestors() {
     setIsSubmitting(true);
     
     addUpdate('🔄 Starting elite investor qualification process...');
-    
     try {
+<<<<<<< HEAD
       // REAL FORMSPREE INTEGRATION - USING YOUR ACTUAL FORM ID
       const formspreeEndpoint = import.meta.env.VITE_FORMSPREE_ENDPOINT || '';
       const formspreeResponse = await fetch(formspreeEndpoint, {
@@ -80,17 +83,85 @@ export default function AccreditedInvestors() {
           automation: 'elite'
         })
       });
+=======
+      // Resolve Formspree endpoint from env. Prefer a full endpoint, fall back to a form id.
+  const _env = (import.meta as any).env || {};
+  const envEndpoint = _env.VITE_FORMSPREE_ENDPOINT as string | undefined;
+  const formId = _env.VITE_FORMSPREE_FORM_ID as string | undefined;
+  const endpoint = envEndpoint || (formId ? `https://formspree.io/f/${formId}` : undefined);
+>>>>>>> cleanup/merge-ready
 
-      addUpdate('✅ Form submitted to Formspree');
+      const payload = {
+        ...formData,
+        qualificationScore,
+        investorType: 'accredited',
+        source: 'Elite Accredited Investors Page',
+        timestamp: new Date().toISOString(),
+        automation: 'elite'
+      };
 
-      if (formspreeResponse.ok) {
-        addUpdate('🎯 Investor qualification processed');
-        addUpdate('📄 Investor documents generated');
-        addUpdate('💼 Added to investor CRM');
-        addUpdate('📧 Added to accredited investors list');
-        
+      // If no endpoint is configured, run in safe demo mode and still show success + automation log
+      if (!endpoint) {
+        addUpdate('ℹ️ No Formspree endpoint configured - running in demo mode');
+        // Simulate network latency
+        await new Promise((res) => setTimeout(res, 700));
+        addUpdate('✅ (Demo) Form processed locally');
+
+        // Trigger demo-mode downstream integrations (they internally noop if no keys present)
+        try {
+          await emailMarketing.subscribeUser({ email: formData.email, firstName: formData.name, investorType: 'accredited' });
+          addUpdate('📧 (Demo) Mailchimp subscription queued');
+        } catch (err) {
+          addUpdate('⚠️ (Demo) Mailchimp subscription failed');
+        }
+
+        try {
+          await airtableSync.syncInvestorAcrossAllBases(formData as any, { score: qualificationScore });
+          addUpdate('📄 (Demo) Airtable sync queued');
+        } catch (err) {
+          addUpdate('⚠️ (Demo) Airtable sync failed');
+        }
+
         setIsSubmitted(true);
-        addUpdate('⚡ Elite automations activated');
+        addUpdate('⚡ Elite automations simulated (demo)');
+
+        // Simulated Zapier recipes (dev/testing only)
+        addUpdate('🔁 Zapier (simulated): New lead → Slack alert');
+        addUpdate('🔁 Zapier (simulated): New lead → Add row in Airtable');
+        addUpdate('🔁 Zapier (simulated): New lead → Add Mailchimp tag: Accredited');
+        addUpdate('🔁 Zapier (simulated): New lead → Notify Portfolio Manager');
+      } else {
+        // Real submission path
+        const resp = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        addUpdate('✅ Form submitted to Formspree');
+
+        if (resp.ok) {
+          addUpdate('🎯 Investor qualification processed');
+          // Attempt safe downstream integrations (they will no-op in client if API keys are absent)
+          try {
+            await emailMarketing.subscribeUser({ email: formData.email, firstName: formData.name, investorType: 'accredited' });
+            addUpdate('📧 Mailchimp subscription requested');
+          } catch (err) {
+            addUpdate('⚠️ Mailchimp subscription failed');
+          }
+
+          try {
+            await airtableSync.syncInvestorAcrossAllBases(formData as any, { score: qualificationScore });
+            addUpdate('📄 Airtable sync requested');
+          } catch (err) {
+            addUpdate('⚠️ Airtable sync failed');
+          }
+
+          setIsSubmitted(true);
+          addUpdate('⚡ Elite automations activated');
+        } else {
+          addUpdate('❌ Formspree returned an error');
+        }
       }
     } catch (error) {
       console.error('Form submission error:', error);

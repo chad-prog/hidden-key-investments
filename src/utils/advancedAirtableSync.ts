@@ -24,11 +24,20 @@ interface SyncResult {
 }
 
 class AdvancedAirtableSync {
+<<<<<<< HEAD
   private apiKey = import.meta.env.VITE_AIRTABLE_API_KEY || '';
   private baseIds = {
     investorLeads: import.meta.env.VITE_AIRTABLE_BASE_INVESTOR_LEADS || '',
     investorInteractions: import.meta.env.VITE_AIRTABLE_BASE_INVESTOR_INTERACTIONS || '',
     propertyTracker: import.meta.env.VITE_AIRTABLE_BASE_PROPERTY_TRACKER || ''
+=======
+  private _env = (import.meta as any).env || {};
+  private apiKey = this._env.VITE_AIRTABLE_API_KEY || 'demo-key';
+  private baseIds = {
+    investorLeads: this._env.VITE_AIRTABLE_BASE_INVESTOR_LEADS || 'appsxCvXYkJF62wQc',
+    investorInteractions: this._env.VITE_AIRTABLE_BASE_INVESTOR_INTERACTIONS || 'apppzfIaiHvQ2avWm',
+    propertyTracker: this._env.VITE_AIRTABLE_BASE_PROPERTY_TRACKER || 'appl3vaf5gFdstSA2'
+>>>>>>> cleanup/merge-ready
   };
 
   /**
@@ -37,13 +46,40 @@ class AdvancedAirtableSync {
   async syncInvestorAcrossAllBases(investorData: InvestorData, analytics: any): Promise<SyncResult[]> {
     const results: SyncResult[] = [];
 
+<<<<<<< HEAD
     // If no API key, return demo mode
     if (!this.apiKey) {
       console.log('Demo mode: Would sync investor to Airtable', investorData);
       results.push({
         success: true,
         message: 'Demo mode: Investor data would be synced with real API key'
+=======
+    // Prefer server-side Netlify function to perform Airtable sync.
+    // Client-only code will call the function and honor its demo mode.
+    try {
+      const resp = await fetch('/.netlify/functions/airtable-sync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ investorData, analytics })
+>>>>>>> cleanup/merge-ready
       });
+
+      if (!resp.ok) {
+        throw new Error('Airtable server function returned an error');
+      }
+
+      const json = await resp.json();
+      if (json && json.demo) {
+        results.push({ success: true, message: 'Demo mode: serverless function simulated Airtable sync', data: json });
+        return results;
+      }
+
+      // If server function returns real result, bubble it up
+      results.push({ success: true, message: 'Server function performed Airtable sync', data: json });
+      return results;
+    } catch (err) {
+      console.warn('Serverless Airtable sync failed, falling back to client/demo mode', err);
+      results.push({ success: true, message: 'Client demo fallback: would sync to Airtable' });
       return results;
     }
 

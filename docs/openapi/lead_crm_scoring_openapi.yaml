@@ -1,0 +1,196 @@
+openapi: 3.0.3
+info:
+  title: Hidden Key Investments - Core APIs
+  version: 0.1.0
+  description: OpenAPI definitions for lead ingestion, CRM, scoring, and assistant orchestration.
+servers:
+  - url: https://api.hiddenkeyinvestments.com
+paths:
+  /v1/leads:
+    post:
+      summary: Ingest a new lead
+      tags: [Leads]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LeadIngest'
+      responses:
+        '200':
+          description: Lead accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeadResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '429':
+          $ref: '#/components/responses/RateLimit'
+  /v1/leads/{leadId}:
+    get:
+      summary: Retrieve a lead
+      parameters:
+        - name: leadId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lead fetched
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lead'
+        '404':
+          description: Not found
+  /v1/score:
+    post:
+      summary: Score a lead
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScoreRequest'
+      responses:
+        '200':
+          description: Scoring result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScoreResponse'
+  /v1/orchestrator/task:
+    post:
+      summary: Submit a task to the Empire orchestrator
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrchestratorTask'
+      responses:
+        '202':
+          description: Task accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskAccepted'
+components:
+  schemas:
+    LeadIngest:
+      type: object
+      properties:
+        source:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        property:
+          type: object
+          properties:
+            address:
+              type: string
+            city:
+              type: string
+            state:
+              type: string
+            zip:
+              type: string
+            lat:
+              type: number
+            lon:
+              type: number
+        rawPayload:
+          type: object
+      required: [source]
+    LeadResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+        leadId:
+          type: string
+    Lead:
+      type: object
+      properties:
+        id:
+          type: string
+        source:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        property:
+          type: object
+        score:
+          type: number
+    ScoreRequest:
+      type: object
+      properties:
+        leadId:
+          type: string
+        snapshotFeatures:
+          type: object
+      required: [leadId]
+    ScoreResponse:
+      type: object
+      properties:
+        score:
+          type: number
+        version:
+          type: string
+        reasons:
+          type: array
+          items:
+            type: string
+    OrchestratorTask:
+      type: object
+      properties:
+        taskType:
+          type: string
+        payload:
+          type: object
+        callbackUrl:
+          type: string
+        priority:
+          type: integer
+      required: [taskType, payload]
+    TaskAccepted:
+      type: object
+      properties:
+        ok:
+          type: boolean
+        taskId:
+          type: string
+  responses:
+    BadRequest:
+      description: Invalid input
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              ok:
+                type: boolean
+              code:
+                type: string
+              message:
+                type: string
+    RateLimit:
+      description: Rate limited
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              ok:
+                type: boolean
+              code:
+                type: string
+              retryAfter:
+                type: integer

@@ -23,6 +23,7 @@ interface QualificationResult {
   tier: 'Bronze' | 'Silver' | 'Gold' | 'Platinum';
   recommendations: string[];
   matchedDeals: string[];
+  riskFactors?: string[];
 }
 
 export const useEliteInvestorCRM = () => {
@@ -144,13 +145,27 @@ export const useEliteInvestorCRM = () => {
         recommendations.push('Focus on building investment knowledge and capital allocation strategy');
       }
 
-      // Generate automated documents
-      const documentGeneration = await import('./documentGeneration');
-      await documentGeneration.generateInvestorWelcomePackage(data, tier, score);
+      // Generate automated documents (safe dynamic import)
+      try {
+        const docModule = await import('./documentGeneration');
+        const generator = (docModule as any).generateInvestorWelcomePackage || (docModule as any).default;
+        if (typeof generator === 'function') {
+          await generator(data, tier, score);
+        }
+      } catch (err) {
+        console.warn('Document generation skipped (demo or missing module)', err);
+      }
 
-      // Sync with all Airtable bases
-      const airtableSync = await import('./advancedAirtableSync');
-      await airtableSync.syncInvestorAcrossAllBases(data, { score, tier, riskFactors });
+      // Sync with Airtable via advancedAirtableSync singleton (safe dynamic import)
+      try {
+        const airtableModule = await import('./advancedAirtableSync');
+        const syncObj = (airtableModule as any).airtableSync || (airtableModule as any).default;
+        if (syncObj && typeof syncObj.syncInvestorAcrossAllBases === 'function') {
+          await syncObj.syncInvestorAcrossAllBases(data, { score, tier, riskFactors });
+        }
+      } catch (err) {
+        console.warn('Airtable sync skipped (demo or missing module)', err);
+      }
 
       return { 
         score, 
@@ -205,6 +220,19 @@ export const useEliteInvestorCRM = () => {
     };
 
     try {
+<<<<<<< HEAD
+=======
+      // Use env-driven API key and base id. If not present, operate in demo/no-op mode.
+      const _env = (import.meta as any).env || {};
+      const apiKey = _env.VITE_AIRTABLE_API_KEY as string | undefined;
+      const baseId = _env.VITE_AIRTABLE_BASE_INVESTOR_LEADS || 'appsxCvXYkJF62wQc';
+
+      if (!apiKey || apiKey === 'your_new_airtable_api_key_here') {
+        console.log('Demo mode: would POST to Airtable', baseId, airtableData);
+        return { demo: true } as any;
+      }
+
+>>>>>>> cleanup/merge-ready
       const response = await fetch(`https://api.airtable.com/v0/${baseId}/Investor%20Leads`, {
         method: 'POST',
         headers: {
@@ -215,7 +243,8 @@ export const useEliteInvestorCRM = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Airtable integration failed');
+        const errText = await response.text();
+        throw new Error('Airtable integration failed: ' + errText);
       }
 
       return await response.json();
