@@ -1,7 +1,7 @@
 # ✅ Your Infrastructure Completion Checklist
 
 **Status**: 🎉 Infrastructure 100% Complete (Code-wise)  
-**Last Updated**: October 27, 2025  
+**Last Updated**: October 2025  
 **Validation**: ✅ All 36 automated checks passing
 
 ---
@@ -99,7 +99,8 @@ These require configuration in external dashboards (Netlify, Sentry, Supabase):
    git commit -m "test: Trigger staging deploy"
    git push
    ```
-   - Visit: `https://staging--your-site.netlify.app`
+   - Visit: `https://staging--[your-site-name].netlify.app`
+   - (Replace [your-site-name] with your actual Netlify site name)
 
 **Detailed Guide**: [docs/COMPLETE-INFRASTRUCTURE-GUIDE.md](./COMPLETE-INFRASTRUCTURE-GUIDE.md) Section "Task 2"
 
