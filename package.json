@@ -10,7 +10,7 @@
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
-    "test:functions": "echo 'Function tests in progress - see netlify/functions/__tests__' && exit 0",
+    "test:functions": "cd netlify/functions && npm test",
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
     "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix"
   },

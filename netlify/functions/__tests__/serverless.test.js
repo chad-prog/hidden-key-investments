@@ -58,20 +58,19 @@ describe('Serverless Functions', () => {
     const validEvent = {
       httpMethod: 'POST',
       body: JSON.stringify({
-        name: 'Test Property',
-        price: 500000,
-        location: 'Test Location',
+        email: 'test@example.com',
+        firstName: 'Test',
+        lastName: 'User',
       }),
     };
 
     test('returns demo mode response when environment variables are missing', async () => {
       const response = await airtableHandler(validEvent);
       expect(response.statusCode).toBe(200);
-      expect(JSON.parse(response.body)).toEqual({
-        ok: true,
-        demo: true,
-        action: 'simulated-record-create',
-      });
+      const body = JSON.parse(response.body);
+      expect(body.ok).toBe(true);
+      expect(body.code).toBe('DEMO_MODE');
+      expect(body.details.action).toBe('simulated-record-create');
     });
 
     test('successfully creates record when all environment variables are present', async () => {
@@ -79,17 +78,18 @@ describe('Serverless Functions', () => {
       process.env.AIRTABLE_BASE_ID = 'test-base';
       process.env.AIRTABLE_TABLE_NAME = 'Properties';
 
-      fetch.mockImplementationOnce(() =>
+      vi.mocked(fetch).mockImplementationOnce(() =>
         Promise.resolve({
           ok: true,
+          status: 200,
           json: () => Promise.resolve({ records: [{ id: 'test-record-id' }] }),
+          text: () => Promise.resolve(JSON.stringify({ records: [{ id: 'test-record-id' }] }))
         })
       );
 
       const response = await airtableHandler(validEvent);
       expect(response.statusCode).toBe(200);
       expect(JSON.parse(response.body).ok).toBe(true);
-      expect(JSON.parse(response.body).demo).toBe(false);
     });
   });
 });
