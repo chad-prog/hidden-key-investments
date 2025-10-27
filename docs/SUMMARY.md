@@ -27,7 +27,7 @@ Build a single, extensible platform for Elite real-estate investors with:
 - ✅ Database schema (7 tables)
 - ✅ Security scanning
 - ✅ Multi-environment setup
-- ✅ Documentation (173KB)
+- ✅ Documentation (315KB)
 
 ### Foundation: 95% Complete
 - ✅ Lead capture form
@@ -309,14 +309,15 @@ Value: Better understanding
 
 ## 🎓 Resources Available
 
-### Documentation (173KB Total)
-- **WHAT-I-CAN-DO.md** - Complete guide (17KB)
-- **IMPLEMENTATION-CHECKLIST.md** - Task tracking (16KB)
-- **DEPLOYMENT-CHECKLIST.md** - Production safety (10KB)
-- **NEXT-STEPS.md** - Quick start (14KB)
-- **CURRENT-STATUS.md** - Platform status (12KB)
-- **ACTION-PLAN.md** - Prioritized roadmap (18KB)
-- **Plus 13 more comprehensive guides**
+### Documentation (173KB+ Markdown)
+- **WHAT-I-CAN-DO.md** (18KB) - Complete guide
+- **IMPLEMENTATION-CHECKLIST.md** (16KB) - Task tracking  
+- **DEPLOYMENT-CHECKLIST.md** (10KB) - Production safety
+- **NEXT-STEPS.md** (14KB) - Quick start
+- **SUMMARY.md** (9KB) - Executive overview
+- **CURRENT-STATUS.md** (12KB) - Platform status
+- **ACTION-PLAN.md** (18KB) - Prioritized roadmap
+- **Plus 18 more comprehensive guides** (315KB total)
 
 ### Ready-to-Use
 - ✅ Development environment setup script

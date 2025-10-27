@@ -174,12 +174,14 @@ git push origin feature/lead-list-ui
 
 #### Code Templates to Get Started
 
-**useLeads Hook Template**:
+> **Note**: These are starter templates. The project already has `src/lib/apiClient.ts` with type-safe API methods. You can either use the existing apiClient or create custom hooks for specific UI needs.
+
+**useLeads Hook Template** (Custom approach):
 ```typescript
 // src/hooks/useLeads.ts
 import { useState, useEffect } from 'react';
-import { supabase } from '@/lib/supabase';
-import { LeadSchema } from '@/lib/schemas/crm';
+import { supabase } from '@/lib/supabaseClient';
+import type { Lead } from '@/lib/schemas/crm';
 
 export interface UseLeadsOptions {
   page?: number;
