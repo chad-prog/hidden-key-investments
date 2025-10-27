@@ -103,7 +103,7 @@ Comprehensive test coverage with 10 tests:
 9. ✅ Handles lead ingestion failure
 10. ✅ Includes UTM tracking when provided
 
-**Total Test Count**: 28 tests (19 existing + 9 new)  
+**Total Test Count**: 28 tests (19 existing + 9 new function tests)  
 **Pass Rate**: 100% (28/28)
 
 ## Integration Points
@@ -213,8 +213,9 @@ curl -X POST https://site.netlify.app/.netlify/functions/webhook-inbound \
    - **Future**: Consider implementing retry queue
 
 4. **Deduplication**: Based on webhook_id only
-   - **Impact**: Medium - may accept duplicates
-   - **Future**: Add Redis-based deduplication
+   - **Impact**: Medium - may accept duplicates if webhook_id not provided
+   - **Behavior**: Falls back to timestamp-based uniqueness checking
+   - **Future**: Add Redis-based deduplication with configurable strategies
 
 ## Future Enhancements
 
