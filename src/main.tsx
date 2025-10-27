@@ -24,15 +24,14 @@ if (envValidation.warnings.length > 0) {
 
 // Log Sentry status
 if (import.meta.env.VITE_SENTRY_DSN) {
-  console.log('🔍 Sentry DSN configured');
-  console.log('💡 To enable Sentry error tracking: npm install @sentry/react');
-  console.log('💡 Then uncomment Sentry initialization in src/main.tsx');
+  console.log('🔍 Sentry error tracking enabled');
+  console.log('📊 Environment:', import.meta.env.MODE || 'development');
 } else {
   console.log('ℹ️ Sentry not configured (VITE_SENTRY_DSN not set)');
+  console.log('💡 To enable error monitoring, add VITE_SENTRY_DSN to environment variables');
 }
 
-// To enable Sentry, uncomment the following code after installing @sentry/react:
-/*
+// Sentry error monitoring - active when VITE_SENTRY_DSN is configured
 if (import.meta.env.VITE_SENTRY_DSN) {
   import('@sentry/react').then((Sentry) => {
     Sentry.init({
@@ -55,7 +54,6 @@ if (import.meta.env.VITE_SENTRY_DSN) {
     console.warn('⚠️ Failed to initialize Sentry:', err.message);
   });
 }
-*/
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
