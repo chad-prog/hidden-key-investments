@@ -7,13 +7,40 @@
 
 [functions]
   directory = "netlify/functions"
+  node_bundler = "esbuild"
 
 [dev]
   command = "npm run dev"
   targetPort = 3000
   functions = "netlify/functions"
 
+# Production context (main branch)
+[context.production]
+  environment = { NODE_ENV = "production" }
+
+# Staging context (staging branch)
+[context.staging]
+  environment = { NODE_ENV = "staging" }
+
+# Branch deploy context (feature branches)
+[context.branch-deploy]
+  environment = { NODE_ENV = "development" }
+
+# Deploy Preview context (pull requests)
+[context.deploy-preview]
+  environment = { NODE_ENV = "preview" }
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+
+# Headers for security
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
