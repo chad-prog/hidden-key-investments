@@ -21,6 +21,7 @@ npm run dev
 
 ### Core Platform
 - ✅ **Lead Capture & Enrichment** - Automated lead ingestion with validation
+- ✅ **Webhook Integration** - Third-party lead capture (Zapier, Make, n8n)
 - ✅ **CRM Pipeline** - Leads → Opportunities → Investors workflow
 - ✅ **Workflow Automation** - Rule-based email/SMS triggers
 - ✅ **Feature Flags** - Gradual rollout and A/B testing
@@ -29,8 +30,8 @@ npm run dev
 ### Infrastructure
 - ✅ **Production Database** - Complete PostgreSQL schema with indexes
 - ✅ **Type Safety** - Full TypeScript with Zod validation
-- ✅ **Testing** - 19 tests with comprehensive fixtures
-- ✅ **CI/CD** - GitHub Actions with automated checks
+- ✅ **Testing** - 28 tests with comprehensive fixtures
+- ✅ **CI/CD** - GitHub Actions with security scanning (Trivy, Gitleaks, TruffleHog)
 - ✅ **Observability** - Structured logging and error tracking ready
 
 ### Coming Soon
@@ -43,11 +44,11 @@ npm run dev
 
 | Metric | Status | Details |
 |--------|--------|---------|
-| Build | ✅ 3.52s | Target: <5s |
-| Tests | ✅ 19/19 | All passing |
-| Linting | ✅ 0 errors | 128 warnings (documented) |
-| CI/CD | ✅ Working | GitHub Actions |
-| Docs | ✅ Complete | 7 comprehensive guides |
+| Build | ✅ 3.74s | Target: <5s |
+| Tests | ✅ 28/28 | All passing |
+| Linting | ✅ 0 errors | Warnings documented |
+| CI/CD | ✅ Working | Security scanning enabled |
+| Docs | ✅ Complete | 9 comprehensive guides |
 | Demo Mode | ✅ Active | No API keys needed |
 
 ## 🛠️ Tech Stack
@@ -68,6 +69,7 @@ npm run dev
 |----------|-------------|
 | [**ACTION-PLAN.md**](docs/ACTION-PLAN.md) | ⭐ **Priority action items & roadmap** |
 | [**CURRENT-STATUS.md**](docs/CURRENT-STATUS.md) | 📊 Platform status & metrics |
+| [**WEBHOOK-INTEGRATION.md**](docs/WEBHOOK-INTEGRATION.md) | 🔗 Webhook setup guide (Zapier, Make, n8n) |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | 🤝 Developer contribution guide |
 | [QUICK-START.md](docs/QUICK-START.md) | Get building in 5 minutes |
 | [CAPABILITIES.md](docs/CAPABILITIES.md) | Complete feature guide |
@@ -171,6 +173,7 @@ src/
 
 netlify/functions/              # Serverless functions
 ├── lead-ingest-enhanced.js     # Lead capture API
+├── webhook-inbound.js          # Third-party webhook handler
 ├── investor.js                 # Investor management
 └── opportunity.js              # Deal pipeline
 
@@ -181,7 +184,7 @@ supabase-sql/                   # Database schemas
 
 ## 💡 Usage Examples
 
-### Creating a Lead
+### Creating a Lead via API
 ```typescript
 import { LeadCreateSchema } from '@/lib/schemas/crm';
 
@@ -205,6 +208,26 @@ fetch('/.netlify/functions/lead-ingest-enhanced', {
   body: JSON.stringify(lead)
 });
 ```
+
+### Using Webhook for Lead Capture
+```bash
+# Send lead from Zapier, Make, n8n, or custom integration
+curl -X POST https://your-site.netlify.app/.netlify/functions/webhook-inbound \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "investor@example.com",
+    "first_name": "John",
+    "last_name": "Doe",
+    "phone": "+1234567890",
+    "address": "123 Main St",
+    "city": "Austin",
+    "state": "TX",
+    "zip": "78701",
+    "webhook_source": "zapier"
+  }'
+```
+
+See [WEBHOOK-INTEGRATION.md](docs/WEBHOOK-INTEGRATION.md) for complete webhook documentation.
 
 ### Using Mock Data
 ```typescript
@@ -248,10 +271,11 @@ Proprietary - All rights reserved
 
 ## 🎉 Success Metrics
 
-- ✅ Build time: 3.52s (target: <5s)
-- ✅ Test coverage: 19/19 passing
+- ✅ Build time: 3.74s (target: <5s)
+- ✅ Test coverage: 28/28 passing (100%)
 - ✅ Lint errors: 0
-- ✅ Documentation: Complete
+- ✅ Documentation: Complete with webhook guide
 - ✅ Demo mode: Fully functional
+- ✅ Security: Enhanced scanning in CI/CD
 
 **Ready to build! See [docs/QUICK-START.md](docs/QUICK-START.md) to get started.** 🚀
