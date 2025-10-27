@@ -1,7 +1,7 @@
 // Tests for investor.js serverless function
 // These tests verify CRUD operations for investor management
 
-const { describe, it, expect, beforeEach, vi } = require('vitest');
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 
 // Mock Supabase client
 const mockSupabase = {
@@ -19,9 +19,10 @@ vi.mock('../supabaseClient.cjs', () => ({
 }));
 
 // Import handler after mocking
-const { handler } = require('../investor.js');
-
-describe('investor function', () => {
+import('../investor.js').then(module => {
+  const { handler } = module;
+  
+  describe('investor function', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
