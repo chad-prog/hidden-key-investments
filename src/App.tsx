@@ -9,6 +9,8 @@ import AccreditedInvestors from './pages/AccreditedInvestors';
 import InvestorDashboard from './pages/InvestorDashboard';
 import IntegrationDashboard from './pages/IntegrationDashboard';
 import LeadForm from './components/LeadForm';
+import LeadList from './pages/LeadList';
+import LeadDetail from './pages/LeadDetail';
 
 function App() {
   return (
@@ -20,6 +22,10 @@ function App() {
           <Route path="/investor-dashboard" element={<InvestorDashboard />} />
           <Route path="/integration-dashboard" element={<IntegrationDashboard />} />
           <Route path="/lead-form" element={<LeadForm />} />
+          
+          {/* CRM Routes */}
+          <Route path="/crm/leads" element={<LeadList />} />
+          <Route path="/crm/leads/:leadId" element={<LeadDetail />} />
         </Routes>
       </div>
     </BrowserRouter>
