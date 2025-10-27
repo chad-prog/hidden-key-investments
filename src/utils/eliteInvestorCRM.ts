@@ -220,8 +220,6 @@ export const useEliteInvestorCRM = () => {
     };
 
     try {
-<<<<<<< HEAD
-=======
       // Use env-driven API key and base id. If not present, operate in demo/no-op mode.
       const _env = (import.meta as any).env || {};
       const apiKey = _env.VITE_AIRTABLE_API_KEY as string | undefined;
@@ -232,7 +230,6 @@ export const useEliteInvestorCRM = () => {
         return { demo: true } as any;
       }
 
->>>>>>> cleanup/merge-ready
       const response = await fetch(`https://api.airtable.com/v0/${baseId}/Investor%20Leads`, {
         method: 'POST',
         headers: {
