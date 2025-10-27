@@ -23,6 +23,27 @@ export default defineConfig({
     },
     deps: {
       inline: ['react', 'react-dom', '@testing-library/react']
+    },
+    // Coverage configuration
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html', 'lcov'],
+      exclude: [
+        'node_modules/**',
+        'dist/**',
+        '**/*.config.*',
+        '**/*.test.*',
+        '**/__tests__/**',
+        '**/tests/**',
+        'src/components/ui/**', // Exclude shadcn/ui components
+        'netlify/functions/tests/**',
+        'netlify/functions/__tests__/**'
+      ],
+      all: true,
+      lines: 60,
+      functions: 60,
+      branches: 60,
+      statements: 60
     }
   }
 })

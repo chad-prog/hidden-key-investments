@@ -10,10 +10,12 @@ const OpportunitySchema = zod.object({
   notes: zod.string().optional()
 });
 
-exports.handler = async function(event, context) {
+exports.handler = async function(event) {
   if (event.httpMethod === 'POST') {
     let data;
-    try { data = JSON.parse(event.body || '{}'); } catch (err) {
+    try { 
+      data = JSON.parse(event.body || '{}'); 
+    } catch {
       return { statusCode: 400, body: JSON.stringify({ error: 'Invalid JSON body' }) };
     }
     const result = OpportunitySchema.safeParse(data);
@@ -48,7 +50,9 @@ exports.handler = async function(event, context) {
   }
   if (event.httpMethod === 'DELETE') {
     let data;
-    try { data = JSON.parse(event.body || '{}'); } catch (err) {
+    try { 
+      data = JSON.parse(event.body || '{}'); 
+    } catch {
       return { statusCode: 400, body: JSON.stringify({ error: 'Invalid JSON body' }) };
     }
     const { id } = data;
@@ -61,7 +65,9 @@ exports.handler = async function(event, context) {
   // PATCH for stage transition
   if (event.httpMethod === 'PATCH') {
     let data;
-    try { data = JSON.parse(event.body || '{}'); } catch (err) {
+    try { 
+      data = JSON.parse(event.body || '{}'); 
+    } catch {
       return { statusCode: 400, body: JSON.stringify({ error: 'Invalid JSON body' }) };
     }
     const { id, stage } = data;

@@ -107,7 +107,7 @@ export async function readResponseSafely(response) {
   const text = await response.text();
   try {
     return { parsed: JSON.parse(text), raw: truncate(text) };
-  } catch (err) {
+  } catch {
     return { parsed: null, raw: truncate(text) };
   }
 }
