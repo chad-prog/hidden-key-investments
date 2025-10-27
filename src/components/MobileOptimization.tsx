@@ -4,7 +4,6 @@
  * Ensures optimal experience across all device sizes
  */
 import React from 'react';
-import { useWindowSize } from '../hooks/useWindowSize'; // We'll create this hook
 
 // Custom hook for window size detection
 export const useWindowSize = () => {
