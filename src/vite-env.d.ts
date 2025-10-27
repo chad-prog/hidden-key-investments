@@ -1,1 +1,1 @@
-<The code content has been applied to the code environment>
+/// <reference types="vite/client" />

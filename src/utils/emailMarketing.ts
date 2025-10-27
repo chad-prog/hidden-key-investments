@@ -18,16 +18,6 @@ interface SubscribeResult {
 }
 
 class EmailMarketingService {
-<<<<<<< HEAD
-  private apiKey = import.meta.env.VITE_MAILCHIMP_API_KEY || '';
-  private serverPrefix = import.meta.env.VITE_MAILCHIMP_SERVER_PREFIX || '';
-  private audienceIds = {
-    accredited: import.meta.env.VITE_MAILCHIMP_AUDIENCE_ACCREDITED || '',
-    firstTime: import.meta.env.VITE_MAILCHIMP_AUDIENCE_FIRST_TIME || '',
-    passive: import.meta.env.VITE_MAILCHIMP_AUDIENCE_PASSIVE || '',
-    texas: import.meta.env.VITE_MAILCHIMP_AUDIENCE_TEXAS || '',
-    general: import.meta.env.VITE_MAILCHIMP_AUDIENCE_GENERAL || ''
-=======
   private _env = (import.meta as any).env || {};
   private apiKey = this._env.VITE_MAILCHIMP_API_KEY || 'demo-key';
   private serverPrefix = this._env.VITE_MAILCHIMP_SERVER_PREFIX || 'us8';
@@ -37,26 +27,13 @@ class EmailMarketingService {
     passive: this._env.VITE_MAILCHIMP_AUDIENCE_PASSIVE || '825140d12f',
     texas: this._env.VITE_MAILCHIMP_AUDIENCE_TEXAS || '0b1df5453e',
     general: this._env.VITE_MAILCHIMP_AUDIENCE_GENERAL || 'a47056c160'
->>>>>>> cleanup/merge-ready
   };
 
   /**
    * Subscribe user to Mailchimp audience
    */
   async subscribeUser(data: SubscribeData): Promise<SubscribeResult> {
-<<<<<<< HEAD
-    // If no API key is set, return demo mode
-    if (!this.apiKey || !this.serverPrefix) {
-      console.log('Demo mode: Would subscribe', data.email, 'to', data.investorType);
-      return {
-        success: true,
-        message: 'Demo mode: Subscription would be processed with real API key'
-      };
-    }
-
-=======
     // Prefer server-side Netlify function for subscriptions
->>>>>>> cleanup/merge-ready
     try {
       const resp = await fetch('/.netlify/functions/mailchimp-sync', {
         method: 'POST',

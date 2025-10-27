@@ -1,6 +1,9 @@
 {
   "type": "module",
   "private": true,
+  "scripts": {
+    "test": "echo 'No tests configured for functions yet' && exit 0"
+  },
   "dependencies": {
     "@mailchimp/mailchimp_marketing": "^3.0.80",
     "@netlify/functions": "^2.5.1",

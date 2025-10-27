@@ -66,30 +66,11 @@ export default function AccreditedInvestors() {
     
     addUpdate('🔄 Starting elite investor qualification process...');
     try {
-<<<<<<< HEAD
-      // REAL FORMSPREE INTEGRATION - USING YOUR ACTUAL FORM ID
-      const formspreeEndpoint = import.meta.env.VITE_FORMSPREE_ENDPOINT || '';
-      const formspreeResponse = await fetch(formspreeEndpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...formData,
-          qualificationScore,
-          investorType: 'accredited',
-          source: 'Elite Accredited Investors Page',
-          timestamp: new Date().toISOString(),
-          automation: 'elite'
-        })
-      });
-=======
       // Resolve Formspree endpoint from env. Prefer a full endpoint, fall back to a form id.
-  const _env = (import.meta as any).env || {};
-  const envEndpoint = _env.VITE_FORMSPREE_ENDPOINT as string | undefined;
-  const formId = _env.VITE_FORMSPREE_FORM_ID as string | undefined;
-  const endpoint = envEndpoint || (formId ? `https://formspree.io/f/${formId}` : undefined);
->>>>>>> cleanup/merge-ready
+      const _env = (import.meta as any).env || {};
+      const envEndpoint = _env.VITE_FORMSPREE_ENDPOINT as string | undefined;
+      const formId = _env.VITE_FORMSPREE_FORM_ID as string | undefined;
+      const endpoint = envEndpoint || (formId ? `https://formspree.io/f/${formId}` : undefined);
 
       const payload = {
         ...formData,
