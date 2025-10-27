@@ -35,8 +35,9 @@ bash scripts/dev-utils.sh check-all  # Full quality check
 
 ```bash
 # Run all tests
-npm test                          # 19 main tests
-npm run test:functions            # 53 function tests
+npm test                          # Main test suite (19 tests)
+npm run test:functions            # Function tests (53 tests)
+                                 # Total: 72 tests
 
 # Watch mode (auto-rerun on changes)
 npm run test:watch
@@ -163,9 +164,9 @@ touch netlify/functions/my-function.js
 # Create test file
 touch netlify/functions/__tests__/my-function.test.js
 
-# Add to vitest config
+# Add to vitest config include array
 # Edit: netlify/functions/vitest.config.js
-# Add: '__tests__/my-function.test.js' to include array
+# Add: '__tests__/my-function.test.js' to the include array
 
 # Test it
 npm run test:functions
@@ -306,9 +307,9 @@ git push origin main
 
 ## 🔗 Useful Links
 
-- **Repository**: https://github.com/chad-prog/hidden-key-investments
-- **Staging**: https://staging.yoursite.com (if configured)
-- **Production**: https://yoursite.com (if configured)
+- **Repository**: https://github.com/chad-prog/hidden-key-investments (update with your repo URL)
+- **Staging**: https://staging.yoursite.com (configure in Netlify)
+- **Production**: https://yoursite.com (configure in Netlify)
 - **CI/CD**: GitHub Actions tab
 - **Documentation**: `/docs` folder
 

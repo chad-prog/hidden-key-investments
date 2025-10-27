@@ -6,7 +6,7 @@ This checklist guides the implementation of Core MVP features (Weeks 2-6) as out
 
 **Goal**: Deliver a fully functional CRM interface for managing leads, opportunities, and investors.
 
-**Timeline**: 4-6 weeks  
+**Timeline**: 4-6 weeks (Weeks 3-6 of overall roadmap)  
 **Priority**: HIGH VALUE 🎯  
 **Status**: Ready to Start
 
