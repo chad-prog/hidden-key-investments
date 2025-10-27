@@ -249,3 +249,4 @@ import('../investor.js').then(module => {
     });
   });
 });
+});
