@@ -8,7 +8,8 @@ export default defineConfig({
     include: [
       '__tests__/serverless.test.js',
       '__tests__/airtable-sync.test.js',
-      '__tests__/webhook-inbound.test.js'
+      '__tests__/webhook-inbound.test.js',
+      '__tests__/lead-ingest-enhanced.test.js'
     ],
     // Exclude problematic tests that need refactoring
     exclude: [
