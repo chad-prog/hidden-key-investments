@@ -51,21 +51,22 @@ export interface PerformanceMetric {
 export class ErrorTracker {
   private enabled: boolean;
   private environment: string;
+  private sentryAvailable: boolean = false;
 
   constructor() {
     this.enabled = typeof process !== 'undefined' && process.env.VITE_FEATURE_ERRORTRACKING === 'true';
     this.environment = typeof process !== 'undefined' ? (process.env.NODE_ENV || 'development') : 'development';
+    
+    // Check if Sentry is available
+    if (typeof window !== 'undefined' && (window as any).Sentry) {
+      this.sentryAvailable = true;
+    }
   }
 
   /**
    * Capture an exception
    */
   captureException(error: Error, context?: ErrorContext): void {
-    if (!this.enabled) {
-      console.error('[ErrorTracker] (disabled)', error, context);
-      return;
-    }
-
     const enrichedContext = {
       ...context,
       environment: this.environment,
@@ -75,28 +76,36 @@ export class ErrorTracker {
       stack: error.stack,
     };
 
-    // TODO: Integrate with Sentry or similar service
-    // Sentry.captureException(error, { contexts: enrichedContext });
-    
-    console.error('[ErrorTracker]', {
-      error: {
-        name: error.name,
-        message: error.message,
-        stack: error.stack,
-      },
-      context: enrichedContext,
-    });
+    // Send to Sentry if available
+    if (this.sentryAvailable && typeof window !== 'undefined') {
+      const Sentry = (window as any).Sentry;
+      Sentry.captureException(error, {
+        contexts: { custom: enrichedContext },
+        tags: {
+          component: context?.component,
+          action: context?.action,
+        },
+        user: context?.userId ? { id: context.userId } : undefined,
+      });
+    }
+
+    // Always log to console in development or if tracking disabled
+    if (!this.enabled || this.environment === 'development') {
+      console.error('[ErrorTracker]', {
+        error: {
+          name: error.name,
+          message: error.message,
+          stack: error.stack,
+        },
+        context: enrichedContext,
+      });
+    }
   }
 
   /**
    * Capture a message (for non-error logging)
    */
   captureMessage(message: string, level: 'info' | 'warning' | 'error' = 'info', context?: ErrorContext): void {
-    if (!this.enabled) {
-      console.log('[ErrorTracker] (disabled)', level, message, context);
-      return;
-    }
-
     const enrichedContext = {
       ...context,
       environment: this.environment,
@@ -104,46 +113,68 @@ export class ErrorTracker {
       level,
     };
 
-    // TODO: Integrate with Sentry or similar service
-    // Sentry.captureMessage(message, level, { contexts: enrichedContext });
+    // Send to Sentry if available
+    if (this.sentryAvailable && typeof window !== 'undefined') {
+      const Sentry = (window as any).Sentry;
+      Sentry.captureMessage(message, {
+        level: level === 'warning' ? 'warning' : level,
+        contexts: { custom: enrichedContext },
+        tags: {
+          component: context?.component,
+          action: context?.action,
+        },
+      });
+    }
 
-    console.log('[ErrorTracker]', level, message, enrichedContext);
+    // Log to console in development or if tracking disabled
+    if (!this.enabled || this.environment === 'development') {
+      console.log('[ErrorTracker]', level, message, enrichedContext);
+    }
   }
 
   /**
    * Set user context for error tracking
    */
   setUser(userId: string, email?: string, username?: string): void {
-    if (!this.enabled) return;
+    // Set in Sentry if available
+    if (this.sentryAvailable && typeof window !== 'undefined') {
+      const Sentry = (window as any).Sentry;
+      Sentry.setUser({ id: userId, email, username });
+    }
 
-    // TODO: Integrate with Sentry or similar service
-    // Sentry.setUser({ id: userId, email, username });
-
-    console.log('[ErrorTracker] User set:', { userId, email, username });
+    if (this.environment === 'development') {
+      console.log('[ErrorTracker] User set:', { userId, email, username });
+    }
   }
 
   /**
    * Clear user context
    */
   clearUser(): void {
-    if (!this.enabled) return;
+    // Clear in Sentry if available
+    if (this.sentryAvailable && typeof window !== 'undefined') {
+      const Sentry = (window as any).Sentry;
+      Sentry.setUser(null);
+    }
 
-    // TODO: Integrate with Sentry or similar service
-    // Sentry.setUser(null);
-
-    console.log('[ErrorTracker] User cleared');
+    if (this.environment === 'development') {
+      console.log('[ErrorTracker] User cleared');
+    }
   }
 
   /**
    * Add breadcrumb (for debugging)
    */
   addBreadcrumb(message: string, category?: string, data?: any): void {
-    if (!this.enabled) return;
+    // Add to Sentry if available
+    if (this.sentryAvailable && typeof window !== 'undefined') {
+      const Sentry = (window as any).Sentry;
+      Sentry.addBreadcrumb({ message, category, data, timestamp: Date.now() / 1000 });
+    }
 
-    // TODO: Integrate with Sentry or similar service
-    // Sentry.addBreadcrumb({ message, category, data, timestamp: Date.now() / 1000 });
-
-    console.debug('[ErrorTracker] Breadcrumb:', { message, category, data });
+    if (this.environment === 'development') {
+      console.debug('[ErrorTracker] Breadcrumb:', { message, category, data });
+    }
   }
 }
 
