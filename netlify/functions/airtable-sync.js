@@ -2,7 +2,7 @@ import { fetch } from 'undici';
 import { Logger, makeErrorResponse, readResponseSafely, retryWithBackoff } from './lib/logger.js';
 import { airtableSubscriberSchema, validatePayload } from './lib/schemas.js';
 
-export async function handler(event, context) {
+export async function handler(event) {
   const logger = new Logger({ 
     function: 'airtable-sync',
     requestId: event.requestContext?.requestId

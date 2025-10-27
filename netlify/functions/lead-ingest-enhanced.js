@@ -73,7 +73,7 @@ const StandardResponse = z.object({
 /**
  * Main handler function
  */
-export async function handler(event, context) {
+export async function handler(event) {
   const correlationId = randomUUID();
   const startTime = Date.now();
   
@@ -81,7 +81,7 @@ export async function handler(event, context) {
   let body;
   try {
     body = JSON.parse(event.body || '{}');
-  } catch (error) {
+  } catch {
     return makeResponse({
       statusCode: 400,
       correlationId,
