@@ -96,6 +96,20 @@ Security is built into every feature from the start, not added later.
 X-API-Key: your_api_key_here
 ```
 
+**Scopes**: Each API key can have one or more of:
+- `leads:read` - View lead data
+- `leads:write` - Create/update leads
+- `opportunities:read` - View opportunities
+- `opportunities:write` - Create/update opportunities
+- `workflows:read` - View workflow definitions
+- `workflows:execute` - Trigger workflows
+
+**Rate Limits**:
+- `leads:write` - 100 requests/hour
+- `leads:read` - 1000 requests/hour
+- `opportunities:write` - 50 requests/hour
+- Default - 300 requests/hour
+
 **Future**: OAuth 2.0 with JWT tokens
 ```http
 Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
@@ -508,10 +522,12 @@ X-RateLimit-Reset: 1635345600
 - Penetration testing: Annually
 
 **Patch Management**:
-- Critical vulnerabilities: Within 24 hours
+- Critical vulnerabilities: Within 24 hours*
 - High vulnerabilities: Within 7 days
 - Medium vulnerabilities: Within 30 days
 - Low vulnerabilities: Next release cycle
+
+\* *For critical vulnerabilities requiring extensive testing or third-party coordination, may extend to 72 hours with documented justification and temporary mitigations in place.*
 
 ## Security Training
 

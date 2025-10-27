@@ -308,6 +308,8 @@ src/components/workflows/
 
 **External APIs** (choose based on budget):
 
+> **Note**: Pricing as of October 2025. Verify current pricing during implementation.
+
 | Service | Feature | Cost |
 |---------|---------|------|
 | Melissa Data | Address validation | $0.01/lookup |
@@ -683,10 +685,22 @@ export class DealFinderAssistant {
       result: JSON.parse(response.choices[0].message.content),
       metadata: {
         tokensUsed: response.usage.total_tokens,
-        cost: calculateCost(response.usage),
+        cost: calculateCost(response.usage), // See cost calculation below
       },
     };
   }
+}
+
+// Cost calculation helper
+function calculateCost(usage: TokenUsage): number {
+  // OpenAI GPT-4 pricing (as of Oct 2025)
+  const INPUT_COST_PER_1K = 0.03;  // $0.03 per 1K input tokens
+  const OUTPUT_COST_PER_1K = 0.06; // $0.06 per 1K output tokens
+  
+  return (
+    (usage.prompt_tokens / 1000) * INPUT_COST_PER_1K +
+    (usage.completion_tokens / 1000) * OUTPUT_COST_PER_1K
+  );
 }
 ```
 

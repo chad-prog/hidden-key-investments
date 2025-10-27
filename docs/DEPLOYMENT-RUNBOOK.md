@@ -649,7 +649,7 @@ psql "postgresql://postgres:[password]@[host]:5432/postgres" -c "SELECT 1;"
 
 ### Emergency Contacts
 
-- **On-Call Engineer**: [Rotation schedule]
+- **On-Call Engineer**: See on-call rotation at https://[your-pagerduty-or-opsgenie].com
 - **DevOps**: devops@hiddenkey.io
 - **Security**: security@hiddenkey.io
 - **Netlify Support**: https://answers.netlify.com/
