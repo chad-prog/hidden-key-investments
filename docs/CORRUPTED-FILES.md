@@ -21,7 +21,7 @@ During the merge process, several files became corrupted with placeholder text. 
 9. `src/utils/smsNotifications.ts`
 
 ## Current Status
-All corrupted files have been temporarily excluded from ESLint in `eslint.config.js` to allow the build and CI to pass.
+All corrupted files have been temporarily excluded from the ESLint configuration file (`eslint.config.js`) to allow the build and CI to pass.
 
 ## Impact
 - ❌ These components/utilities cannot be imported or used
