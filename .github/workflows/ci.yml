@@ -184,13 +184,60 @@ jobs:
       contents: read
       pull-requests: write
     steps:
-      - name: Comment PR
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Comment PR with deployment info
         uses: actions/github-script@v7
         with:
           script: |
-            github.rest.issues.createComment({
+            const { data: comments } = await github.rest.issues.listComments({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: '🚀 Netlify will automatically deploy this PR preview. Check the Netlify deployment status below.'
-            })
+            });
+            
+            const botComment = comments.find(comment => 
+              comment.user.type === 'Bot' && comment.body.includes('🚀 Deployment Status')
+            );
+            
+            const body = `## 🚀 Deployment Status
+            
+            Your pull request is being deployed to Netlify!
+            
+            ### What to expect:
+            - ✅ **Security Scan**: Complete
+            - ✅ **Tests**: All passed
+            - ✅ **Build**: Successful
+            - 🔄 **Deploy Preview**: Netlify will automatically deploy this PR
+            
+            ### After Deployment:
+            Netlify will comment with the preview URL. You can then:
+            1. Test the deployed application
+            2. Verify all features work as expected
+            3. Check that environment variables are configured correctly
+            
+            ### Manual Validation:
+            Once deployed, you can validate with:
+            \`\`\`bash
+            bash scripts/validate-deployment.sh <preview-url>
+            \`\`\`
+            
+            ---
+            *This comment will be updated if the deployment status changes.*`;
+            
+            if (botComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: body
+              });
+            } else {
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: body
+              });
+            }
