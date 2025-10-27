@@ -65,9 +65,16 @@ npm run dev
 
 ## 📚 Documentation
 
+### 🎯 Start Here
 | Document | Description |
 |----------|-------------|
-| [**ACTION-PLAN.md**](docs/ACTION-PLAN.md) | ⭐ **Priority action items & roadmap** |
+| [**WHAT-I-CAN-BUILD-NOW.md**](docs/WHAT-I-CAN-BUILD-NOW.md) | 🚀 **Complete capability roadmap - what can be built, when, and how** |
+| [**ENTERPRISE-VISION-CAPABILITY-MATRIX.md**](docs/ENTERPRISE-VISION-CAPABILITY-MATRIX.md) | 📊 **Detailed status of every enterprise vision component** |
+| [**ACTION-PLAN.md**](docs/ACTION-PLAN.md) | ⭐ **Priority action items & immediate next steps** |
+
+### 📖 Core Documentation
+| Document | Description |
+|----------|-------------|
 | [**CURRENT-STATUS.md**](docs/CURRENT-STATUS.md) | 📊 Platform status & metrics |
 | [**TESTING-GUIDE.md**](docs/TESTING-GUIDE.md) | 🧪 Testing practices & utilities |
 | [**WEBHOOK-INTEGRATION.md**](docs/WEBHOOK-INTEGRATION.md) | 🔗 Webhook setup guide (Zapier, Make, n8n) |
