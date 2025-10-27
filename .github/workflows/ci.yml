@@ -49,6 +49,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Validate environment
+        run: bash scripts/validate-env.sh
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
