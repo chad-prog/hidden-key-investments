@@ -66,6 +66,9 @@ npm run dev
 
 | Document | Description |
 |----------|-------------|
+| [**ACTION-PLAN.md**](docs/ACTION-PLAN.md) | ⭐ **Priority action items & roadmap** |
+| [**CURRENT-STATUS.md**](docs/CURRENT-STATUS.md) | 📊 Platform status & metrics |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | 🤝 Developer contribution guide |
 | [QUICK-START.md](docs/QUICK-START.md) | Get building in 5 minutes |
 | [CAPABILITIES.md](docs/CAPABILITIES.md) | Complete feature guide |
 | [ARCHITECTURE.md](docs/ARCHITECTURE.md) | System design |
@@ -94,6 +97,16 @@ npm run lint
 
 # Auto-fix lint issues
 npm run lint:fix
+```
+
+## 🛠️ Utility Scripts
+
+```bash
+# Verify setup and run quality checks
+./scripts/verify-setup.sh
+
+# Create a backup of the repository
+./scripts/backup.sh
 ```
 
 ## 🗄️ Database Setup

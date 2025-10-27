@@ -434,9 +434,22 @@ You're ready for:
 
 ## 📖 Quick Start Guide
 
+**🎯 Brand New? Start Here:**
+1. Read `docs/GETTING-STARTED.md` (30 min quick start)
+2. Run `./scripts/verify-setup.sh` (verify everything works)
+3. Review `docs/CURRENT-STATUS.md` (understand current state)
+4. Check `docs/ACTION-PLAN.md` (know what to do next)
+
+**📚 Complete Documentation Tree:**
+- **GETTING-STARTED.md** ⭐ - 30-minute orientation guide
+- **CURRENT-STATUS.md** ⭐ - Platform status & metrics
+- **ACTION-PLAN.md** ⭐ - Prioritized action items
+- **IMPLEMENTATION-ROADMAP.md** - Complete 20-week plan
+- **CONTRIBUTING.md** - Developer workflow guide
+
 ```bash
-# 1. Review the roadmap
-open docs/IMPLEMENTATION-ROADMAP.md
+# 1. Review your priorities
+cat docs/ACTION-PLAN.md
 
 # 2. Activate error tracking (optional but recommended)
 npm install @sentry/react
@@ -447,7 +460,7 @@ npm install @sentry/react
 # Follow docs/STAGING-SETUP.md
 
 # 4. Start Week 3 development
-# Build Lead List view (see IMPLEMENTATION-ROADMAP.md Week 3)
+# Build Lead List view (see ACTION-PLAN.md)
 
 # 5. Deploy to staging
 git push origin staging
@@ -459,7 +472,7 @@ npm run build
 
 ---
 
-**Ready to build? Start with `docs/IMPLEMENTATION-ROADMAP.md`** 🚀
+**Ready to build? Start with `docs/GETTING-STARTED.md`** 🚀
 
 *Last Updated: 2025-10-27*
 *Version: 1.0*

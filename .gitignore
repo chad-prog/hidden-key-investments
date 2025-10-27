@@ -39,3 +39,7 @@ pids
 coverage/
 # Local Netlify folder
 .netlify
+
+# Backups
+backups/
+*.tar.gz
