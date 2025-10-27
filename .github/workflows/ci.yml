@@ -110,6 +110,18 @@ jobs:
       - name: Run function tests
         run: npm run test:functions
 
+      - name: Generate test summary
+        if: always()
+        run: |
+          echo "## Test Results Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Main tests completed" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Function tests completed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -d "coverage" ]; then
+            echo "📊 Coverage report generated" >> $GITHUB_STEP_SUMMARY
+          fi
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
         if: always()

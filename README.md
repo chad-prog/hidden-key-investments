@@ -45,10 +45,10 @@ npm run dev
 | Metric | Status | Details |
 |--------|--------|---------|
 | Build | ✅ 3.74s | Target: <5s |
-| Tests | ✅ 28/28 | All passing |
+| Tests | ✅ 72/72 | All passing (19 main + 53 functions) |
 | Linting | ✅ 0 errors | Warnings documented |
 | CI/CD | ✅ Working | Security scanning enabled |
-| Docs | ✅ Complete | 9 comprehensive guides |
+| Docs | ✅ Complete | 10 comprehensive guides |
 | Demo Mode | ✅ Active | No API keys needed |
 
 ## 🛠️ Tech Stack
@@ -69,6 +69,7 @@ npm run dev
 |----------|-------------|
 | [**ACTION-PLAN.md**](docs/ACTION-PLAN.md) | ⭐ **Priority action items & roadmap** |
 | [**CURRENT-STATUS.md**](docs/CURRENT-STATUS.md) | 📊 Platform status & metrics |
+| [**TESTING-GUIDE.md**](docs/TESTING-GUIDE.md) | 🧪 Testing practices & utilities |
 | [**WEBHOOK-INTEGRATION.md**](docs/WEBHOOK-INTEGRATION.md) | 🔗 Webhook setup guide (Zapier, Make, n8n) |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | 🤝 Developer contribution guide |
 | [QUICK-START.md](docs/QUICK-START.md) | Get building in 5 minutes |
@@ -104,11 +105,23 @@ npm run lint:fix
 ## 🛠️ Utility Scripts
 
 ```bash
+# Run all quality checks (lint, test, build)
+bash scripts/dev-utils.sh check-all
+
+# Run all test suites
+bash scripts/dev-utils.sh test-all
+
+# Run pre-commit checks
+bash scripts/dev-utils.sh pre-commit
+
 # Verify setup and run quality checks
 ./scripts/verify-setup.sh
 
 # Create a backup of the repository
 ./scripts/backup.sh
+
+# See all available commands
+bash scripts/dev-utils.sh help
 ```
 
 ## 🗄️ Database Setup
@@ -272,10 +285,11 @@ Proprietary - All rights reserved
 ## 🎉 Success Metrics
 
 - ✅ Build time: 3.74s (target: <5s)
-- ✅ Test coverage: 28/28 passing (100%)
+- ✅ Test coverage: 72/72 passing (100% - 19 main + 53 functions)
 - ✅ Lint errors: 0
-- ✅ Documentation: Complete with webhook guide
+- ✅ Documentation: Complete with testing & webhook guides
 - ✅ Demo mode: Fully functional
 - ✅ Security: Enhanced scanning in CI/CD
+- ✅ Developer tools: Comprehensive utility scripts
 
 **Ready to build! See [docs/QUICK-START.md](docs/QUICK-START.md) to get started.** 🚀
