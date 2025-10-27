@@ -4,8 +4,16 @@
  * Helper functions and mock data for testing
  */
 
+import { z } from 'zod';
 import type { Lead, Opportunity, Investor, Activity } from './schemas/crm';
 import { randomUUID } from 'crypto';
+
+// ============================================================================
+// Constants
+// ============================================================================
+
+/** Reserved UUID for system/test data that should not be deleted */
+const RESERVED_TEST_UUID = '00000000-0000-0000-0000-000000000000';
 
 // ============================================================================
 // Mock Data Generators
@@ -204,16 +212,23 @@ export function wait(ms: number): Promise<void> {
 
 /**
  * Mock fetch function for testing
+ * Note: Requires jest or compatible testing framework with fn() mock support
  */
 export function mockFetch(response: any, status: number = 200) {
-  return jest.fn(() =>
+  const mockFn = (url: string, options?: RequestInit) =>
     Promise.resolve({
       ok: status >= 200 && status < 300,
       status,
       json: () => Promise.resolve(response),
       text: () => Promise.resolve(JSON.stringify(response)),
-    })
-  ) as any;
+    } as Response);
+
+  // Add mock tracking if jest is available
+  if (typeof jest !== 'undefined') {
+    return jest.fn(mockFn) as any;
+  }
+  
+  return mockFn as any;
 }
 
 /**
@@ -246,7 +261,7 @@ export class MockApiClient {
 /**
  * Assert that a value matches a schema
  */
-export function assertValidSchema<T>(schema: any, value: any): T {
+export function assertValidSchema<T>(schema: z.ZodSchema<T>, value: any): T {
   const result = schema.safeParse(value);
   if (!result.success) {
     throw new Error(`Validation failed: ${JSON.stringify(result.error.format())}`);
@@ -288,10 +303,14 @@ export function generateInsertSql(tableName: string, data: Record<string, any>):
 
 /**
  * Clean test data from database
+ * Removes all records except those with the reserved test UUID
  */
-export async function cleanupTestData(supabase: any, tables: string[]): Promise<void> {
+export async function cleanupTestData(
+  supabase: { from: (table: string) => { delete: () => { neq: (column: string, value: string) => Promise<any> } } },
+  tables: string[]
+): Promise<void> {
   for (const table of tables) {
-    await supabase.from(table).delete().neq('id', '00000000-0000-0000-0000-000000000000');
+    await supabase.from(table).delete().neq('id', RESERVED_TEST_UUID);
   }
 }
 
