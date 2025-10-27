@@ -83,7 +83,7 @@ jobs:
         run: npm run test:coverage --if-present
 
       - name: Run function tests
-        run: npm run test:functions --if-present
+        run: npm run test:functions
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
