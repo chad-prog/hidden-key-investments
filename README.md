@@ -65,7 +65,16 @@ npm run dev
 
 ## 📚 Documentation
 
-### 🎯 Start Here
+### 🎯 Enterprise Vision Roadmap (NEW!)
+| Document | Description |
+|----------|-------------|
+| [**ENTERPRISE-VISION-MASTER-ROADMAP.md**](docs/ENTERPRISE-VISION-MASTER-ROADMAP.md) | 🗺️ **20-week master plan: Complete roadmap to enterprise platform** |
+| [**QUICK-REFERENCE.md**](docs/QUICK-REFERENCE.md) | ⚡ **Quick reference: Status, next actions, and key links** |
+| [**PHASE-1-INFRASTRUCTURE-ACTIVATION.md**](docs/PHASE-1-INFRASTRUCTURE-ACTIVATION.md) | 🔧 **Phase 1: Infrastructure activation guide (95% → 100%)** |
+| [**PHASE-2-MVP-IMPLEMENTATION-BLUEPRINT.md**](docs/PHASE-2-MVP-IMPLEMENTATION-BLUEPRINT.md) | 🎨 **Phase 2: Core MVP UI implementation blueprint** |
+| [**PHASE-3-7-ADVANCED-FEATURES-GUIDE.md**](docs/PHASE-3-7-ADVANCED-FEATURES-GUIDE.md) | 🚀 **Phase 3-7: ML, AI, and enterprise features guide** |
+
+### 🎯 Planning & Capability Docs
 | Document | Description |
 |----------|-------------|
 | [**WHAT-I-CAN-BUILD-NOW.md**](docs/WHAT-I-CAN-BUILD-NOW.md) | 🚀 **Complete capability roadmap - what can be built, when, and how** |
