@@ -68,6 +68,8 @@ npm run dev
 ### 🎯 Enterprise Vision Roadmap (NEW!)
 | Document | Description |
 |----------|-------------|
+| [**HOW-I-CAN-HELP.md**](docs/HOW-I-CAN-HELP.md) | 🎯 **COMPLETE GUIDE: Everything I can build for your Enterprise Vision** |
+| [**IMMEDIATE-NEXT-STEPS.md**](docs/IMMEDIATE-NEXT-STEPS.md) | ⚡ **START NOW: Get results in hours, not weeks** |
 | [**ENTERPRISE-VISION-MASTER-ROADMAP.md**](docs/ENTERPRISE-VISION-MASTER-ROADMAP.md) | 🗺️ **20-week master plan: Complete roadmap to enterprise platform** |
 | [**QUICK-REFERENCE.md**](docs/QUICK-REFERENCE.md) | ⚡ **Quick reference: Status, next actions, and key links** |
 | [**PHASE-1-INFRASTRUCTURE-ACTIVATION.md**](docs/PHASE-1-INFRASTRUCTURE-ACTIVATION.md) | 🔧 **Phase 1: Infrastructure activation guide (95% → 100%)** |
