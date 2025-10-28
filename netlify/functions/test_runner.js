@@ -1,6 +1,3 @@
-import dotenv from 'dotenv';
-dotenv.config({ path: '../../.env.local' });
-
 import { handler as mailchimpHandler } from './mailchimp-sync.js';
 import { handler as airtableHandler } from './airtable-sync.js';
 
