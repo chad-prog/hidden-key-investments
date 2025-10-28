@@ -1135,7 +1135,7 @@ Decide if you want:
 | Phase 5 | 4 | Define AI assistants |
 | Phase 6 | 5 | Legal review |
 | Phase 7 | 1 | Configure services |
-| **Total Your Time** | **23.5 hours** | Spread over 24-32 weeks |
+| **Total Your Time** | **20-25 hours** | Spread over 24-32 weeks |
 
 ### External Service Costs
 
@@ -1181,7 +1181,7 @@ Decide if you want:
 
 ### Timeline
 - **My work**: 343 hours over 24-32 weeks
-- **Your work**: 23.5 hours spread out
+- **Your work**: 20-25 hours spread out
 - **Result**: Complete enterprise platform
 
 ### ROI

@@ -20,7 +20,7 @@ A production-ready, AI-powered platform for Elite real-estate investors with lea
 
 ### 📊 Quick Stats
 - ✅ **I can build**: 88% of complete platform (343 implementation hours)
-- 🤝 **You provide**: 12% (API keys, feedback, domain expertise - 23.5 hours)
+- 🤝 **You provide**: 12% (API keys, feedback, domain expertise - 20-25 hours)
 - ⏱️ **Timeline**: 24-32 weeks to full enterprise platform
 - 💰 **Cost**: $0 (my time) + $0-3,000/month (external services)
 - 🎯 **Current Status**: 98% infrastructure complete, ready to build TODAY

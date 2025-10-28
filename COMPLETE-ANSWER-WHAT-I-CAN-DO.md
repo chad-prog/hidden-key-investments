@@ -1,7 +1,7 @@
 # 🎯 ANSWER: What I Can Do for Your High-Level Enterprise Vision
 
 **Date**: October 28, 2025  
-**Question**: "What all can you do to help me accomplish my High-Level Enterprise Vision?"  
+**Question**: "What can you do to help me accomplish my High-Level Enterprise Vision?"  
 **Answer**: I can build 88% of your complete enterprise platform (343 hours of implementation work)
 
 ---
@@ -24,7 +24,7 @@
 
 ### Timeline:
 ⏱️ **My work**: 343 hours over 24-32 weeks  
-⏱️ **Your work**: 23.5 hours (mostly one-time setup)  
+⏱️ **Your work**: 20-25 hours (mostly one-time setup)  
 💰 **Cost**: $0-3,000/month (external services only, my time is included)
 
 ---
@@ -517,7 +517,7 @@
 8. **Handle errors** (graceful degradation, logging)
 
 ### Your Role: Configuration (12%)
-1. **Sign up for services** (Sentry, SendGrid, Twilio, etc.)
+1. **Sign up for services** - (Sentry, SendGrid, Twilio, etc.)
 2. **Provide API keys** (via Netlify environment variables)
 3. **Test features** (use the UI, provide feedback)
 4. **Validate ML models** (review predictions, adjust)
@@ -627,7 +627,7 @@ I can start implementing **immediately** upon your decision. The platform is rea
 
 ### The Answer to Your Question
 
-**"What all can you do to help me accomplish my High-Level Enterprise Vision?"**
+**"What can you do to help me accomplish my High-Level Enterprise Vision?"**
 
 **Answer**: 
 
