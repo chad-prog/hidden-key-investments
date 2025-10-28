@@ -244,12 +244,10 @@ async function persistLead(leadData, correlationId) {
  * Trigger automated workflows
  */
 async function triggerWorkflows(lead) {
-  // Import workflow engine dynamically
-  const { workflowEngine } = await import('../../../src/lib/workflowEngine');
-  
-  await workflowEngine.trigger('lead_created', lead, {
-    timestamp: new Date().toISOString(),
-  });
+  // TODO: Implement workflow engine integration for serverless functions
+  // The workflow engine currently resides in the frontend src directory
+  // and needs to be refactored for serverless function use
+  console.log('[LeadIngest] Workflow triggering deferred - lead_created event for lead:', lead.id);
 }
 
 /**

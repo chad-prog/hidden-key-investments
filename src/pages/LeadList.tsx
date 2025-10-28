@@ -160,13 +160,12 @@ export default function LeadList() {
         case 'date':
           comparison = new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
           break;
--     case 'name':
-+     case 'name': {
+        case 'name': {
           const nameA = `${a.firstName || ''} ${a.lastName || ''}`.trim();
           const nameB = `${b.firstName || ''} ${b.lastName || ''}`.trim();
           comparison = nameA.localeCompare(nameB);
           break;
-+     }
+   }
         case 'score':
           comparison = (a.score || 0) - (b.score || 0);
           break;
