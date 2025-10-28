@@ -2,9 +2,9 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "test": "../../node_modules/.bin/vitest run",
-    "test:watch": "../../node_modules/.bin/vitest",
-    "test:coverage": "../../node_modules/.bin/vitest run --coverage"
+    "test": "../../node_modules/.bin/vitest run --config vitest-config.js",
+    "test:watch": "../../node_modules/.bin/vitest --config vitest-config.js",
+    "test:coverage": "../../node_modules/.bin/vitest run --coverage --config vitest-config.js"
   },
   "dependencies": {
     "@mailchimp/mailchimp_marketing": "^3.0.80",

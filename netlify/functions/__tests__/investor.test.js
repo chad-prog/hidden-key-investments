@@ -19,10 +19,9 @@ vi.mock('../supabaseClient.cjs', () => ({
 }));
 
 // Import handler after mocking
-import('../investor.js').then(module => {
-  const { handler } = module;
-  
-  describe('investor function', () => {
+const { handler } = await import('../investor.js');
+
+describe('investor function', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -248,5 +247,4 @@ import('../investor.js').then(module => {
       expect(body.error).toContain('Method not allowed');
     });
   });
-});
 });

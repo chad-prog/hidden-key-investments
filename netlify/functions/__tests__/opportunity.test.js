@@ -1,7 +1,7 @@
 // Tests for opportunity.js serverless function
 // These tests verify CRUD operations and stage transitions for opportunities
 
-const { describe, it, expect, beforeEach, vi } = require('vitest');
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 
 // Mock Supabase client
 const mockSupabase = {
@@ -20,7 +20,7 @@ vi.mock('../supabaseClient.cjs', () => ({
 }));
 
 // Import handler after mocking
-const { handler } = require('../opportunity.js');
+const { handler } = await import('../opportunity.js');
 
 describe('opportunity function', () => {
   beforeEach(() => {
