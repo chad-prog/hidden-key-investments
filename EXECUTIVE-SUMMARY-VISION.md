@@ -248,7 +248,7 @@
 
 For detailed technical information, see:
 
-- **COMPREHENSIVE-VISION-CAPABILITY-GUIDE.md** - Complete technical breakdown (70KB)
+- **COMPREHENSIVE-VISION-CAPABILITY-GUIDE.md** - Complete technical breakdown (44KB)
 - **IMPLEMENTATION-STATUS.md** - Current platform status
 - **PROJECT-ROADMAP.md** - Technical roadmap
 - **README.md** - Getting started guide
