@@ -9,7 +9,7 @@ const InvestorSchema = zod.object({
   notes: zod.string().optional()
 });
 
-export const handler = async function(event) {
+exports.handler = async function(event) {
   if (event.httpMethod === 'POST') {
     let data;
     try { data = JSON.parse(event.body || '{}'); } catch (err) {
