@@ -63,6 +63,7 @@ VITE_SENTRY_DSN=your_sentry_dsn_here
 VITE_APP_VERSION=1.0.0
 
 # Email Marketing
+# Note: Client-side uses VITE_ prefix, server-side functions use without prefix
 VITE_MAILCHIMP_API_KEY=your_mailchimp_api_key
 VITE_MAILCHIMP_SERVER_PREFIX=us1
 VITE_MAILCHIMP_AUDIENCE_ACCREDITED=your_audience_id
@@ -127,11 +128,18 @@ Add these variables for production:
 
 #### Email Marketing (Optional)
 
-| Variable | Description | Where to get it |
+**Note**: Server-side functions use variables without `VITE_` prefix.
+
+| Variable (Server-side) | Description | Where to get it |
 |----------|-------------|-----------------|
 | `MAILCHIMP_API_KEY` | Mailchimp API key | Mailchimp → Account → Extras → API Keys |
 | `MAILCHIMP_SERVER_PREFIX` | Server prefix (e.g., us1) | From your API key |
 | `MAILCHIMP_AUDIENCE_ID` | List/Audience ID | Mailchimp → Audience → Settings |
+
+For client-side usage, also set:
+- `VITE_MAILCHIMP_API_KEY`
+- `VITE_MAILCHIMP_SERVER_PREFIX`
+- `VITE_MAILCHIMP_AUDIENCE_*` (various audience IDs)
 
 #### Data Sync (Optional)
 
