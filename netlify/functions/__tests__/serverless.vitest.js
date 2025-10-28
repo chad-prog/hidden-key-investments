@@ -2,10 +2,10 @@ import { expect, describe, test, beforeEach, vi } from 'vitest';
 import { handler as mailchimpHandler } from '../mailchimp-sync';
 import { handler as airtableHandler } from '../airtable-sync';
 
-// Mock fetch
-vi.mock('undici', () => ({
-  fetch: vi.fn()
-}));
+// Mock global fetch
+global.fetch = vi.fn();
+
+const fetch = global.fetch;
 
 import { fetch } from 'undici';
 

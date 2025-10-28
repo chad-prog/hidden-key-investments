@@ -1,6 +1,6 @@
 // Investor endpoint with Supabase CRUD
-const zod = require('zod');
-const { supabase } = require('./supabaseClient.cjs');
+import zod from 'zod';
+import { supabase } from './supabaseClient.cjs';
 
 const InvestorSchema = zod.object({
   name: zod.string().min(1, 'Name is required'),
@@ -9,8 +9,7 @@ const InvestorSchema = zod.object({
   notes: zod.string().optional()
 });
 
-exports.handler = async function(event) {
-  if (event.httpMethod === 'POST') {
+export const handler = async function(event) {  if (event.httpMethod === 'POST') {
     let data;
     try { 
       data = JSON.parse(event.body || '{}'); 
