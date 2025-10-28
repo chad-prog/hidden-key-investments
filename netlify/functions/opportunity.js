@@ -12,8 +12,6 @@ const OpportunitySchema = zod.object({
 export const handler = async function(event) {
   if (event.httpMethod === 'POST') {
     let data;
-  if (event.httpMethod === 'POST') {
-    let data;
     try { 
       data = JSON.parse(event.body || '{}'); 
     } catch {
