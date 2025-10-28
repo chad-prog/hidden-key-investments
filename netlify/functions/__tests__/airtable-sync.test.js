@@ -1,15 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { handler } from '../airtable-sync.js';
 
-import { fetch as origFetch } from 'undici';
+// Mock global fetch
+global.fetch = vi.fn();
 
-// Mock undici fetch
-vi.mock('undici', () => ({
-  fetch: vi.fn()
-}));
-
-// Get the mocked fetch function
-const fetch = vi.mocked(origFetch);
+const fetch = global.fetch;
 
 // Mock environment variables
 const ENV_VARS = {
