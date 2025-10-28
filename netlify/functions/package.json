@@ -9,6 +9,7 @@
   "dependencies": {
     "@mailchimp/mailchimp_marketing": "^3.0.80",
     "@netlify/functions": "^2.5.1",
-   "airtable": "^0.12.2",
-   "dotenv": "^16.4.5"
+    "airtable": "^0.12.2",
+    "dotenv": "^16.4.5"
+  }
 }
