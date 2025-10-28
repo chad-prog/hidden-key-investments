@@ -1258,7 +1258,7 @@ class MLMonitoringService:
 | **5. Communication & Legal** | 5% | 80% | 120-150 | $12K-15K | 4-8 weeks |
 | **6. AI Orchestration** | 15% | 70% | 180-220 | $18K-22K | 6-10 weeks |
 | **7. Scale & Polish** | 95% | 100% | 60-80 | $6K-8K | 2-4 weeks |
-| **TOTAL** | **~40%** | **~85%** | **980-1210** | **$98K-121K** | **24-32 weeks** |
+| **TOTAL** | **~40%** | **~85%** | **660-970** | **$66K-97K** | **16-24 weeks** |
 
 ### Notes on Cost:
 - Assumes $100/hr blended rate (realistic for senior full-stack + ML engineers)
