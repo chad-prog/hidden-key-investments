@@ -223,7 +223,7 @@ export const useEliteInvestorCRM = () => {
       // Use env-driven API key and base id. If not present, operate in demo/no-op mode.
       const _env = (import.meta as any).env || {};
       const apiKey = _env.VITE_AIRTABLE_API_KEY as string | undefined;
-      const baseId = _env.VITE_AIRTABLE_BASE_INVESTOR_LEADS || 'appsxCvXYkJF62wQc';
+      const baseId = _env.VITE_AIRTABLE_BASE_INVESTOR_LEADS;
 
       if (!apiKey || apiKey === 'your_new_airtable_api_key_here') {
         console.log('Demo mode: would POST to Airtable', baseId, airtableData);
