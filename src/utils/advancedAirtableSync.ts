@@ -27,9 +27,9 @@ class AdvancedAirtableSync {
   private _env = (import.meta as any).env || {};
   private apiKey = this._env.VITE_AIRTABLE_API_KEY || 'demo-key';
   private baseIds = {
-    investorLeads: this._env.VITE_AIRTABLE_BASE_INVESTOR_LEADS || 'appsxCvXYkJF62wQc',
-    investorInteractions: this._env.VITE_AIRTABLE_BASE_INVESTOR_INTERACTIONS || 'apppzfIaiHvQ2avWm',
-    propertyTracker: this._env.VITE_AIRTABLE_BASE_PROPERTY_TRACKER || 'appl3vaf5gFdstSA2'
+    investorLeads: this._env.VITE_AIRTABLE_BASE_INVESTOR_LEADS,
+    investorInteractions: this._env.VITE_AIRTABLE_BASE_INVESTOR_INTERACTIONS,
+    propertyTracker: this._env.VITE_AIRTABLE_BASE_PROPERTY_TRACKER
   };
 
   /**
