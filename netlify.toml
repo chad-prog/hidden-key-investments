@@ -4,6 +4,7 @@ publish = "dist"
 
 [build.environment]
   NODE_VERSION = "22"
+  SECRETS_SCAN_OMIT_KEYS = "efd1019e962b4a24b32936088c76d2d9"
 
 [functions]
   directory = "netlify/functions"
