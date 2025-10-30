@@ -18,12 +18,13 @@ export function createMockLead(overrides?: Partial<Lead>): Lead {
     id,
     source: 'website',
     status: 'new',
+    firstName: 'John',
+    lastName: 'Doe',
     contact: {
-      firstName: 'John',
-      lastName: 'Doe',
       email: 'john.doe@example.com',
       phone: '+1234567890',
       preferredContact: 'email',
+      doNotContact: false,
     },
     property: {
       address: '123 Main St',
@@ -51,20 +52,14 @@ export function createMockOpportunity(overrides?: Partial<Opportunity>): Opportu
   
   return {
     id,
+    leadId: `lead_${Math.random().toString(36).substr(2, 9)}`,
     name: 'Test Opportunity',
     stage: 'prospecting',
     dealType: 'acquisition',
     estimatedValue: 1000000,
     expectedReturn: 0.15,
-    probability: 0.5,
-    property: {
-      address: '456 Investment Ave',
-      city: 'Dallas',
-      state: 'TX',
-      zip: '75201',
-      propertyType: 'commercial',
-      estimatedValue: 1000000,
-    },
+    probability: 50,
+    secondaryInvestors: [],
     documents: [],
     tags: [],
     customFields: {},
@@ -83,30 +78,32 @@ export function createMockInvestor(overrides?: Partial<Investor>): Investor {
   
   return {
     id,
+    firstName: 'Jane',
+    lastName: 'Smith',
     type: 'individual',
     status: 'active',
     contact: {
-      firstName: 'Jane',
-      lastName: 'Smith',
       email: 'jane.smith@example.com',
       phone: '+1987654321',
       preferredContact: 'email',
+      doNotContact: false,
     },
     investmentProfile: {
       minInvestment: 50000,
       maxInvestment: 500000,
+      preferredDealTypes: [],
       preferredPropertyTypes: ['multi_family', 'commercial'],
       preferredLocations: ['TX', 'CA'],
-      riskTolerance: 'moderate',
+      riskTolerance: 'medium',
     },
     accreditation: {
-      status: 'verified',
+      isAccredited: true,
       verifiedAt: now,
       expiresAt: new Date(now.getTime() + 365 * 24 * 60 * 60 * 1000), // 1 year
     },
     totalInvested: 0,
-    activeDealCount: 0,
-    completedDealCount: 0,
+    activeDeals: 0,
+    completedDeals: 0,
     tags: [],
     customFields: {},
     createdAt: now,
@@ -173,12 +170,13 @@ export function createMockLeads(count: number, overrides?: Partial<Lead>): Lead[
   return Array.from({ length: count }, (_, i) =>
     createMockLead({
       ...overrides,
+      firstName: `Lead${i}`,
+      lastName: 'Test',
       contact: {
-        firstName: `Lead${i}`,
-        lastName: 'Test',
         email: `lead${i}@example.com`,
         phone: `+123456789${i}`,
         preferredContact: 'email',
+        doNotContact: false,
       },
     })
   );
@@ -192,17 +190,18 @@ export function createMockCRMDataset() {
   const opportunities = leads.slice(0, 3).map((lead) =>
     createMockOpportunity({
       leadId: lead.id,
-      name: `Deal for ${lead.contact.firstName}`,
+      name: `Deal for ${lead.firstName}`,
     })
   );
   const investors = Array.from({ length: 3 }, (_, i) =>
     createMockInvestor({
+      firstName: `Investor${i}`,
+      lastName: 'Active',
       contact: {
-        firstName: `Investor${i}`,
-        lastName: 'Active',
         email: `investor${i}@example.com`,
         phone: `+198765432${i}`,
         preferredContact: 'email',
+        doNotContact: false,
       },
     })
   );
@@ -213,7 +212,7 @@ export function createMockCRMDataset() {
     activities.push(
       createMockActivity({
         leadId: lead.id,
-        subject: `Initial contact for ${lead.contact.firstName}`,
+        subject: `Initial contact for ${lead.firstName}`,
       })
     );
   });

@@ -9,8 +9,10 @@ import AccreditedInvestors from './pages/AccreditedInvestors';
 import InvestorDashboard from './pages/InvestorDashboard';
 import IntegrationDashboard from './pages/IntegrationDashboard';
 import LeadForm from './components/LeadForm';
+import LeadManagement from './pages/LeadManagement';
 import LeadList from './pages/LeadList';
 import LeadDetail from './pages/LeadDetail';
+import LeadCreate from './pages/LeadCreate';
 
 function App() {
   return (
@@ -24,7 +26,9 @@ function App() {
           <Route path="/lead-form" element={<LeadForm />} />
           
           {/* CRM Routes */}
+          <Route path="/crm" element={<LeadManagement />} />
           <Route path="/crm/leads" element={<LeadList />} />
+          <Route path="/crm/leads/new" element={<LeadCreate />} />
           <Route path="/crm/leads/:leadId" element={<LeadDetail />} />
         </Routes>
       </div>
