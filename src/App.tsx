@@ -2,7 +2,6 @@
  * Main App component with routing setup
  * Defines the application structure and routes
  */
-import { ErrorButton } from './sentry.jsx';/**
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router';
 import Home from './pages/Home';
@@ -28,8 +27,6 @@ function App() {
           <Route path="/crm/leads" element={<LeadList />} />
           <Route path="/crm/leads/:leadId" element={<LeadDetail />} />
         </Routes>
-        {/* Add the button here: */}
-       <ErrorButton />
       </div>
     </BrowserRouter>
   );
