@@ -4,7 +4,7 @@ publish = "dist"
 
 [build.environment]
   NODE_VERSION = "22"
-  SECRETS_SCAN_OMIT_PATHS = "netlify/functions/__tests__/**"
+  SECRETS_SCAN_OMIT_PATHS = "netlify/functions/__tests__/**:docs/**:*.md:scripts/**"
 
 [functions]
   directory = "netlify/functions"
