@@ -88,7 +88,7 @@ const server = http.createServer((req, res) => {
     } catch (err) {
       console.error('Function error', name, err.stack || err);
       res.writeHead(500, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ error: String(err) }));
+      res.end(JSON.stringify({ error: 'An internal error occurred' }));
     }
   });
 });
