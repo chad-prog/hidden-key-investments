@@ -22,11 +22,11 @@ class EmailMarketingService {
   private apiKey = this._env.VITE_MAILCHIMP_API_KEY || 'demo-key';
   private serverPrefix = this._env.VITE_MAILCHIMP_SERVER_PREFIX || 'us8';
   private audienceIds = {
-    accredited: this._env.VITE_MAILCHIMP_AUDIENCE_ACCREDITED || 'c662ef0af5',
-    firstTime: this._env.VITE_MAILCHIMP_AUDIENCE_FIRST_TIME || 'cc891b6526',
-    passive: this._env.VITE_MAILCHIMP_AUDIENCE_PASSIVE || '825140d12f',
-    texas: this._env.VITE_MAILCHIMP_AUDIENCE_TEXAS || '0b1df5453e',
-    general: this._env.VITE_MAILCHIMP_AUDIENCE_GENERAL || 'a47056c160'
+    accredited: this._env.VITE_MAILCHIMP_AUDIENCE_ACCREDITED || '',
+    firstTime: this._env.VITE_MAILCHIMP_AUDIENCE_FIRST_TIME || '',
+    passive: this._env.VITE_MAILCHIMP_AUDIENCE_PASSIVE || '',
+    texas: this._env.VITE_MAILCHIMP_AUDIENCE_TEXAS || '',
+    general: this._env.VITE_MAILCHIMP_AUDIENCE_GENERAL || ''
   };
 
   /**

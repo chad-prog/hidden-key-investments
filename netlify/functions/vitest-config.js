@@ -4,7 +4,7 @@ export default defineConfig({
   test: {
     environment: 'node',
     globals: true,
-    // Only include function tests that are properly formatted
+    // Include working function tests
     include: [
       '__tests__/serverless.test.js',
       '__tests__/airtable-sync.test.js',
@@ -12,10 +12,10 @@ export default defineConfig({
       '__tests__/lead-ingest-enhanced.test.js',
       '__tests__/health.test.js'
     ],
-    // Exclude problematic tests that need refactoring
+    // Exclude tests that need refactoring for proper async mocking
     exclude: [
-      '__tests__/investor.test.js',  // Needs async import refactoring
-      '__tests__/opportunity.test.js',  // Uses CommonJS require
+      '__tests__/investor.test.js',  // Mock setup needs refactoring for top-level await
+      '__tests__/opportunity.test.js',  // Mock setup needs refactoring for top-level await
       '__tests__/serverless.vitest.js'  // Duplicate of serverless.test.js
     ],
     // Coverage configuration for functions

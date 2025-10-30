@@ -166,7 +166,7 @@ describe('webhook-inbound function', () => {
       body: JSON.stringify(payload),
     };
     
-    const response = await handler(event);
+    await handler(event);
     const fetchCall = global.fetch.mock.calls[0];
     const fetchBody = JSON.parse(fetchCall[1].body);
     

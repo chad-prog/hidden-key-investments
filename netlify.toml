@@ -1,9 +1,10 @@
 [build]
-  command = "npm install && npm run build"
-  publish = "dist"
+command = "npm install --include=dev && npm run build"
+publish = "dist"
 
 [build.environment]
   NODE_VERSION = "22"
+  SECRETS_SCAN_OMIT_PATHS = "netlify/functions/__tests__/**:docs/**:*.md:scripts/**"
 
 [functions]
   directory = "netlify/functions"

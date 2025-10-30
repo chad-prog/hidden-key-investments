@@ -112,7 +112,7 @@ X-API-Key: your_api_key_here
 
 **Future**: OAuth 2.0 with JWT tokens
 ```http
-Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+Authorization: Bearer <JWT_TOKEN>
 ```
 
 ### Role-Based Access Control (RBAC)

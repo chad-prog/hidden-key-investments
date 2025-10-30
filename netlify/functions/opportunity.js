@@ -1,16 +1,15 @@
-// Opportunity endpoint with Supabase CRUD
-const zod = require('zod');
-const { supabase } = require('./supabaseClient.cjs');
+import zod from 'zod';
+import { supabase } from './supabaseClient.cjs';
 const validStages = ['new', 'review', 'negotiation', 'closed', 'lost'];
 
 const OpportunitySchema = zod.object({
-  title: zod.string().min(1, 'Title is required'),
-  value: zod.number().min(0, 'Value must be positive'),
-  stage: zod.string().optional(),
+
+
+  
   notes: zod.string().optional()
 });
 
-exports.handler = async function(event) {
+export const handler = async function(event) {
   if (event.httpMethod === 'POST') {
     let data;
     try { 

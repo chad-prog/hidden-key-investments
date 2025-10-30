@@ -1,4 +1,4 @@
-import { fetch } from 'undici';
+
 import { Logger, makeErrorResponse, readResponseSafely, retryWithBackoff } from './lib/logger.js';
 import { airtableSubscriberSchema, validatePayload } from './lib/schemas.js';
 

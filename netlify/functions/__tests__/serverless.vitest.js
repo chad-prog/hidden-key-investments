@@ -2,16 +2,12 @@ import { expect, describe, test, beforeEach, vi } from 'vitest';
 import { handler as mailchimpHandler } from '../mailchimp-sync';
 import { handler as airtableHandler } from '../airtable-sync';
 
-// Mock fetch
-vi.mock('undici', () => ({
-  fetch: vi.fn()
-}));
-
-import { fetch } from 'undici';
+// Mock global fetch
+global.fetch = vi.fn();
 
 describe('Serverless Functions', () => {
   beforeEach(() => {
-    vi.mocked(fetch).mockReset();
+    vi.mocked(global.fetch).mockReset();
     process.env = {};
   });
 
@@ -40,7 +36,7 @@ describe('Serverless Functions', () => {
       process.env.MAILCHIMP_LIST_ID = 'test-list';
       process.env.MAILCHIMP_SERVER_PREFIX = 'us1';
 
-      vi.mocked(fetch).mockImplementationOnce(() =>
+      vi.mocked(global.fetch).mockImplementationOnce(() =>
         Promise.resolve({
           ok: true,
           json: () => Promise.resolve({ id: 'test-member-id' }),
@@ -78,7 +74,7 @@ describe('Serverless Functions', () => {
       process.env.AIRTABLE_BASE_ID = 'test-base';
       process.env.AIRTABLE_TABLE_NAME = 'Properties';
 
-      vi.mocked(fetch).mockImplementationOnce(() =>
+      vi.mocked(global.fetch).mockImplementationOnce(() =>
         Promise.resolve({
           ok: true,
           json: () => Promise.resolve({ records: [{ id: 'test-record-id' }] }),
