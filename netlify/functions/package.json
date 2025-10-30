@@ -11,5 +11,5 @@
     "@netlify/functions": "^2.5.1",
     "airtable": "^0.12.2",
     "dotenv": "^16.4.5"
-	
+  }	
 }
