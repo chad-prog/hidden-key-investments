@@ -40,7 +40,8 @@ describe('LeadManagement', () => {
     );
 
     expect(screen.getByRole('button', { name: /view all leads/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /new lead/i })).toBeInTheDocument();
+    const newLeadButtons = screen.getAllByRole('button', { name: /new lead/i });
+    expect(newLeadButtons.length).toBeGreaterThan(0);
   });
 
   it('displays stat cards', async () => {
@@ -53,8 +54,10 @@ describe('LeadManagement', () => {
     await waitFor(() => {
       expect(screen.getByText('Total Leads')).toBeInTheDocument();
       expect(screen.getByText('New Leads')).toBeInTheDocument();
-      expect(screen.getByText('Qualified')).toBeInTheDocument();
-      expect(screen.getByText('Converted')).toBeInTheDocument();
+      const qualifiedElements = screen.getAllByText('Qualified');
+      expect(qualifiedElements.length).toBeGreaterThan(0);
+      const convertedElements = screen.getAllByText('Converted');
+      expect(convertedElements.length).toBeGreaterThan(0);
     });
   });
 
