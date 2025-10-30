@@ -51,7 +51,7 @@ describe('Test Fixtures', () => {
       expect(investor).toHaveProperty('type', 'individual');
       expect(investor).toHaveProperty('status', 'active');
       expect(investor.investmentProfile).toHaveProperty('minInvestment');
-      expect(investor.accreditation).toHaveProperty('status', 'verified');
+      expect(investor.accreditation).toHaveProperty('isAccredited', true);
     });
   });
 
