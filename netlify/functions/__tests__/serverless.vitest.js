@@ -5,6 +5,8 @@ import { handler as airtableHandler } from '../airtable-sync';
 // Mock global fetch
 global.fetch = vi.fn();
 
+import { fetch } from 'undici';
+
 describe('Serverless Functions', () => {
   beforeEach(() => {
     vi.mocked(global.fetch).mockReset();
