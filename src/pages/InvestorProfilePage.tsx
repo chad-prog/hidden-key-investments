@@ -7,6 +7,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
+import type { Investor } from '@/lib/schemas/crm';
 import { useInvestors } from '@/hooks/useInvestors';
 import { InvestorProfile } from '@/components/crm/InvestorProfile';
 import Header from '@/components/Header';
@@ -18,7 +19,7 @@ export default function InvestorProfilePage() {
   const { investorId } = useParams<{ investorId: string }>();
   const navigate = useNavigate();
   const { getInvestor, isLoading, error } = useInvestors();
-  const [investor, setInvestor] = useState(investorId ? getInvestor(investorId) : undefined);
+  const [investor, setInvestor] = useState<Investor | undefined>(undefined);
 
   useEffect(() => {
     if (investorId && !isLoading) {

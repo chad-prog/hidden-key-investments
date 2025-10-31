@@ -32,12 +32,13 @@ interface InvestmentHistoryProps {
 
 export function InvestmentHistory({ investor }: InvestmentHistoryProps) {
   // Mock investment data - in production, this would come from the API
+  // Sort by date in descending order (most recent first)
   const mockInvestments: Investment[] = [
     {
       id: '1',
       name: 'Luxury Oceanfront Villa',
       amount: 450000,
-      date: new Date('2024-01-15'),
+      date: new Date('2024-05-10'),
       status: 'active',
       roi: 9.2,
       type: 'Direct Ownership'
@@ -55,11 +56,11 @@ export function InvestmentHistory({ investor }: InvestmentHistoryProps) {
       id: '3',
       name: 'Commercial Redevelopment',
       amount: 500000,
-      date: new Date('2024-05-10'),
+      date: new Date('2024-01-15'),
       status: 'pending',
       type: 'Development Fund'
     }
-  ];
+  ].sort((a, b) => b.date.getTime() - a.date.getTime());
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -168,10 +169,10 @@ export function InvestmentHistory({ investor }: InvestmentHistoryProps) {
 
                   {index < mockInvestments.length - 1 && (
                     <div className="text-xs text-gray-500 mt-2">
-                      {Math.floor(
-                        (mockInvestments[index + 1].date.getTime() - investment.date.getTime()) / 
+                      {Math.abs(Math.floor(
+                        (investment.date.getTime() - mockInvestments[index + 1].date.getTime()) / 
                         (1000 * 60 * 60 * 24)
-                      )} days until next investment
+                      ))} days since previous investment
                     </div>
                   )}
                 </div>
@@ -197,12 +198,13 @@ export function InvestmentHistory({ investor }: InvestmentHistoryProps) {
           <div className="text-center">
             <p className="text-sm text-gray-600">Avg. ROI</p>
             <p className="text-2xl font-bold text-purple-600">
-              {(
-                mockInvestments
-                  .filter(i => i.roi !== undefined)
-                  .reduce((sum, i) => sum + (i.roi || 0), 0) / 
-                mockInvestments.filter(i => i.roi !== undefined).length || 0
-              ).toFixed(1)}%
+              {(() => {
+                const withROI = mockInvestments.filter(i => i.roi !== undefined);
+                const avg = withROI.length > 0
+                  ? withROI.reduce((sum, i) => sum + (i.roi || 0), 0) / withROI.length
+                  : 0;
+                return avg.toFixed(1);
+              })()}%
             </p>
           </div>
         </div>
