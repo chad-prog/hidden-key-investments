@@ -14,6 +14,7 @@ import LeadList from './pages/LeadList';
 import LeadDetail from './pages/LeadDetail';
 import LeadCreate from './pages/LeadCreate';
 import InvestorProfilePage from './pages/InvestorProfilePage';
+import InvestorsPage from './pages/InvestorsPage';
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
           <Route path="/crm/leads" element={<LeadList />} />
           <Route path="/crm/leads/new" element={<LeadCreate />} />
           <Route path="/crm/leads/:leadId" element={<LeadDetail />} />
+          <Route path="/crm/investors" element={<InvestorsPage />} />
           <Route path="/crm/investors/:investorId" element={<InvestorProfilePage />} />
         </Routes>
       </div>
