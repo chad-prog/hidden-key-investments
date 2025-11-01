@@ -21,7 +21,7 @@ npm install
 npm run dev
 
 # 3. Open browser and explore (2 minutes)
-# Visit http://localhost:5173
+# Visit http://localhost:5173 (or different port if 5173 is in use)
 # See working LeadTable, OpportunityPipeline, InvestorDirectory
 ```
 
