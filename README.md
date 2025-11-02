@@ -11,24 +11,26 @@ A production-ready, AI-powered platform for Elite real-estate investors with lea
 
 ### ⭐ START HERE - Only 3 Documents You Need!
 
-**1. [MASTER-INDEX-START-HERE.md](MASTER-INDEX-START-HERE.md)** 🗺️ **READ THIS FIRST!**
-   - Navigate all 1,094 documentation files
-   - Find exactly what you need
-   - Skip duplicate/outdated docs
-   - 5-minute orientation
+**📚 LOST IN DOCUMENTATION?** → [DOCUMENTATION-INDEX.md](DOCUMENTATION-INDEX.md) - Organized navigation hub for all 144+ docs
 
-**2. [WHAT-I-CAN-DO-COMPLETE-ANSWER.md](WHAT-I-CAN-DO-COMPLETE-ANSWER.md)** 🎯 **THE DEFINITIVE ANSWER**
+**1. [WHAT-I-CAN-DO-COMPLETE-ANSWER.md](WHAT-I-CAN-DO-COMPLETE-ANSWER.md)** 🎯 **THE DEFINITIVE ANSWER**
    - Complete answer to your vision question
    - Detailed specs for all 7 phases
    - Time and cost breakdowns
    - What you need to provide
    - **Read this to understand everything I can build**
 
-**3. [NEXT-ACTIONS-SIMPLIFIED.md](NEXT-ACTIONS-SIMPLIFIED.md)** ⚡ **TAKE ACTION NOW**
+**2. [NEXT-ACTIONS-SIMPLIFIED.md](NEXT-ACTIONS-SIMPLIFIED.md)** ⚡ **TAKE ACTION NOW**
    - Choose your path (A/B/C/D)
    - Copy/paste decision template
    - Get started in 5 minutes
    - **Read this to start building immediately**
+
+**3. [docs/NAVIGATION-GUIDE.md](docs/NAVIGATION-GUIDE.md)** 🧭 **FIND WHAT YOU NEED**
+   - Visual documentation map
+   - Learning paths by role
+   - Quick decision tree
+   - Search by keyword or question
 
 ### 📊 Quick Stats (Updated Nov 2, 2025)
 - ✅ **Platform Status**: 91% complete (Phase 1: 100%, Phase 2: 91%)
