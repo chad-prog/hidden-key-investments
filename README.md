@@ -4,19 +4,48 @@ A production-ready, AI-powered platform for Elite real-estate investors with lea
 
 ---
 
-## 🎉 NEW: Organized Documentation System!
+## 🎉 NEW: Interactive Documentation Portal!
 
-**Lost in 144+ documentation files?** We've created a streamlined navigation system!
+**Lost in 167+ documentation files?** We've built an interactive web portal with powerful search!
 
-👉 **[View the Documentation System Guide](docs/HOW-TO-USE-NEW-DOCS-SYSTEM.md)** - Learn how to navigate efficiently
+### 🚀 Access the Portal
 
-**Quick Access:**
-- 📚 [Documentation Index](DOCUMENTATION-INDEX.md) - Master navigation hub
-- 🧭 [Navigation Guide](docs/NAVIGATION-GUIDE.md) - Visual maps & decision trees
-- 📇 [Quick Reference Card](docs/QUICK-REFERENCE-CARD.md) - Fast answers (5 min)
-- 📋 [Complete Catalog](DOCUMENTATION-CATALOG.md) - All 144+ files listed
+```bash
+npm run dev
+# Navigate to http://localhost:5173/docs
+```
 
-**Result:** Find what you need in < 1 minute instead of hours! 🚀
+**Features:**
+- 🔍 **Full-text search** - Search across all 167 files instantly
+- 📂 **Category filtering** - 8 organized categories for easy navigation
+- 👤 **Role-based filtering** - Filter by Developer, Executive, DevOps, or Architect
+- ⏱️ **Read time estimates** - Know how long each document takes
+- 🏷️ **Tag system** - Multi-dimensional organization
+- 📊 **Analytics** - Track popular and recently viewed docs (privacy-friendly)
+- 📱 **Mobile-responsive** - Works on all devices
+
+### 📚 Quick Links
+
+- 🌟 **[Interactive Portal](http://localhost:5173/docs)** - Start here! (requires `npm run dev`)
+- 📖 **[Documentation System Guide](DOCUMENTATION-SYSTEM-GUIDE.md)** - Learn how to use the portal
+- 📚 **[Documentation Index](DOCUMENTATION-INDEX.md)** - Master navigation hub
+- 🧭 **[Navigation Guide](docs/NAVIGATION-GUIDE.md)** - Visual maps & decision trees
+- 📇 **[Quick Reference Card](docs/QUICK-REFERENCE-CARD.md)** - Fast answers (5 min)
+
+### 🛠️ Documentation Tools
+
+```bash
+# Lint documentation for quality issues
+npm run docs:lint
+
+# Generate searchable catalog
+npm run docs:catalog
+
+# Analyze organization
+npm run docs:analyze
+```
+
+**Result:** Find what you need in < 10 seconds instead of hours! 🚀
 
 ---
 

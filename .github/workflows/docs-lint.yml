@@ -1,0 +1,63 @@
+name: Documentation Linter
+
+on:
+  push:
+    branches: [ main, staging ]
+    paths:
+      - '**.md'
+      - 'scripts/lint-docs.cjs'
+      - '.github/workflows/docs-lint.yml'
+  pull_request:
+    branches: [ main, staging ]
+    paths:
+      - '**.md'
+      - 'scripts/lint-docs.cjs'
+      - '.github/workflows/docs-lint.yml'
+
+jobs:
+  lint-docs:
+    name: Lint Documentation
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Needed for git history in linter
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Run documentation linter
+      run: npm run docs:lint
+      
+    - name: Check for broken links
+      run: |
+        OUTPUT=$(npm run docs:lint 2>&1)
+        echo "$OUTPUT"
+        if echo "$OUTPUT" | grep -q "Broken links: [1-9]"; then
+          echo "❌ Found broken links in documentation!"
+          exit 1
+        fi
+        if echo "$OUTPUT" | grep -q "Found [1-9][0-9]* errors"; then
+          echo "❌ Found errors in documentation!"
+          exit 1
+        fi
+        echo "✅ All documentation checks passed!"
+    
+    - name: Generate documentation catalog
+      run: npm run docs:catalog
+      
+    - name: Check if catalog is up to date
+      run: |
+        git diff --exit-code docs/documentation-catalog.json || {
+          echo "❌ Documentation catalog is out of date!"
+          echo "Run 'npm run docs:catalog' and commit the changes."
+          exit 1
+        }
