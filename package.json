@@ -12,7 +12,11 @@
     "test:coverage": "vitest run --coverage",
     "test:functions": "cd netlify/functions && npm test",
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
-    "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix"
+    "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix",
+    "docs:lint": "node scripts/lint-docs.cjs",
+    "docs:catalog": "node scripts/generate-docs-catalog.cjs",
+    "docs:analyze": "bash scripts/analyze-docs-migration.sh",
+    "docs:organize": "bash scripts/organize-docs.sh"
   },
   "dependencies": {
     "2": "^3.0.0",
