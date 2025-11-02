@@ -1,10 +1,11 @@
 import { useState, useMemo, useEffect } from 'react';
-import { Search, FileText, Book, Menu, X, Home, Clock, Tag, HelpCircle, GitBranch } from 'lucide-react';
+import { Search, FileText, Book, Menu, X, Home, Clock, Tag, HelpCircle, GitBranch, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { advancedSearch, getSearchHelp } from '@/utils/advancedSearch';
 import { VersionDisplay } from '@/components/documentation/VersionDisplay';
+import { MarkdownPreview, useMarkdownPreview } from '@/components/documentation/MarkdownPreview';
 import {
   Tooltip,
   TooltipContent,
@@ -229,6 +230,7 @@ export default function DocumentationPortal() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [selectedDoc, setSelectedDoc] = useState<DocMetadata | null>(null);
   const [showSearchHelp, setShowSearchHelp] = useState(false);
+  const { previewState, openPreview, closePreview } = useMarkdownPreview();
 
   // Filter documentation based on search, category, and role
   const filteredDocs = useMemo(() => {
@@ -473,8 +475,7 @@ export default function DocumentationPortal() {
                       {docs.map((doc) => (
                         <Card
                           key={doc.path}
-                          className="p-4 hover:shadow-lg transition-shadow cursor-pointer"
-                          onClick={() => window.open(doc.path, '_blank')}
+                          className="p-4 hover:shadow-lg transition-shadow"
                         >
                           <div className="flex items-start justify-between mb-2">
                             <h4 className="font-semibold">{doc.title}</h4>
@@ -503,7 +504,7 @@ export default function DocumentationPortal() {
                               )}
                             </div>
                           )}
-                          <div className="flex flex-wrap gap-2">
+                          <div className="flex flex-wrap gap-2 mb-3">
                             {doc.tags.slice(0, 3).map((tag) => (
                               <span
                                 key={tag}
@@ -513,6 +514,25 @@ export default function DocumentationPortal() {
                                 {tag}
                               </span>
                             ))}
+                          </div>
+                          <div className="flex gap-2">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="flex-1"
+                              onClick={() => openPreview(doc.path, doc.title)}
+                            >
+                              <Eye className="h-4 w-4 mr-2" />
+                              Preview
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => window.open(doc.path, '_blank')}
+                              title="Open in new tab"
+                            >
+                              <FileText className="h-4 w-4" />
+                            </Button>
                           </div>
                         </Card>
                       ))}
@@ -555,6 +575,14 @@ export default function DocumentationPortal() {
           </main>
         </div>
       </div>
+
+      {/* Markdown Preview Dialog */}
+      <MarkdownPreview
+        filePath={previewState.filePath}
+        title={previewState.title}
+        open={previewState.isOpen}
+        onClose={closePreview}
+      />
     </div>
   );
 }
