@@ -15,6 +15,7 @@ import LeadDetail from './pages/LeadDetail';
 import LeadCreate from './pages/LeadCreate';
 import InvestorProfilePage from './pages/InvestorProfilePage';
 import InvestorsPage from './pages/InvestorsPage';
+import DocumentationPortal from './pages/DocumentationPortal';
 
 function App() {
   return (
@@ -26,6 +27,9 @@ function App() {
           <Route path="/investor-dashboard" element={<InvestorDashboard />} />
           <Route path="/integration-dashboard" element={<IntegrationDashboard />} />
           <Route path="/lead-form" element={<LeadForm />} />
+          
+          {/* Documentation Portal */}
+          <Route path="/docs" element={<DocumentationPortal />} />
           
           {/* CRM Routes */}
           <Route path="/crm" element={<LeadManagement />} />
