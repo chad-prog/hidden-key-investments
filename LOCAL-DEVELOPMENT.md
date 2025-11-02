@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Local Development Setup
 
 ## Prerequisites
@@ -38,7 +37,7 @@
    ```bash
    npm run dev
    ```
-   The dev server will start at http://localhost:3000
+   The dev server will start at http://localhost:5173
 
 4. Build for production:
    ```bash
@@ -58,17 +57,20 @@
 - `npm run dev` - Start development server
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build locally
+- `npm test` - Run tests
+- `npm run lint` - Check code style
+- `npm run lint:fix` - Fix code style issues
 
 ## Troubleshooting
 
 ### Dev Server Issues
 If the dev server doesn't start:
-1. Check if port 3000 is in use:
+1. Check if port 5173 is in use:
    ```bash
    # Windows
-   netstat -ano | findstr :3000
+   netstat -ano | findstr :5173
    # Unix/macOS
-   lsof -i :3000
+   lsof -i :5173
    ```
 2. Kill any existing processes or change the port in `vite.config.ts`
 
@@ -108,75 +110,3 @@ Before submitting PRs:
 2. Test in development with `npm run dev`
 3. Check for TypeScript errors
 4. Verify changes in different browsers
-=======
-LOCAL DEVELOPMENT
-
-This file describes local setup, security guidance, Elite flows, and testing pointers.
-
-1) Security hardening
-- Never hardcode secrets, API keys, tokens, IDs or credentials in source.
-- Use environment variables for all runtime values. In Vite, expose only public values via VITE_* prefix.
-- Add sensitive server-side integrations to serverless functions or separate backend — don't put real keys in client code.
-- Keep `.env` out of the repo. Commit an `.env.example` with empty placeholders only (no secrets).
-
-2) Elite-ready integrations (high level)
-- The Accredited Investors form reads `VITE_FORMSPREE_ENDPOINT` from env and falls back to demo mode if missing.
-- Mailchimp and Airtable utilities run in demo mode on the client (they simulate/enqueue events). Real sync should be via serverless endpoint (e.g., Netlify Functions) using server-side secrets.
-- Provide clear UI feedback after submission and show an "Automation Log" sidebar for visibility. In demo mode the log shows simulated actions.
-
-3) Netlify & environment
-- Netlify environment variables (set in Netlify UI):
-  - `VITE_FORMSPREE_ENDPOINT` (Formspree endpoint)
-  - `AIRTABLE_BASE_ID`, `AIRTABLE_API_KEY`, `AIRTABLE_TABLE_NAME` (server-only; do not expose in VITE_ vars)
-  - `MAILCHIMP_API_KEY`, `MAILCHIMP_LIST_ID` (server-only; do not expose in VITE_ vars)
-- In Netlify's Site settings -> Build & deploy -> Environment, add the VITE_* variables only if safe; server-only secrets must be added to serverless function environment or Netlify build environment (but be mindful of public exposure).
-- `netlify.toml` should use:
-  [build]
-  command = "npm run build"
-  publish = "dist"
-
-  [[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-
-4) Demo mode design
-- When an env var (VITE_FORMSPREE_ENDPOINT) is missing, the client should:
-  - Submit to a local demo handler that resolves successfully.
-  - Add simulated automation entries to the Automation Log (Mailchimp: "Simulated subscribe", Airtable: "Simulated record created").
-  - NEVER throw or fail the UI because of missing env.
-
-5) Developer workflow (local)
-- Install Node (recommended via nvm):
-  nvm install 22
-  nvm use 22
-- Install dependencies:
-  npm install
-- Start dev server:
-  npm run dev
-- Build production bundle:
-  npm run build
-- Preview production:
-  npm run preview
-
-6) Troubleshooting
-- If dev server doesn't respond, ensure no other process is blocking port 3000:
-  netstat -ano | findstr :3000
-- If build fails, clear cache:
-  rm -rf node_modules dist
-  npm cache clean --force
-  npm install
-
-7) Testing Elite flow (manual)
-- In Netlify set only `VITE_FORMSPREE_ENDPOINT` for a live Formspree endpoint.
-- Deploy, visit the Accredited Investors page, submit the form.
-- Check Automation Log for Mailchimp/Airtable actions; if envs are missing, log shows simulated actions.
-
-8) Commit checklist before PR
-- No hardcoded keys in source
-- `env.example` updated with placeholders
-- `LOCAL-DEVELOPMENT.md` added
-- Build passes locally: `npm run build`
-
--- End of LOCAL-DEVELOPMENT.md
->>>>>>> cleanup/merge-ready

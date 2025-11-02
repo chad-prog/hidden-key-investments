@@ -290,12 +290,12 @@ git push origin main
 
 ## 📖 Documentation
 
-- [Quick Start](docs/QUICK-START.md) - Get started in 5 minutes
-- [Testing Guide](docs/TESTING-GUIDE.md) - Testing practices
-- [Architecture](docs/ARCHITECTURE.md) - System design
-- [API Reference](docs/API-REFERENCE.md) - API endpoints
-- [Contributing](CONTRIBUTING.md) - Contribution guide
-- [Phase 2 Checklist](docs/PHASE-2-CHECKLIST.md) - Next development phase
+- [Quick Start](QUICK-START.md) - Get started in 5 minutes
+- [Testing Guide](TESTING-GUIDE.md) - Testing practices
+- [Architecture](ARCHITECTURE.md) - System design
+- [API Reference](API-REFERENCE.md) - API endpoints
+- [Contributing](../CONTRIBUTING.md) - Contribution guide
+- [Phase 2 Checklist](PHASE-2-CHECKLIST.md) - Next development phase
 
 ## 🆘 Getting Help
 

@@ -252,9 +252,9 @@ No migration needed - new endpoint doesn't affect existing lead ingestion.
 ## Support Resources
 
 ### Documentation
-- [WEBHOOK-INTEGRATION.md](docs/WEBHOOK-INTEGRATION.md) - Complete guide
-- [DEPLOYMENT-CHECKLIST-V1.1.0.md](docs/DEPLOYMENT-CHECKLIST-V1.1.0.md) - Deployment guide
-- [README.md](README.md) - Updated with webhook examples
+- [WEBHOOK-INTEGRATION.md](WEBHOOK-INTEGRATION.md) - Complete guide
+- [DEPLOYMENT-CHECKLIST-V1.1.0.md](DEPLOYMENT-CHECKLIST-V1.1.0.md) - Deployment guide
+- [README.md](../README.md) - Updated with webhook examples
 
 ### Testing
 - Unit tests: `npm run test:functions`

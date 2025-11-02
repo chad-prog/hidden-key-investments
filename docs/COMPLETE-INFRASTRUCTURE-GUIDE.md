@@ -398,4 +398,3 @@ See: [docs/MVP-IMPLEMENTATION.md](./MVP-IMPLEMENTATION.md) for Phase 2 details.
 - [STAGING-SETUP.md](./STAGING-SETUP.md) - Detailed staging configuration
 - [OBSERVABILITY-GUIDE.md](./OBSERVABILITY-GUIDE.md) - Full Sentry setup
 - [ENVIRONMENT-VARIABLES.md](./ENVIRONMENT-VARIABLES.md) - All env vars explained
-- [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) - Common issues and solutions

@@ -1,6 +1,6 @@
-Hidden Key Investments — Prioritized Implementation Roadmap
+# Hidden Key Investments — Prioritized Implementation Roadmap
 
-Goal: Build a platform that automates sourcing, nurturing, and executing investments for Elite real-estate investors with AI-first orchestration.
+**Goal:** Build a platform that automates sourcing, nurturing, and executing investments for Elite real-estate investors with AI-first orchestration.
 
 Quarter 0 (Now — 1 month)
 - Stabilize repository and CI (tests + lint on PR)

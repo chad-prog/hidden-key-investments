@@ -1,6 +1,6 @@
-Hidden Key Investments — Minimal Architecture
+# Hidden Key Investments — Minimal Architecture
 
-Overview
+## Overview
 
 This document describes a minimal, scalable architecture to support Elite investor workflows: lead capture, CRM, automation, ML-driven scoring, document management, and AI-assistant orchestration.
 

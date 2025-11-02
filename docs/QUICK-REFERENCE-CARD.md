@@ -199,9 +199,9 @@ By Category:
 ## 🆘 Help & Navigation
 
 ### Lost in Documentation?
-1. **Start:** [DOCUMENTATION-INDEX.md](DOCUMENTATION-INDEX.md)
-2. **Navigate:** [docs/NAVIGATION-GUIDE.md](docs/NAVIGATION-GUIDE.md)
-3. **Browse:** [DOCUMENTATION-CATALOG.md](DOCUMENTATION-CATALOG.md)
+1. **Start:** [DOCUMENTATION-INDEX.md](../DOCUMENTATION-INDEX.md)
+2. **Navigate:** [NAVIGATION-GUIDE.md](NAVIGATION-GUIDE.md)
+3. **Browse:** [DOCUMENTATION-CATALOG.md](../DOCUMENTATION-CATALOG.md)
 
 ### Need Something Specific?
 - **Search GitHub:** Use `.md` filter
