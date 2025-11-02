@@ -16,6 +16,8 @@ import LeadCreate from './pages/LeadCreate';
 import InvestorProfilePage from './pages/InvestorProfilePage';
 import InvestorsPage from './pages/InvestorsPage';
 import DocumentationPortal from './pages/DocumentationPortal';
+import MonitoringDashboard from './pages/MonitoringDashboard';
+import EnhancedLeadCapture from './pages/EnhancedLeadCapture';
 
 function App() {
   return (
@@ -31,10 +33,14 @@ function App() {
           {/* Documentation Portal */}
           <Route path="/docs" element={<DocumentationPortal />} />
           
+          {/* Monitoring */}
+          <Route path="/monitoring" element={<MonitoringDashboard />} />
+          
           {/* CRM Routes */}
           <Route path="/crm" element={<LeadManagement />} />
           <Route path="/crm/leads" element={<LeadList />} />
           <Route path="/crm/leads/new" element={<LeadCreate />} />
+          <Route path="/crm/leads/enhanced" element={<EnhancedLeadCapture />} />
           <Route path="/crm/leads/:leadId" element={<LeadDetail />} />
           <Route path="/crm/investors" element={<InvestorsPage />} />
           <Route path="/crm/investors/:investorId" element={<InvestorProfilePage />} />
