@@ -36,6 +36,10 @@ export function VersionDisplay({ version, compact = false }: VersionDisplayProps
     
     try {
       const date = new Date(dateString);
+      // Check if date is valid
+      if (isNaN(date.getTime())) {
+        return dateString; // Return original string if invalid
+      }
       return date.toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'short',

@@ -31,6 +31,7 @@ export function TableOfContents({ content, maxLevel = 3 }: TableOfContentsProps)
     const lines = markdown.split('\n');
     const items: TocItem[] = [];
     const stack: TocItem[] = [];
+    const idCounts = new Map<string, number>();
 
     for (const line of lines) {
       const match = line.match(/^(#{1,6})\s+(.+)$/);
@@ -39,10 +40,15 @@ export function TableOfContents({ content, maxLevel = 3 }: TableOfContentsProps)
         if (level > maxLevel) continue;
 
         const text = match[2].trim();
-        const id = text
+        let baseId = text
           .toLowerCase()
           .replace(/[^\w\s-]/g, '')
           .replace(/\s+/g, '-');
+
+        // Ensure unique IDs by adding a counter if needed
+        const count = idCounts.get(baseId) || 0;
+        const id = count > 0 ? `${baseId}-${count}` : baseId;
+        idCounts.set(baseId, count + 1);
 
         const item: TocItem = { id, text, level };
 
@@ -127,7 +133,7 @@ export function useTableOfContents(filePath: string) {
         setLoading(false);
       })
       .catch((error) => {
-        console.error('Failed to load document:', error);
+        console.error(`Failed to load document '${filePath}':`, error);
         setLoading(false);
       });
   }, [filePath]);
