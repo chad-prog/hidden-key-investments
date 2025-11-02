@@ -1,8 +1,8 @@
 {
-  "generated": "2025-11-02T07:38:57.015Z",
+  "generated": "2025-11-02T07:51:25.496Z",
   "stats": {
-    "totalFiles": 164,
-    "totalReadTime": 1492,
+    "totalFiles": 167,
+    "totalReadTime": 1513,
     "categories": {
       "00-START-HERE": 15,
       "01-GETTING-STARTED": 12,
@@ -12,21 +12,21 @@
       "05-DEPLOYMENT": 10,
       "06-VISION-ROADMAP": 53,
       "07-REFERENCE": 4,
-      "UNCATEGORIZED": 55
+      "UNCATEGORIZED": 58
     },
     "tags": {
-      "essential": 108,
-      "architecture": 131,
-      "deployment": 150,
-      "testing": 148,
-      "development": 130,
-      "reference": 103,
-      "tutorial": 141,
-      "devops": 145,
-      "ml": 155,
-      "getting-started": 126,
-      "api": 147,
-      "planning": 130
+      "essential": 111,
+      "architecture": 134,
+      "deployment": 153,
+      "testing": 151,
+      "development": 133,
+      "reference": 106,
+      "tutorial": 144,
+      "devops": 146,
+      "ml": 158,
+      "getting-started": 129,
+      "api": 150,
+      "planning": 133
     },
     "filesWithoutMetadata": 0
   },
@@ -178,6 +178,29 @@
       "category": "00-START-HERE"
     },
     {
+      "path": "docs/README.md",
+      "title": "📚 Documentation Directory",
+      "description": "---",
+      "readTime": 2,
+      "version": "2.0",
+      "lastUpdated": "November 2, 2025",
+      "tags": [
+        "essential",
+        "getting-started",
+        "architecture",
+        "api",
+        "deployment",
+        "testing",
+        "development",
+        "planning",
+        "reference",
+        "tutorial",
+        "devops",
+        "ml"
+      ],
+      "category": "00-START-HERE"
+    },
+    {
       "path": "DOCUMENTATION-INDEX.md",
       "title": "📚 Documentation Index - Navigation Hub",
       "description": "---",
@@ -244,29 +267,6 @@
       "title": "🚀 START HERE - Hidden Key Investments Platform",
       "description": "---",
       "readTime": 8,
-      "version": null,
-      "lastUpdated": "2025-11-02",
-      "tags": [
-        "essential",
-        "getting-started",
-        "architecture",
-        "api",
-        "deployment",
-        "testing",
-        "development",
-        "planning",
-        "reference",
-        "tutorial",
-        "devops",
-        "ml"
-      ],
-      "category": "00-START-HERE"
-    },
-    {
-      "path": "docs/README.md",
-      "title": "Documentation Index",
-      "description": "---",
-      "readTime": 6,
       "version": null,
       "lastUpdated": "2025-11-02",
       "tags": [
@@ -2362,6 +2362,28 @@
       "category": "UNCATEGORIZED"
     },
     {
+      "path": "DOCUMENTATION-ENHANCEMENT-SUMMARY.md",
+      "title": "🎉 Documentation Enhancement System - Implementation Summary",
+      "description": "---",
+      "readTime": 9,
+      "version": "2.0",
+      "lastUpdated": "2025-11-02",
+      "tags": [
+        "essential",
+        "getting-started",
+        "architecture",
+        "api",
+        "deployment",
+        "testing",
+        "development",
+        "planning",
+        "reference",
+        "tutorial",
+        "ml"
+      ],
+      "category": "UNCATEGORIZED"
+    },
+    {
       "path": "docs/EXECUTIVE-SUMMARY.md",
       "title": "🎉 MVP Implementation Summary - COMPLETE",
       "description": "Ready to build? Start with `docs/GETTING-STARTED.md` 🚀",
@@ -2589,6 +2611,28 @@
       "category": "UNCATEGORIZED"
     },
     {
+      "path": "DOCUMENTATION-SYSTEM-GUIDE.md",
+      "title": "📚 Enhanced Documentation System Guide",
+      "description": "---",
+      "readTime": 10,
+      "version": "2.0",
+      "lastUpdated": "November 2, 2025",
+      "tags": [
+        "essential",
+        "getting-started",
+        "architecture",
+        "api",
+        "deployment",
+        "testing",
+        "development",
+        "planning",
+        "reference",
+        "tutorial",
+        "ml"
+      ],
+      "category": "UNCATEGORIZED"
+    },
+    {
       "path": "NEXT-ACTIONS-SIMPLIFIED.md",
       "title": "Actionable Next Steps: Your High-Level Enterprise Vision",
       "description": "---",
@@ -2745,6 +2789,29 @@
       "tags": [
         "api",
         "testing",
+        "ml"
+      ],
+      "category": "UNCATEGORIZED"
+    },
+    {
+      "path": "docs/README-OLD.md",
+      "title": "Documentation Index",
+      "description": "---",
+      "readTime": 6,
+      "version": null,
+      "lastUpdated": "2025-11-02",
+      "tags": [
+        "essential",
+        "getting-started",
+        "architecture",
+        "api",
+        "deployment",
+        "testing",
+        "development",
+        "planning",
+        "reference",
+        "tutorial",
+        "devops",
         "ml"
       ],
       "category": "UNCATEGORIZED"

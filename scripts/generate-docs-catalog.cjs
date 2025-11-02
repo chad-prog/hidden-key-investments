@@ -8,7 +8,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
+const { execFileSync } = require('child_process');
 
 class DocumentationCatalog {
   constructor() {
@@ -94,10 +94,11 @@ class DocumentationCatalog {
     if (updatedMatch) {
       metadata.lastUpdated = updatedMatch[1].trim();
     } else {
-      // Try to get from git (safely)
+      // Try to get from git using execFileSync (safer than execSync)
       try {
-        const gitDate = execSync(
-          'git log -1 --format=%ai -- ' + filePath.replace(/'/g, "'\\''"),
+        const gitDate = execFileSync(
+          'git',
+          ['log', '-1', '--format=%ai', '--', filePath],
           { encoding: 'utf-8', stdio: ['pipe', 'pipe', 'ignore'] }
         ).trim();
         if (gitDate) {
