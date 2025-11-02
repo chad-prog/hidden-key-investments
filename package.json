@@ -16,7 +16,8 @@
     "docs:lint": "node scripts/lint-docs.cjs",
     "docs:catalog": "node scripts/generate-docs-catalog.cjs",
     "docs:analyze": "bash scripts/analyze-docs-migration.sh",
-    "docs:organize": "bash scripts/organize-docs.sh"
+    "docs:organize": "bash scripts/organize-docs.sh",
+    "docs:api": "node scripts/generate-api-docs.cjs"
   },
   "dependencies": {
     "2": "^3.0.0",
@@ -65,9 +66,12 @@
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.56.1",
     "react-i18next": "^15.5.1",
+    "react-markdown": "^10.1.0",
     "react-resizable-panels": "^2.1.9",
     "react-router": "^7.5.3",
     "recharts": "^2.15.3",
+    "rehype-highlight": "^7.0.2",
+    "remark-gfm": "^4.0.1",
     "sonner": "^2.0.3",
     "tailwind-merge": "^3.2.0",
     "vaul": "^1.1.2",

@@ -4,9 +4,9 @@ A production-ready, AI-powered platform for Elite real-estate investors with lea
 
 ---
 
-## 🎉 NEW: Interactive Documentation Portal!
+## 🎉 NEW: Enhanced Documentation Portal 2.0!
 
-**Lost in 167+ documentation files?** We've built an interactive web portal with powerful search!
+**Lost in 167+ documentation files?** We've built a world-class interactive portal with AI assistance!
 
 ### 🚀 Access the Portal
 
@@ -15,22 +15,47 @@ npm run dev
 # Navigate to http://localhost:5173/docs
 ```
 
-**Features:**
-- 🔍 **Full-text search** - Search across all 167 files instantly
-- 📂 **Category filtering** - 8 organized categories for easy navigation
-- 👤 **Role-based filtering** - Filter by Developer, Executive, DevOps, or Architect
-- ⏱️ **Read time estimates** - Know how long each document takes
+### ✨ NEW Features in v2.0:
+
+#### 📖 Markdown Preview
+- **View docs in-portal** - No need to open files
+- **Syntax highlighting** - Beautiful code blocks
+- **Auto-generated TOC** - Navigate long docs easily
+- **PDF export** - Print to PDF with one click
+- **Version tracking** - See document history
+
+#### 🤖 AI Documentation Assistant
+- **Smart chatbot** - Ask questions, get instant answers
+- **Contextual help** - Suggests related documents
+- **Quick suggestions** - Common questions as chips
+- **Demo mode ready** - Works without API keys
+
+#### 🌍 Multi-Language Support
+- **7 languages** - EN, ES, FR, DE, ZH, JA, AR
+- **Auto-detection** - Matches browser language
+- **RTL support** - Arabic layout ready
+- **Easy switching** - Change language anytime
+
+#### 📊 Enhanced Analytics
+- **Search tracking** - Monitor popular queries
+- **Navigation patterns** - See how users flow
+- **Category stats** - Identify hot topics
+- **Tag analytics** - Most popular tags
+- **Privacy-first** - All data stays local
+
+#### 🔧 Auto-Generated API Docs
+- **TypeScript parser** - Extracts interfaces & functions
+- **JSDoc support** - Includes descriptions
+- **One command** - `npm run docs:api`
+- **31+ API items** - Already documented
+
+### 📚 Core Features:
+- 🔍 **Advanced search** - Boolean operators (AND, OR, NOT)
+- 📂 **Smart filtering** - By category, role, and tags
+- ⏱️ **Read time estimates** - Plan your learning
 - 🏷️ **Tag system** - Multi-dimensional organization
-- 📊 **Analytics** - Track popular and recently viewed docs (privacy-friendly)
 - 📱 **Mobile-responsive** - Works on all devices
-
-### 📚 Quick Links
-
-- 🌟 **[Interactive Portal](http://localhost:5173/docs)** - Start here! (requires `npm run dev`)
-- 📖 **[Documentation System Guide](DOCUMENTATION-SYSTEM-GUIDE.md)** - Learn how to use the portal
-- 📚 **[Documentation Index](DOCUMENTATION-INDEX.md)** - Master navigation hub
-- 🧭 **[Navigation Guide](docs/NAVIGATION-GUIDE.md)** - Visual maps & decision trees
-- 📇 **[Quick Reference Card](docs/QUICK-REFERENCE-CARD.md)** - Fast answers (5 min)
+- 🔐 **Privacy-friendly** - No external tracking
 
 ### 🛠️ Documentation Tools
 
@@ -41,11 +66,22 @@ npm run docs:lint
 # Generate searchable catalog
 npm run docs:catalog
 
+# Auto-generate API documentation
+npm run docs:api
+
 # Analyze organization
 npm run docs:analyze
 ```
 
-**Result:** Find what you need in < 10 seconds instead of hours! 🚀
+### 📖 Quick Links
+
+- 🌟 **[Interactive Portal](http://localhost:5173/docs)** - Start here! (requires `npm run dev`)
+- 📘 **[Portal Features Guide](docs/DOCUMENTATION-PORTAL-FEATURES.md)** - Complete feature documentation
+- 📖 **[Documentation System Guide](DOCUMENTATION-SYSTEM-GUIDE.md)** - Learn how to use the portal
+- 📚 **[Documentation Index](DOCUMENTATION-INDEX.md)** - Master navigation hub
+- 🧭 **[Navigation Guide](docs/NAVIGATION-GUIDE.md)** - Visual maps & decision trees
+
+**Result:** World-class documentation system that's enterprise-grade! 🎉
 
 ---
 
