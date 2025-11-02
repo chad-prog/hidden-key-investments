@@ -373,6 +373,12 @@ Net ROI:            +$35,000/month
 
 Break-even: Month 6
 12-Month ROI: 3.5x investment
+
+*Note: ROI calculations based on industry averages:
+- Labor cost: $50/hour fully loaded
+- Lead processing: 30 min/lead manual vs 1 min automated
+- Conversion improvement: 15-20% with ML scoring
+- Your actual results may vary based on team, market, and adoption
 ```
 
 ---

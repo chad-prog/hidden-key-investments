@@ -264,7 +264,8 @@ export class SteveAgent extends BaseAgent {
   }
   
   private generateInsights(forecast: unknown): { requiresAction: boolean; actions: string[] } {
-    // AI-powered insight generation
+    // TODO: Implement AI-powered insight generation using OpenAI or custom ML model
+    // Should analyze forecast trends, historical data, and market conditions
     return {
       requiresAction: true,
       actions: ['increase_marketing_budget', 'hire_sales_rep']
@@ -272,6 +273,8 @@ export class SteveAgent extends BaseAgent {
   }
   
   private generateRecommendations(forecast: unknown): string[] {
+    // TODO: Implement recommendation engine based on forecast analysis
+    // Should consider business constraints, budget, and strategic goals
     return [
       'Increase lead generation budget by 20% next quarter',
       'Focus on high-value properties (>$500K)',
@@ -280,28 +283,39 @@ export class SteveAgent extends BaseAgent {
   }
   
   private identifyBottlenecks(performance: unknown): Array<{ step: string; impact: number }> {
-    // Analyze workflow metrics
+    // TODO: Implement bottleneck detection algorithm
+    // Analyze workflow metrics: execution time, failure rates, queue depths
+    // Return steps sorted by impact (highest first)
     return [];
   }
   
   private async generateOptimizations(bottlenecks: unknown) {
+    // TODO: Implement optimization suggestion engine
+    // For each bottleneck, suggest: parallel execution, caching, resource scaling
     return [];
   }
   
   private assignTasksToAgents(subTasks: unknown) {
+    // TODO: Implement intelligent task routing
+    // Match task type to agent capabilities using capability matrix
     return [];
   }
   
   private async executeCoordinatedTasks(assignments: unknown) {
+    // TODO: Implement parallel/sequential task execution
+    // Handle dependencies, retries, and error aggregation
     return [];
   }
   
   private aggregateResults(goal: string, results: unknown) {
+    // TODO: Implement result aggregation and summarization
+    // Combine multi-agent outputs into coherent response
     return { goal, results };
   }
   
   private async triggerAutomatedActions(insights: unknown) {
-    // Implement automated responses
+    // TODO: Implement automated action triggers
+    // Examples: adjust budgets, send notifications, update workflows
   }
 }
 
