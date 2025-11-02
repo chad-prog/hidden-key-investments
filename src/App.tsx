@@ -18,6 +18,8 @@ import InvestorsPage from './pages/InvestorsPage';
 import DocumentationPortal from './pages/DocumentationPortal';
 import MonitoringDashboard from './pages/MonitoringDashboard';
 import EnhancedLeadCapture from './pages/EnhancedLeadCapture';
+import AnalyticsDashboard from './pages/AnalyticsDashboard';
+import WorkflowBuilder from './pages/WorkflowBuilder';
 
 function App() {
   return (
@@ -35,6 +37,12 @@ function App() {
           
           {/* Monitoring */}
           <Route path="/monitoring" element={<MonitoringDashboard />} />
+          
+          {/* Analytics */}
+          <Route path="/analytics" element={<AnalyticsDashboard />} />
+          
+          {/* Workflows */}
+          <Route path="/workflows" element={<WorkflowBuilder />} />
           
           {/* CRM Routes */}
           <Route path="/crm" element={<LeadManagement />} />
