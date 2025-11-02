@@ -315,8 +315,14 @@ export function createTask(
   priority: TaskPriority = 'medium',
   metadata?: Record<string, any>
 ): AgentTask {
+  // Generate a more secure and unique ID
+  const timestamp = Date.now();
+  const random = typeof crypto !== 'undefined' && crypto.randomUUID 
+    ? crypto.randomUUID().slice(0, 8)
+    : Math.random().toString(36).substr(2, 9);
+  
   return {
-    id: `task-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+    id: `task-${timestamp}-${random}`,
     agentRole,
     type,
     priority,

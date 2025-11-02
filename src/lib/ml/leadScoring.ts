@@ -29,7 +29,7 @@ export interface LeadFeatures {
   
   // Historical
   previousInteractions: number;
-  dayssinceFirstContact: number;
+  daysSinceFirstContact: number;
   responseRate?: number;
 }
 
@@ -198,18 +198,26 @@ export class LeadScoringModel {
 
   /**
    * Assess email quality
+   * Note: In production, load these lists from a configuration service
    */
   private assessEmailQuality(domain: string): number {
-    const professionalDomains = ['gmail.com', 'yahoo.com', 'outlook.com', 'hotmail.com'];
-    const businessDomains = ['company.com']; // Would be a larger list
+    // Common professional email domains (free email services)
+    const professionalDomains = [
+      'gmail.com', 'yahoo.com', 'outlook.com', 'hotmail.com',
+      'icloud.com', 'aol.com', 'protonmail.com', 'mail.com'
+    ];
     
-    if (businessDomains.some(d => domain.includes(d))) {
-      return 1.0;
+    // Check if it's a business domain (not in free email list)
+    // In production, this would check against a maintained list or use a domain validation service
+    const isBusinessDomain = !professionalDomains.includes(domain.toLowerCase());
+    
+    if (isBusinessDomain) {
+      return 1.0; // Business email (best)
     }
-    if (professionalDomains.includes(domain)) {
-      return 0.7;
+    if (professionalDomains.includes(domain.toLowerCase())) {
+      return 0.7; // Professional free email
     }
-    return 0.5;
+    return 0.5; // Unknown domain
   }
 
   /**

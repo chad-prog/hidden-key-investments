@@ -11,6 +11,18 @@ variable "domain_name" {
   default     = "hidden-key-investments.com"
 }
 
+variable "rate_limit_rpm" {
+  description = "Rate limit requests per minute"
+  type        = number
+  default     = 1000
+}
+
+variable "rate_limit_burst" {
+  description = "Rate limit burst size"
+  type        = number
+  default     = 200
+}
+
 # Networking configuration
 locals {
   cdn_config = {
@@ -31,8 +43,8 @@ locals {
   
   rate_limiting = {
     enabled         = true
-    requests_per_minute = var.environment == "production" ? 1000 : 100
-    burst_size          = var.environment == "production" ? 200 : 50
+    requests_per_minute = var.rate_limit_rpm
+    burst_size          = var.rate_limit_burst
   }
 }
 
