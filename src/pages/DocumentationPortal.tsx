@@ -1,8 +1,16 @@
 import { useState, useMemo, useEffect } from 'react';
-import { Search, FileText, Book, Menu, X, Home, Clock, Tag } from 'lucide-react';
+import { Search, FileText, Book, Menu, X, Home, Clock, Tag, HelpCircle, GitBranch } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
+import { advancedSearch, getSearchHelp } from '@/utils/advancedSearch';
+import { VersionDisplay } from '@/components/documentation/VersionDisplay';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 interface DocMetadata {
   path: string;
@@ -25,6 +33,8 @@ const documentationCatalog: DocMetadata[] = [
     description: 'Complete platform overview, features, and quick start guide',
     readTime: 5,
     tags: ['overview', 'getting-started', 'essential'],
+    version: '1.0.0',
+    lastUpdated: 'Nov 2, 2025',
   },
   {
     path: '/WHAT-I-CAN-DO-COMPLETE-ANSWER.md',
@@ -33,6 +43,8 @@ const documentationCatalog: DocMetadata[] = [
     description: 'Detailed specs for all 7 phases, time and cost breakdowns',
     readTime: 15,
     tags: ['capabilities', 'planning', 'essential'],
+    version: '2.0.0',
+    lastUpdated: 'Nov 2, 2025',
   },
   {
     path: '/NEXT-ACTIONS-SIMPLIFIED.md',
@@ -41,6 +53,8 @@ const documentationCatalog: DocMetadata[] = [
     description: 'Choose your path (A/B/C/D) and get started in 5 minutes',
     readTime: 5,
     tags: ['action-plan', 'getting-started', 'essential'],
+    version: '1.5.0',
+    lastUpdated: 'Nov 2, 2025',
   },
   {
     path: '/DOCUMENTATION-INDEX.md',
@@ -49,6 +63,8 @@ const documentationCatalog: DocMetadata[] = [
     description: 'Master navigation hub for all 144+ documentation files',
     readTime: 5,
     tags: ['navigation', 'index', 'essential'],
+    version: '1.0.0',
+    lastUpdated: 'Nov 2, 2025',
   },
   // Getting Started
   {
@@ -212,6 +228,7 @@ export default function DocumentationPortal() {
   const [selectedRole, setSelectedRole] = useState('all');
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [selectedDoc, setSelectedDoc] = useState<DocMetadata | null>(null);
+  const [showSearchHelp, setShowSearchHelp] = useState(false);
 
   // Filter documentation based on search, category, and role
   const filteredDocs = useMemo(() => {
@@ -232,14 +249,27 @@ export default function DocumentationPortal() {
       }
     }
 
-    // Filter by search query
+    // Filter by search query with advanced search support
     if (searchQuery) {
-      const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(doc =>
-        doc.title.toLowerCase().includes(query) ||
-        doc.description.toLowerCase().includes(query) ||
-        doc.tags.some(tag => tag.toLowerCase().includes(query))
-      );
+      // Check if query contains boolean operators
+      const hasOperators = /\b(AND|OR|NOT)\b/i.test(searchQuery);
+      
+      if (hasOperators) {
+        // Use advanced search with boolean operators
+        filtered = advancedSearch(
+          filtered,
+          searchQuery,
+          (doc) => `${doc.title} ${doc.description} ${doc.tags.join(' ')}`
+        );
+      } else {
+        // Use simple search
+        const query = searchQuery.toLowerCase();
+        filtered = filtered.filter(doc =>
+          doc.title.toLowerCase().includes(query) ||
+          doc.description.toLowerCase().includes(query) ||
+          doc.tags.some(tag => tag.toLowerCase().includes(query))
+        );
+      }
     }
 
     return filtered;
@@ -294,16 +324,53 @@ export default function DocumentationPortal() {
           >
             {/* Search */}
             <div className="space-y-2">
-              <label className="text-sm font-medium">Search Documentation</label>
+              <div className="flex items-center justify-between">
+                <label className="text-sm font-medium">Search Documentation</label>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-6 w-6"
+                        onClick={() => setShowSearchHelp(!showSearchHelp)}
+                      >
+                        <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent className="max-w-xs">
+                      <div className="space-y-2 text-xs">
+                        <p className="font-semibold">Advanced Search</p>
+                        <p><strong>AND:</strong> Both terms (e.g., testing AND deployment)</p>
+                        <p><strong>OR:</strong> Either term (e.g., react OR vue)</p>
+                        <p><strong>NOT:</strong> Exclude term (e.g., NOT deprecated)</p>
+                      </div>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search docs..."
+                  placeholder="Search docs... (try: API AND testing)"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-9"
                 />
               </div>
+              {showSearchHelp && (
+                <Card className="p-3 text-xs space-y-2 bg-muted/50">
+                  <p className="font-semibold">Search Operators:</p>
+                  <ul className="space-y-1 pl-4 list-disc">
+                    <li><code className="bg-background px-1 py-0.5 rounded">AND</code> - Both terms required</li>
+                    <li><code className="bg-background px-1 py-0.5 rounded">OR</code> - Either term works</li>
+                    <li><code className="bg-background px-1 py-0.5 rounded">NOT</code> - Exclude term</li>
+                  </ul>
+                  <p className="text-muted-foreground pt-1">
+                    Example: <code className="bg-background px-1 py-0.5 rounded text-xs">testing AND (api OR deployment)</code>
+                  </p>
+                </Card>
+              )}
             </div>
 
             {/* Role Filter */}
@@ -419,6 +486,23 @@ export default function DocumentationPortal() {
                           <p className="text-sm text-muted-foreground mb-3">
                             {doc.description}
                           </p>
+                          {/* Version and last updated info */}
+                          {(doc.version || doc.lastUpdated) && (
+                            <div className="flex items-center gap-3 mb-3 text-xs text-muted-foreground">
+                              {doc.version && (
+                                <span className="flex items-center gap-1">
+                                  <GitBranch className="h-3 w-3" />
+                                  v{doc.version}
+                                </span>
+                              )}
+                              {doc.lastUpdated && (
+                                <span className="flex items-center gap-1">
+                                  <Clock className="h-3 w-3" />
+                                  Updated {doc.lastUpdated}
+                                </span>
+                              )}
+                            </div>
+                          )}
                           <div className="flex flex-wrap gap-2">
                             {doc.tags.slice(0, 3).map((tag) => (
                               <span
