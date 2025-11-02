@@ -91,7 +91,7 @@ function extractParameterDocs(
   
   for (const tag of jsDocTags) {
     if (tag.tagName.text === 'param' && tag.comment) {
-      const paramName = tag.comment.toString().split(' ')[0].replace(/[\{\}]/g, '');
+      const paramName = tag.comment.toString().split(' ')[0].replace(/[{}]/g, '');
       const paramDesc = tag.comment.toString().substring(paramName.length).trim();
       paramDocs.set(paramName, paramDesc);
     }
