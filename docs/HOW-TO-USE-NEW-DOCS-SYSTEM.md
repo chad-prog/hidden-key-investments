@@ -473,4 +473,4 @@ Found this system helpful? Have suggestions?
 **Maintained by:** AI Development Team  
 **Note:** Check git history for update timeline
 
-**Start your journey:** [DOCUMENTATION-INDEX.md](DOCUMENTATION-INDEX.md) 🚀
+**Start your journey:** [DOCUMENTATION-INDEX.md](../DOCUMENTATION-INDEX.md) 🚀

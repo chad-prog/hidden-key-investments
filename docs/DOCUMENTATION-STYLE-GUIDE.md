@@ -93,8 +93,8 @@ Each category folder should include a README.md with:
 
 ### Internal Links:
 - **Preferred:** Use repository-relative paths
-  - Example: `[Setup Guide](SETUP-GUIDE.md)`
-  - Example: `[Architecture](docs/ARCHITECTURE.md)`
+  - Example: `[Setup Guide](../SETUP-GUIDE.md)`
+  - Example: `[Architecture](ARCHITECTURE.md)`
   
 - **Avoid:** Relative paths with `../`
   - Why: Breaks if files are moved
@@ -183,8 +183,8 @@ If a document requires prior knowledge, list it at the top:
 End with clear next steps or related documents:
 ```markdown
 **Next Steps:**
-- [Related Document 1](link)
-- [Related Document 2](link)
+- [Architecture Guide](ARCHITECTURE.md)
+- [Testing Guide](TESTING-GUIDE.md)
 ```
 
 ---

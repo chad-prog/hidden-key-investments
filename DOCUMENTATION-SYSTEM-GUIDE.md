@@ -131,7 +131,7 @@ Found 164 markdown files
 
 ❌ Errors:
   docs/SOME-DOC.md
-    Broken link: [Example](missing-file.md) - Target not found
+    Broken link: Example link to missing file - Target not found
 
 ⚠️  Warnings:
   docs/ANOTHER-DOC.md
@@ -276,7 +276,7 @@ Access the analytics dashboard through the Documentation Portal:
 
 ### For New Users
 
-1. Start with [README.md](../README.md) (5 min)
+1. Start with [README.md](README.md) (5 min)
 2. Review this guide (10 min)
 3. Explore the Documentation Portal
 4. Use search to find relevant topics
@@ -284,7 +284,7 @@ Access the analytics dashboard through the Documentation Portal:
 
 ### For Contributors
 
-1. Read [CONTRIBUTING.md](../CONTRIBUTING.md) (10 min)
+1. Read [CONTRIBUTING.md](CONTRIBUTING.md) (10 min)
 2. Run `npm run docs:lint` to check quality
 3. Follow metadata standards above
 4. Update catalog after changes
@@ -387,10 +387,10 @@ We welcome contributions to documentation!
 
 ## 📚 Additional Resources
 
-- [Documentation Index](../DOCUMENTATION-INDEX.md) - Complete file listing
-- [Navigation Guide](../docs/NAVIGATION-GUIDE.md) - Visual navigation
-- [README.md](../README.md) - Project overview
-- [CONTRIBUTING.md](../CONTRIBUTING.md) - Contribution guidelines
+- [Documentation Index](DOCUMENTATION-INDEX.md) - Complete file listing
+- [Navigation Guide](docs/NAVIGATION-GUIDE.md) - Visual navigation
+- [README.md](README.md) - Project overview
+- [CONTRIBUTING.md](CONTRIBUTING.md) - Contribution guidelines
 
 ---
 

@@ -1,3 +1,5 @@
+# Cleanup Documentation
+
 This folder contains automated cleanup notes and a record of changes applied by the automated cleanup branch.
 
 What was done:
