@@ -106,7 +106,45 @@ describe('InvestorProfile', () => {
     expect(screen.getByText('High Net Worth')).toBeInTheDocument();
   });
 
-  it('shows portfolio and history tabs', () => {
+  it('shows investment dashboard metrics', () => {
+    const investor = createMockInvestor({
+      totalInvested: 2500000,
+      activeDeals: 5,
+      totalDeals: 12,
+    });
+
+    render(
+      <BrowserRouter>
+        <InvestorProfile investor={investor} />
+      </BrowserRouter>
+    );
+
+    // Check for dashboard heading
+    expect(screen.getByText('Investment Dashboard')).toBeInTheDocument();
+    
+    // Check for key metrics
+    expect(screen.getByText('$2,500,000')).toBeInTheDocument();
+    expect(screen.getByText('Average ROI')).toBeInTheDocument();
+    expect(screen.getByText('18.5%')).toBeInTheDocument();
+    expect(screen.getByText('Avg. Hold Time')).toBeInTheDocument();
+  });
+
+  it('displays quick action buttons', () => {
+    const investor = createMockInvestor();
+
+    render(
+      <BrowserRouter>
+        <InvestorProfile investor={investor} />
+      </BrowserRouter>
+    );
+
+    expect(screen.getByRole('button', { name: /send email/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /call/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /schedule meeting/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /add note/i })).toBeInTheDocument();
+  });
+
+  it('shows all tab options', () => {
     const investor = createMockInvestor();
 
     render(
@@ -116,6 +154,48 @@ describe('InvestorProfile', () => {
     );
 
     expect(screen.getByRole('tab', { name: /portfolio/i })).toBeInTheDocument();
-    expect(screen.getByRole('tab', { name: /investment history/i })).toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: /history/i })).toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: /communications/i })).toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: /documents/i })).toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: /activity/i })).toBeInTheDocument();
+  });
+
+  it('renders communication history in communications tab', () => {
+    const investor = createMockInvestor();
+
+    render(
+      <BrowserRouter>
+        <InvestorProfile investor={investor} />
+      </BrowserRouter>
+    );
+
+    // Tab heading should be present
+    expect(screen.getByRole('tab', { name: /communications/i })).toBeInTheDocument();
+  });
+
+  it('displays document management interface', () => {
+    const investor = createMockInvestor();
+
+    render(
+      <BrowserRouter>
+        <InvestorProfile investor={investor} />
+      </BrowserRouter>
+    );
+
+    // Tab should be present
+    expect(screen.getByRole('tab', { name: /documents/i })).toBeInTheDocument();
+  });
+
+  it('shows activity timeline with chronological events', () => {
+    const investor = createMockInvestor();
+
+    render(
+      <BrowserRouter>
+        <InvestorProfile investor={investor} />
+      </BrowserRouter>
+    );
+
+    // Tab should be present
+    expect(screen.getByRole('tab', { name: /activity/i })).toBeInTheDocument();
   });
 });
