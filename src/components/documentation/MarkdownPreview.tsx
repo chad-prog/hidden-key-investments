@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { TableOfContents } from './TableOfContents';
 import { VersionDisplay, extractVersionFromMarkdown } from './VersionDisplay';
+import { VersionHistory } from './VersionHistory';
 import {
   Dialog,
   DialogContent,
@@ -224,6 +225,9 @@ export function MarkdownPreview({
                   {(versionInfo.version || versionInfo.lastUpdated) && (
                     <VersionDisplay version={versionInfo} />
                   )}
+
+                  {/* Version History */}
+                  <VersionHistory filePath={filePath} compact />
 
                   {/* Table of Contents */}
                   <TableOfContents content={content} maxLevel={3} />
