@@ -255,5 +255,6 @@ docs/QUICK-REFERENCE-CARD.md
 
 ---
 
-**Last Updated:** November 2, 2025  
-**Quick Version of:** [DOCUMENTATION-INDEX.md](../DOCUMENTATION-INDEX.md)
+**Version:** 1.0  
+**Quick Version of:** DOCUMENTATION-INDEX.md (root level)  
+**Note:** Check git history for update timeline
