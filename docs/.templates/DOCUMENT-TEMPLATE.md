@@ -65,14 +65,14 @@ npm run command
 
 ## 🔗 Related Documentation
 
-- [Related Doc 1](link-to-doc.md) - Brief description
-- [Related Doc 2](link-to-doc.md) - Brief description
-- [Related Doc 3](link-to-doc.md) - Brief description
+- [Related Document 1](./path-to-doc.md) - Brief description
+- [Related Document 2](./path-to-doc.md) - Brief description
+- [Related Document 3](./path-to-doc.md) - Brief description
 
 ## 📚 Additional Resources
 
-- [External Resource 1](url) - Description
-- [External Resource 2](url) - Description
+- External Resource 1 - Description
+- External Resource 2 - Description
 
 ## 🆘 Getting Help
 

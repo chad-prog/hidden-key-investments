@@ -1,8 +1,8 @@
 {
-  "generated": "2025-11-02T07:51:25.496Z",
+  "generated": "2025-11-02T08:27:47.293Z",
   "stats": {
-    "totalFiles": 167,
-    "totalReadTime": 1513,
+    "totalFiles": 168,
+    "totalReadTime": 1536,
     "categories": {
       "00-START-HERE": 15,
       "01-GETTING-STARTED": 12,
@@ -12,21 +12,21 @@
       "05-DEPLOYMENT": 10,
       "06-VISION-ROADMAP": 53,
       "07-REFERENCE": 4,
-      "UNCATEGORIZED": 58
+      "UNCATEGORIZED": 59
     },
     "tags": {
-      "essential": 111,
-      "architecture": 134,
-      "deployment": 153,
-      "testing": 151,
-      "development": 133,
-      "reference": 106,
-      "tutorial": 144,
-      "devops": 146,
-      "ml": 158,
-      "getting-started": 129,
-      "api": 150,
-      "planning": 133
+      "essential": 112,
+      "architecture": 135,
+      "deployment": 155,
+      "testing": 154,
+      "development": 135,
+      "reference": 108,
+      "tutorial": 145,
+      "devops": 147,
+      "ml": 160,
+      "getting-started": 131,
+      "api": 151,
+      "planning": 135
     },
     "filesWithoutMetadata": 0
   },
@@ -289,7 +289,7 @@
       "path": "README.md",
       "title": "Hidden Key Investments - Elite Real Estate Investment Platform",
       "description": "- ✅ Developer tools: Comprehensive utility scripts",
-      "readTime": 12,
+      "readTime": 13,
       "version": null,
       "lastUpdated": "2025-11-02",
       "tags": [
@@ -597,22 +597,6 @@
       "category": "01-GETTING-STARTED"
     },
     {
-      "path": "docs/ARCHITECTURE.md",
-      "title": "",
-      "description": "",
-      "readTime": 3,
-      "version": null,
-      "lastUpdated": "2025-11-02",
-      "tags": [
-        "architecture",
-        "api",
-        "deployment",
-        "devops",
-        "ml"
-      ],
-      "category": "02-ARCHITECTURE"
-    },
-    {
       "path": "docs/02-ARCHITECTURE/README.md",
       "title": "🏗️ Architecture & Design",
       "description": "3. ML-ARCHITECTURE.md - ML system design",
@@ -641,6 +625,22 @@
         "deployment",
         "development",
         "reference",
+        "devops",
+        "ml"
+      ],
+      "category": "02-ARCHITECTURE"
+    },
+    {
+      "path": "docs/ARCHITECTURE.md",
+      "title": "Hidden Key Investments — Minimal Architecture",
+      "description": "",
+      "readTime": 3,
+      "version": null,
+      "lastUpdated": "2025-11-02",
+      "tags": [
+        "architecture",
+        "api",
+        "deployment",
         "devops",
         "ml"
       ],
@@ -848,15 +848,12 @@
     {
       "path": "LOCAL-DEVELOPMENT.md",
       "title": "Local Development Setup",
-      "description": "",
-      "readTime": 5,
+      "description": "- Write meaningful commit messages",
+      "readTime": 3,
       "version": null,
       "lastUpdated": "2025-11-02",
       "tags": [
-        "essential",
         "getting-started",
-        "architecture",
-        "api",
         "deployment",
         "testing",
         "development",
@@ -1070,24 +1067,6 @@
         "ml"
       ],
       "category": "05-DEPLOYMENT"
-    },
-    {
-      "path": "docs/ROADMAP.md",
-      "title": "",
-      "description": "",
-      "readTime": 2,
-      "version": null,
-      "lastUpdated": "2025-11-02",
-      "tags": [
-        "getting-started",
-        "api",
-        "deployment",
-        "testing",
-        "planning",
-        "devops",
-        "ml"
-      ],
-      "category": "06-VISION-ROADMAP"
     },
     {
       "path": "DELIVERY-COMPLETE-ENTERPRISE-VISION.md",
@@ -1478,6 +1457,24 @@
         "development",
         "planning",
         "tutorial",
+        "devops",
+        "ml"
+      ],
+      "category": "06-VISION-ROADMAP"
+    },
+    {
+      "path": "docs/ROADMAP.md",
+      "title": "Hidden Key Investments — Prioritized Implementation Roadmap",
+      "description": "",
+      "readTime": 2,
+      "version": null,
+      "lastUpdated": "2025-11-02",
+      "tags": [
+        "getting-started",
+        "api",
+        "deployment",
+        "testing",
+        "planning",
         "devops",
         "ml"
       ],
@@ -2293,35 +2290,6 @@
       "category": "07-REFERENCE"
     },
     {
-      "path": "PROJECT-STRUCTURE-GUIDE.md",
-      "title": "",
-      "description": "",
-      "readTime": 1,
-      "version": null,
-      "lastUpdated": "2025-11-02",
-      "tags": [
-        "tutorial"
-      ],
-      "category": "UNCATEGORIZED"
-    },
-    {
-      "path": "cleanup/CLEANUP-README.md",
-      "title": "",
-      "description": "",
-      "readTime": 1,
-      "version": null,
-      "lastUpdated": "2025-11-02",
-      "tags": [
-        "essential",
-        "architecture",
-        "api",
-        "testing",
-        "planning",
-        "ml"
-      ],
-      "category": "UNCATEGORIZED"
-    },
-    {
       "path": "IMMEDIATE-ACTIONS-YOU-CAN-TAKE.md",
       "title": "⚡ Immediate Actions You Can Take Right Now",
       "description": "---",
@@ -2694,6 +2662,23 @@
       "category": "UNCATEGORIZED"
     },
     {
+      "path": "cleanup/CLEANUP-README.md",
+      "title": "Cleanup Documentation",
+      "description": "",
+      "readTime": 1,
+      "version": null,
+      "lastUpdated": "2025-11-02",
+      "tags": [
+        "essential",
+        "architecture",
+        "api",
+        "testing",
+        "planning",
+        "ml"
+      ],
+      "category": "UNCATEGORIZED"
+    },
+    {
       "path": "WHAT-I-CAN-DO-COMPLETE-ANSWER.md",
       "title": "Complete Answer: What I Can Do For Your High-Level Enterprise Vision",
       "description": "Reply with your chosen path and I'll begin building your Elite Real Estate Investment Platform immediately!",
@@ -2829,10 +2814,34 @@
         "architecture",
         "api",
         "deployment",
+        "testing",
         "development",
         "planning",
         "reference",
         "tutorial",
+        "ml"
+      ],
+      "category": "UNCATEGORIZED"
+    },
+    {
+      "path": "DOCUMENTATION-ENHANCEMENTS-GUIDE.md",
+      "title": "Documentation System Enhancements - Complete Guide",
+      "description": "---",
+      "readTime": 15,
+      "version": "2.0",
+      "lastUpdated": "November 2, 2025",
+      "tags": [
+        "essential",
+        "getting-started",
+        "architecture",
+        "api",
+        "deployment",
+        "testing",
+        "development",
+        "planning",
+        "reference",
+        "tutorial",
+        "devops",
         "ml"
       ],
       "category": "UNCATEGORIZED"
@@ -3111,6 +3120,28 @@
         "reference",
         "tutorial",
         "devops",
+        "ml"
+      ],
+      "category": "UNCATEGORIZED"
+    },
+    {
+      "path": "PROJECT-STRUCTURE-GUIDE.md",
+      "title": "Project Structure Guide",
+      "description": "---",
+      "readTime": 10,
+      "version": "1.0",
+      "lastUpdated": "November 2, 2025",
+      "tags": [
+        "essential",
+        "getting-started",
+        "architecture",
+        "api",
+        "deployment",
+        "testing",
+        "development",
+        "planning",
+        "reference",
+        "tutorial",
         "ml"
       ],
       "category": "UNCATEGORIZED"

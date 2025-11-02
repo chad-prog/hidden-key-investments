@@ -62,10 +62,10 @@ class DocumentationLinter {
     for (const entry of entries) {
       const fullPath = path.join(dir, entry.name);
 
-      // Skip node_modules, .git, dist, etc.
+      // Skip node_modules, .git, dist, .templates, etc.
       if (entry.name === 'node_modules' || entry.name === '.git' || 
           entry.name === 'dist' || entry.name === 'build' ||
-          entry.name === '.netlify') {
+          entry.name === '.netlify' || entry.name === '.templates') {
         continue;
       }
 

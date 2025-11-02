@@ -28,7 +28,8 @@ class DocumentationCatalog {
       // Skip excluded directories
       if (entry.name === 'node_modules' || entry.name === '.git' || 
           entry.name === 'dist' || entry.name === 'build' ||
-          entry.name === '.netlify' || entry.name === 'coverage') {
+          entry.name === '.netlify' || entry.name === 'coverage' ||
+          entry.name === '.templates') {
         continue;
       }
 
