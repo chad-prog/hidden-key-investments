@@ -5,9 +5,12 @@
 
 set -e
 
-DOCS_DIR="/home/runner/work/hidden-key-investments/hidden-key-investments/docs"
+# Get the repository root directory (works from any location)
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+DOCS_DIR="${REPO_ROOT}/docs"
 
 echo "Creating organized documentation structure..."
+echo "Repository root: ${REPO_ROOT}"
 
 # Create category folders
 mkdir -p "$DOCS_DIR/00-START-HERE"

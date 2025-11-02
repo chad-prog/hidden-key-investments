@@ -219,18 +219,18 @@ By Category:
 ## 📱 Mobile-Friendly Quick Links
 
 **Essential 3:**
-1. [README.md](../README.md)
-2. [WHAT-I-CAN-DO-COMPLETE-ANSWER.md](../WHAT-I-CAN-DO-COMPLETE-ANSWER.md)
-3. [NEXT-ACTIONS-SIMPLIFIED.md](../NEXT-ACTIONS-SIMPLIFIED.md)
+1. README.md (root level)
+2. WHAT-I-CAN-DO-COMPLETE-ANSWER.md (root level)
+3. NEXT-ACTIONS-SIMPLIFIED.md (root level)
 
 **Navigation:**
-- [DOCUMENTATION-INDEX.md](../DOCUMENTATION-INDEX.md)
-- [docs/NAVIGATION-GUIDE.md](NAVIGATION-GUIDE.md)
+- DOCUMENTATION-INDEX.md (root level)
+- docs/NAVIGATION-GUIDE.md
 
 **By Role:**
-- Dev: [SETUP-GUIDE.md](../SETUP-GUIDE.md)
-- PM: [IMPLEMENTATION-STATUS.md](../IMPLEMENTATION-STATUS.md)
-- Ops: [DEPLOYMENT-GUIDE.md](../DEPLOYMENT-GUIDE.md)
+- Dev: SETUP-GUIDE.md (root level)
+- PM: IMPLEMENTATION-STATUS.md (root level)
+- Ops: DEPLOYMENT-GUIDE.md (root level)
 
 ---
 

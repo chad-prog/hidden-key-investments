@@ -415,10 +415,13 @@ How to Use?     → docs/HOW-TO-USE-NEW-DOCS-SYSTEM.md
 
 ---
 
-**Last Updated:** November 2, 2025  
 **Diagram Version:** 1.0  
 **Purpose:** Visual overview of documentation structure  
-**Best Viewed:** In a monospace font
+**Best Viewed:** In a monospace font (e.g., Courier, Consolas, Monaco)  
+**Viewing Tips:**
+- On GitHub: Renders automatically in monospace
+- In editors: Use plain text view or markdown preview
+- For printing: Use monospace font setting in print dialog
 
 ---
 
