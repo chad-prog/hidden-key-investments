@@ -3,7 +3,8 @@
 # Documentation Organization Script
 # Purpose: Create organized folder structure for documentation
 
-set -e
+# Exit on error, undefined variables, and pipe failures
+set -euo pipefail
 
 # Get the repository root directory (works from any location)
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
