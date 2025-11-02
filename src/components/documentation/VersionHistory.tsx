@@ -68,7 +68,7 @@ export function VersionHistory({ filePath, compact = false }: VersionHistoryProp
       const parsedHistory = JSON.parse(stored);
       
       const newCommit: GitCommit = {
-        hash: Math.random().toString(36).substring(7),
+        hash: crypto.randomUUID ? crypto.randomUUID().substring(0, 7) : Date.now().toString(36),
         author: 'Current User',
         date: new Date().toISOString(),
         message,
@@ -285,7 +285,7 @@ export function useVersionHistory(filePath: string) {
   const addVersion = (message: string) => {
     try {
       const newCommit: GitCommit = {
-        hash: Math.random().toString(36).substring(7),
+        hash: crypto.randomUUID ? crypto.randomUUID().substring(0, 7) : Date.now().toString(36),
         author: 'Current User',
         date: new Date().toISOString(),
         message,

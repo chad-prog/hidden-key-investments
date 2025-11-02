@@ -3,6 +3,16 @@
  * Sets up multi-language support for the documentation system
  */
 
+import { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Languages } from 'lucide-react';
+
 export interface TranslationConfig {
   locale: string;
   label: string;
@@ -256,8 +266,6 @@ export function t(key: string, locale?: string): string {
 /**
  * React hook for i18n
  */
-import { useState, useEffect } from 'react';
-
 export function useI18n() {
   const [locale, setLocale] = useState<string>(getCurrentLocale());
   const [translations, setTranslations] = useState<DocumentationTranslations>(
@@ -289,15 +297,6 @@ export function useI18n() {
 /**
  * Language Selector Component
  */
-import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Languages } from 'lucide-react';
-
 export function LanguageSelector() {
   const { locale, changeLocale, supportedLocales } = useI18n();
   const currentConfig = supportedLocales.find(l => l.locale === locale);
