@@ -9,6 +9,14 @@ interface DocAnalytics {
   lastViewed: string;
 }
 
+interface StoredDocData {
+  path: string;
+  views: number;
+  totalReadTime: number;
+  viewCount: number;
+  lastViewed: string | null;
+}
+
 interface AnalyticsSummary {
   totalViews: number;
   totalDocs: number;
@@ -85,8 +93,8 @@ export function useDocumentationAnalytics() {
     }
   };
 
-  const computeSummary = (data: Record<string, any>): AnalyticsSummary => {
-    const docs = Object.values(data) as any[];
+  const computeSummary = (data: Record<string, StoredDocData>): AnalyticsSummary => {
+    const docs = Object.values(data);
     const totalViews = docs.reduce((sum, doc) => sum + doc.views, 0);
 
     const popularDocs = docs
@@ -96,18 +104,22 @@ export function useDocumentationAnalytics() {
         path: doc.path,
         views: doc.views,
         avgReadTime: doc.viewCount > 0 ? Math.round(doc.totalReadTime / doc.viewCount) : 0,
-        lastViewed: doc.lastViewed,
+        lastViewed: doc.lastViewed || '',
       }));
 
     const recentDocs = docs
       .filter(doc => doc.lastViewed)
-      .sort((a, b) => new Date(b.lastViewed).getTime() - new Date(a.lastViewed).getTime())
+      .sort((a, b) => {
+        const aTime = a.lastViewed ? new Date(a.lastViewed).getTime() : 0;
+        const bTime = b.lastViewed ? new Date(b.lastViewed).getTime() : 0;
+        return bTime - aTime;
+      })
       .slice(0, 5)
       .map(doc => ({
         path: doc.path,
         views: doc.views,
         avgReadTime: doc.viewCount > 0 ? Math.round(doc.totalReadTime / doc.viewCount) : 0,
-        lastViewed: doc.lastViewed,
+        lastViewed: doc.lastViewed || '',
       }));
 
     return {

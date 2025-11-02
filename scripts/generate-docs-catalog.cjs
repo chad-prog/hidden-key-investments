@@ -94,11 +94,11 @@ class DocumentationCatalog {
     if (updatedMatch) {
       metadata.lastUpdated = updatedMatch[1].trim();
     } else {
-      // Try to get from git
+      // Try to get from git (safely)
       try {
         const gitDate = execSync(
-          `git log -1 --format=%ai "${filePath}"`,
-          { encoding: 'utf-8' }
+          'git log -1 --format=%ai -- ' + filePath.replace(/'/g, "'\\''"),
+          { encoding: 'utf-8', stdio: ['pipe', 'pipe', 'ignore'] }
         ).trim();
         if (gitDate) {
           metadata.lastUpdated = new Date(gitDate).toISOString().split('T')[0];

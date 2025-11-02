@@ -165,8 +165,11 @@ class DocumentationLinter {
     const headings = [];
     lines.forEach((line, index) => {
       if (line.startsWith('#')) {
-        const level = line.match(/^#+/)[0].length;
-        headings.push({ level, line: index + 1, text: line });
+        const match = line.match(/^#+/);
+        if (match) {
+          const level = match[0].length;
+          headings.push({ level, line: index + 1, text: line });
+        }
       }
     });
 
