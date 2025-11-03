@@ -27,8 +27,6 @@ if (import.meta.env.VITE_SENTRY_DSN) {
   console.log('🔍 Sentry error tracking enabled');
   console.log('📊 Environment:', import.meta.env.MODE || 'development');
 } else {
-  console.log('ℹ️ Sentry not configured (VITE_SENTRY_DSN not set)');
-  console.log('💡 To enable error monitoring, add VITE_SENTRY_DSN to environment variables');
 }
 
 // Sentry error monitoring - active when VITE_SENTRY_DSN is configured
