@@ -194,12 +194,12 @@
 **Required API Keys:**
 ```bash
 # SendGrid
-SENDGRID_API_KEY=SG.xxxxxxxxxxxxx
+SENDGRID_API_KEY=your_sendgrid_api_key_here
 FROM_EMAIL=noreply@yourdomain.com
 
 # Twilio
-TWILIO_ACCOUNT_SID=ACxxxxxxxxxxxxx
-TWILIO_AUTH_TOKEN=xxxxxxxxxxxxx
+TWILIO_ACCOUNT_SID=your_twilio_account_sid_here
+TWILIO_AUTH_TOKEN=your_twilio_auth_token_here
 TWILIO_PHONE_NUMBER=+1234567890
 ```
 
