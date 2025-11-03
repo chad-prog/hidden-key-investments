@@ -20,6 +20,7 @@ import MonitoringDashboard from './pages/MonitoringDashboard';
 import EnhancedLeadCapture from './pages/EnhancedLeadCapture';
 import AnalyticsDashboard from './pages/AnalyticsDashboard';
 import WorkflowBuilder from './pages/WorkflowBuilder';
+import TemplateManagement from './pages/TemplateManagement';
 
 function App() {
   return (
@@ -43,6 +44,9 @@ function App() {
           
           {/* Workflows */}
           <Route path="/workflows" element={<WorkflowBuilder />} />
+          
+          {/* Templates */}
+          <Route path="/templates" element={<TemplateManagement />} />
           
           {/* CRM Routes */}
           <Route path="/crm" element={<LeadManagement />} />

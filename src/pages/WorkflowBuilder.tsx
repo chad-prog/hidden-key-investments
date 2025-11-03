@@ -90,9 +90,9 @@ const WORKFLOW_TEMPLATES: WorkflowTemplate[] = [
     category: 'Email',
     nodes: [
       { id: '1', type: 'trigger', name: 'New Lead Created', config: {}, position: { x: 0, y: 0 } },
-      { id: '2', type: 'action', name: 'Send Welcome Email', config: {}, position: { x: 0, y: 1 } },
-      { id: '3', type: 'action', name: 'Wait 2 Days', config: {}, position: { x: 0, y: 2 } },
-      { id: '4', type: 'action', name: 'Send Follow-up', config: {}, position: { x: 0, y: 3 } }
+      { id: '2', type: 'action', name: 'Send Welcome Email', config: { service: 'sendgrid', templateId: 'tpl-1' }, position: { x: 0, y: 1 } },
+      { id: '3', type: 'action', name: 'Wait 2 Days', config: { delay: '2d' }, position: { x: 0, y: 2 } },
+      { id: '4', type: 'action', name: 'Send Follow-up', config: { service: 'sendgrid' }, position: { x: 0, y: 3 } }
     ]
   },
   {
@@ -114,8 +114,19 @@ const WORKFLOW_TEMPLATES: WorkflowTemplate[] = [
     category: 'Communication',
     nodes: [
       { id: '1', type: 'trigger', name: 'Appointment Scheduled', config: {}, position: { x: 0, y: 0 } },
-      { id: '2', type: 'action', name: 'Wait Until 24h Before', config: {}, position: { x: 0, y: 1 } },
-      { id: '3', type: 'action', name: 'Send SMS Reminder', config: {}, position: { x: 0, y: 2 } }
+      { id: '2', type: 'action', name: 'Wait Until 24h Before', config: { delay: '24h' }, position: { x: 0, y: 1 } },
+      { id: '3', type: 'action', name: 'Send SMS Reminder', config: { service: 'twilio', templateId: 'tpl-2' }, position: { x: 0, y: 2 } }
+    ]
+  },
+  {
+    id: 'investment-opportunity',
+    name: 'Investment Opportunity Notification',
+    description: 'Notify investors about new opportunities via email and SMS',
+    category: 'Communication',
+    nodes: [
+      { id: '1', type: 'trigger', name: 'New Property Listed', config: {}, position: { x: 0, y: 0 } },
+      { id: '2', type: 'action', name: 'Send Email Alert', config: { service: 'sendgrid', templateId: 'tpl-3' }, position: { x: -1, y: 1 } },
+      { id: '3', type: 'action', name: 'Send SMS Alert', config: { service: 'twilio' }, position: { x: 1, y: 1 } }
     ]
   }
 ];
