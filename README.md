@@ -1,10 +1,61 @@
 # Hidden Key Investments - Elite Real Estate Investment Platform
 
-A production-ready, AI-powered platform for Elite real-estate investors with lead capture, CRM, workflow automation, and ML-driven analytics.
+A production-ready, AI-powered platform for Elite real-estate investors with lead capture, CRM, workflow automation, ML-driven analytics, and integrated communications.
 
 ---
 
-## 🎉 NEW: Enhanced Documentation Portal 2.0!
+## 🚀 NEW: SendGrid + Twilio Communication System!
+
+**Complete email and SMS integration with visual workflow builder!**
+
+### ✨ Key Features:
+
+#### 📧 Email Integration (SendGrid)
+- **Professional email sending** - Transactional and marketing emails
+- **Template support** - Reusable email templates with variables
+- **HTML content** - Rich formatting and styling
+- **Demo mode** - Works without API keys for development
+
+#### 📱 SMS Integration (Twilio)
+- **SMS messaging** - Send notifications and reminders
+- **Phone validation** - E.164 format support
+- **Template support** - Reusable SMS templates
+- **Multi-segment** - Support for longer messages
+
+#### 📝 Template Management
+- **Visual UI** - Create and manage templates easily
+- **Variable substitution** - Dynamic content with `{{variables}}`
+- **CRUD operations** - Full create, read, update, delete
+- **Status management** - Draft, active, and archived states
+- **Tag system** - Organize templates efficiently
+
+#### 🔄 Workflow Automation
+- **Visual builder** - Create automated workflows
+- **Pre-built templates** - Welcome series, reminders, alerts
+- **Multi-channel** - Combine email and SMS in one workflow
+- **Execution engine** - Reliable workflow processing
+- **Error handling** - Graceful failure management
+
+### 🎯 Quick Start
+
+```bash
+# Access Template Management
+npm run dev
+# Navigate to http://localhost:5173/templates
+
+# Access Workflow Builder
+# Navigate to http://localhost:5173/workflows
+```
+
+### 📚 Documentation
+
+- 📘 **[Communication API Guide](docs/API-COMMUNICATION.md)** - Complete API documentation
+- 📖 **[User Guide](docs/USER-GUIDE-COMMUNICATIONS.md)** - How to use the system
+- 🔧 **[Setup Guide](#communication-setup)** - Configuration instructions
+
+---
+
+## 🎉 Enhanced Documentation Portal 2.0!
 
 **Lost in 167+ documentation files?** We've built a world-class interactive portal with AI assistance!
 
@@ -305,8 +356,31 @@ bash scripts/dev-utils.sh check-all
 - ✅ **Webhook Integration** - Third-party lead capture (Zapier, Make, n8n)
 - ✅ **CRM Pipeline** - Leads → Opportunities → Investors workflow
 - ✅ **Workflow Automation** - Rule-based email/SMS triggers
+- ✅ **Communication System** - SendGrid email + Twilio SMS integration
+- ✅ **Template Management** - Reusable email/SMS templates with variables
+- ✅ **Workflow Builder** - Visual automation with execution engine
 - ✅ **Feature Flags** - Gradual rollout and A/B testing
 - ✅ **Demo Mode** - Full functionality without API keys
+
+### Communication Setup
+
+#### SendGrid Email (Optional - works in demo mode)
+```bash
+# In Netlify dashboard, add environment variables:
+SENDGRID_API_KEY=your_sendgrid_api_key
+SENDGRID_FROM_EMAIL=noreply@yourdomain.com
+SENDGRID_FROM_NAME=Your Company Name
+```
+
+#### Twilio SMS (Optional - works in demo mode)
+```bash
+# In Netlify dashboard, add environment variables:
+TWILIO_ACCOUNT_SID=your_account_sid
+TWILIO_AUTH_TOKEN=your_auth_token
+TWILIO_PHONE_NUMBER=+1234567890
+```
+
+**Note:** System works in demo mode without these credentials. Perfect for development and testing!
 
 ### Infrastructure
 - ✅ **Production Database** - Complete PostgreSQL schema with indexes
