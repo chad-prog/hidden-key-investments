@@ -33,29 +33,6 @@ if (import.meta.env.VITE_SENTRY_DSN) {
 
 // Sentry error monitoring - active when VITE_SENTRY_DSN is configured
 if (import.meta.env.VITE_SENTRY_DSN) {
-  import('@sentry/react').then((Sentry) => {
-    Sentry.init({
-      dsn: import.meta.env.VITE_SENTRY_DSN,
-      environment: import.meta.env.MODE || 'development',
-      integrations: [
-        Sentry.browserTracingIntegration(),
-        Sentry.replayIntegration({
-          maskAllText: true,
-          blockAllMedia: true,
-        }),
-      ],
-      tracesSampleRate: import.meta.env.PROD ? 0.1 : 1.0,
-      replaysSessionSampleRate: 0.1,
-      replaysOnErrorSampleRate: 1.0,
-      release: import.meta.env.VITE_APP_VERSION || 'unknown',
-    });
-    console.log('✅ Sentry initialized');
-  }).catch((err) => {
-    console.warn('⚠️ Failed to initialize Sentry:', err.message);
-  });
-}
-
-ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <App />
   </React.StrictMode>
