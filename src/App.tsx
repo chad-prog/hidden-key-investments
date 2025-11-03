@@ -15,6 +15,8 @@ import LeadDetail from './pages/LeadDetail';
 import LeadCreate from './pages/LeadCreate';
 import InvestorProfilePage from './pages/InvestorProfilePage';
 import InvestorsPage from './pages/InvestorsPage';
+import InvestorDirectory from './pages/InvestorDirectory';
+import OpportunityPipeline from './pages/OpportunityPipeline';
 import DocumentationPortal from './pages/DocumentationPortal';
 import MonitoringDashboard from './pages/MonitoringDashboard';
 import EnhancedLeadCapture from './pages/EnhancedLeadCapture';
@@ -54,7 +56,9 @@ function App() {
           <Route path="/crm/leads/new" element={<LeadCreate />} />
           <Route path="/crm/leads/enhanced" element={<EnhancedLeadCapture />} />
           <Route path="/crm/leads/:leadId" element={<LeadDetail />} />
+          <Route path="/crm/opportunities" element={<OpportunityPipeline />} />
           <Route path="/crm/investors" element={<InvestorsPage />} />
+          <Route path="/crm/investors/directory" element={<InvestorDirectory />} />
           <Route path="/crm/investors/:investorId" element={<InvestorProfilePage />} />
         </Routes>
       </div>
