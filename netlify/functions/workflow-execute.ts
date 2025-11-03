@@ -123,9 +123,9 @@ function evaluateCondition(config: Record<string, any>, data: Record<string, any
     
     switch (config.operator) {
       case 'equals':
-        return fieldValue == config.value;
+        return fieldValue === config.value;
       case 'not_equals':
-        return fieldValue != config.value;
+        return fieldValue !== config.value;
       case 'greater_than':
         return Number(fieldValue) > Number(config.value);
       case 'less_than':

@@ -349,7 +349,7 @@ export default function TemplateManagement() {
           <div className="flex gap-4">
             <div>
               <Label>Type</Label>
-              <Select value={filterType} onValueChange={(value: any) => setFilterType(value)}>
+              <Select value={filterType} onValueChange={(value: 'all' | 'email' | 'sms') => setFilterType(value)}>
                 <SelectTrigger className="w-[180px]">
                   <SelectValue />
                 </SelectTrigger>
@@ -362,7 +362,7 @@ export default function TemplateManagement() {
             </div>
             <div>
               <Label>Status</Label>
-              <Select value={filterStatus} onValueChange={(value: any) => setFilterStatus(value)}>
+              <Select value={filterStatus} onValueChange={(value: 'all' | 'draft' | 'active' | 'archived') => setFilterStatus(value)}>
                 <SelectTrigger className="w-[180px]">
                   <SelectValue />
                 </SelectTrigger>

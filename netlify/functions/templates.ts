@@ -20,6 +20,8 @@ interface Template {
 }
 
 // In-memory storage for demo (in production, use a database)
+// Note: This will reset on each cold start in serverless environment
+// For production, integrate with Supabase or other persistent storage
 const templates: Map<string, Template> = new Map();
 
 // Initialize with sample templates

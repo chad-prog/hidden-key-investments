@@ -4,7 +4,6 @@
  */
 
 import type { Handler } from '@netlify/functions';
-// @ts-ignore
 import twilio from 'twilio';
 
 interface SmsRequest {
