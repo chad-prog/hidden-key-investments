@@ -19,8 +19,8 @@ if (import.meta.env.VITE_SENTRY_DSN) {
     integrations: [
       Sentry.browserTracingIntegration(),
       Sentry.replayIntegration({
-        maskAllText: false,
-        blockAllMedia: false,
+        maskAllText: environment === 'production', // Mask text in production for privacy
+        blockAllMedia: environment === 'production', // Block media in production for privacy
       }),
     ],
     // Performance Monitoring
@@ -41,7 +41,7 @@ if (import.meta.env.VITE_SENTRY_DSN) {
 
   console.log('🔍 Sentry error tracking initialized');
   console.log('📊 Environment:', environment);
-  console.log('🎯 DSN configured:', import.meta.env.VITE_SENTRY_DSN.substring(0, 30) + '...');
+  console.log('🎯 Sentry DSN configured: ✅');
 } else {
   console.warn('⚠️ Sentry DSN not configured - error tracking disabled');
 }
@@ -52,11 +52,15 @@ if (!envValidation.success) {
   console.error('❌ Environment validation failed:', envValidation.errors);
   console.warn('⚠️ Running in demo mode with limited functionality');
   
-  // Report validation errors to Sentry
+  // Report validation errors to Sentry (sanitized)
   if (import.meta.env.VITE_SENTRY_DSN) {
     Sentry.captureMessage('Environment validation failed', {
       level: 'warning',
-      extra: { errors: envValidation.errors },
+      extra: { 
+        errorCount: envValidation.errors.length,
+        hasErrors: true,
+        // Don't send actual error details to avoid exposing config
+      },
     });
   }
 } else {
