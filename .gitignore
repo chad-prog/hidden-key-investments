@@ -43,3 +43,12 @@ coverage/
 # Backups
 backups/
 *.tar.gz
+
+# IDE + local caches
+.vs/
+.devcontainer/
+
+# IDE caches / build output
+.vs/
+dist/
+*.map
