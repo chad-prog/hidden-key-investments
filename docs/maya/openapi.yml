@@ -1,0 +1,75 @@
+openapi: 3.1.0
+info: { title: Maya Deal Analyzer API, version: 1.0.0 }
+paths:
+  /health:
+    get:
+      summary: Liveness probe
+      responses: { '200': { description: OK } }
+  /v1/deals/analyze:
+    post:
+      summary: Analyze a deal (sync)
+      requestBody:
+        required: true
+        content:
+          application/json: { schema: { $ref: '#/components/schemas/Deal' } }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json: { schema: { $ref: '#/components/schemas/AnalysisResult' } }
+  /v1/deals/analyze/async:
+    post:
+      summary: Queue a deal for async analysis
+      responses: { '202': { description: Accepted } }
+  /v1/webhooks/hubspot:
+    post:
+      summary: HubSpot webhook endpoint (v3 signature verification)
+      responses: { '204': { description: No Content } }
+components:
+  schemas:
+    Deal:
+      type: object
+      required: [purchase_price,down_payment,interest_rate,term_years,rent_monthly]
+      properties:
+        purchase_price: { type: number }
+        down_payment: { type: number }
+        interest_rate: { type: number }
+        term_years: { type: integer }
+        rent_monthly: { type: number }
+    AnalysisResult:
+      type: object
+      required: [metrics, risk, explainability]
+      properties:
+        id: { type: string }
+        metrics:
+          type: object
+          required: [roi, irr, npv]
+          properties:
+            roi: { type: number }
+            irr: { type: number }
+            npv: { type: number }
+            cash_flow: { type: array, items: { type: number } }
+        risk:
+          type: object
+          required: [score, category]
+          properties:
+            score: { type: number }
+            category: { type: string, enum: [Low, Medium, High] }
+            vector: { type: object, additionalProperties: { type: number } }
+            mitigations: { type: array, items: { type: string } }
+        explainability:
+          type: object
+          required: [scoring_logic, feature_attribution]
+          properties:
+            scoring_logic: { type: string }
+            feature_attribution:
+              type: array
+              items:
+                type: object
+                required: [feature, weight, value, contribution]
+                properties:
+                  feature: { type: string }
+                  weight: { type: number }
+                  value: { type: number }
+                  contribution: { type: number }
+            inputs_used: { type: object }
