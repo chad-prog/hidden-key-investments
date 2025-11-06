@@ -260,7 +260,7 @@ async function triggerWorkflows(lead) {
  * 
  * Best-effort sync that doesn't block lead creation.
  * 1. Upsert contact to Mautic
- * 2. Check if high-value lead
+ * 2. Check if high-value lead using shared deciders logic
  * 3. Add to campaign if qualified
  */
 async function syncToMautic(lead, leadData, correlationId) {
@@ -312,7 +312,9 @@ async function syncToMautic(lead, leadData, correlationId) {
     console.log('[LeadIngest] Mautic upsert completed | contactId=' + upsertResult.contactId);
 
     // Check if should enroll in high-value campaign
-    const shouldEnroll = checkHighValueEnrollment(lead);
+    // Note: Using simplified inline check here rather than importing deciders module
+    // to avoid module dependency issues in serverless functions
+    const shouldEnroll = checkHighValueEnrollmentInline(lead);
     
     if (shouldEnroll.shouldEnroll) {
       console.log('[LeadIngest] Enrolling in campaign | reason=' + shouldEnroll.reason + ' | campaignId=' + shouldEnroll.campaignId);
@@ -352,9 +354,10 @@ async function syncToMautic(lead, leadData, correlationId) {
 /**
  * Check if lead should be enrolled in high-value campaign
  * 
- * Simplified version of addToCampaignIfHighValue decider
+ * Inline implementation matching addToCampaignIfHighValue logic from src/lib/mautic/deciders.ts
+ * Kept inline to avoid module import issues in serverless functions.
  */
-function checkHighValueEnrollment(lead) {
+function checkHighValueEnrollmentInline(lead) {
   const enrollmentEnabled = process.env.MAUTIC_ENROLLMENT_ENABLED === 'true';
   
   if (!enrollmentEnabled) {
@@ -374,6 +377,7 @@ function checkHighValueEnrollment(lead) {
     .map(s => s.trim().toLowerCase())
     .filter(s => s.length > 0);
 
+  // Use lead.status as that's the field in the leads table
   if (eligibleStages.length > 0 && lead.status) {
     const leadStage = lead.status.toLowerCase();
     if (!eligibleStages.includes(leadStage)) {

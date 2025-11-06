@@ -36,8 +36,10 @@ COMMENT ON COLUMN leads.email_status IS 'Email delivery status from Mautic (subs
 COMMENT ON COLUMN leads.email_status_updated_at IS 'Last update timestamp for email_status';
 
 -- Set default email_status for existing leads without status
+-- Only update leads with email and marketing_opt_in=true to minimize scope
 UPDATE leads 
 SET email_status = 'subscribed' 
 WHERE email_status IS NULL 
   AND email IS NOT NULL 
+  AND email != ''
   AND marketing_opt_in = true;
