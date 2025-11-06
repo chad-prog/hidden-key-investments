@@ -125,6 +125,11 @@ export async function handler(event) {
       console.error('[LeadIngest] Workflow trigger failed:', err);
     });
     
+    // Sync to Mautic asynchronously (don't wait)
+    syncToMautic(lead, leadData, correlationId).catch(err => {
+      console.error('[LeadIngest] Mautic sync failed:', err);
+    });
+    
     // Track analytics event
     trackEvent('lead_created', {
       leadId: lead.id,
@@ -248,6 +253,157 @@ async function triggerWorkflows(lead) {
   // The workflow engine currently resides in the frontend src directory
   // and needs to be refactored for serverless function use
   console.log('[LeadIngest] Workflow triggering deferred - lead_created event for lead:', lead.id);
+}
+
+/**
+ * Sync lead to Mautic
+ * 
+ * Best-effort sync that doesn't block lead creation.
+ * 1. Upsert contact to Mautic
+ * 2. Check if high-value lead
+ * 3. Add to campaign if qualified
+ */
+async function syncToMautic(lead, leadData, correlationId) {
+  // Skip if no email
+  if (!lead.email) {
+    console.log('[LeadIngest] Skipping Mautic sync - no email | correlationId=' + correlationId);
+    return;
+  }
+
+  try {
+    // Build Mautic sync payload
+    const upsertPayload = {
+      action: 'upsert_contact',
+      payload: {
+        email: lead.email,
+        firstName: lead.first_name,
+        lastName: lead.last_name,
+        phone: lead.phone,
+        company: leadData.company,
+        tags: lead.tags || [],
+        utm_source: leadData.utm?.source,
+        utm_medium: leadData.utm?.medium,
+        utm_campaign: leadData.utm?.campaign,
+        utm_term: leadData.utm?.term,
+        utm_content: leadData.utm?.content,
+        updated_at: lead.updated_at,
+        customFields: lead.custom_fields,
+      },
+    };
+
+    // Call mautic-sync function
+    console.log('[LeadIngest] Syncing to Mautic | correlationId=' + correlationId + ' | email=' + lead.email);
+    
+    const upsertResponse = await fetch('/.netlify/functions/mautic-sync', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Correlation-ID': correlationId,
+      },
+      body: JSON.stringify(upsertPayload),
+    });
+
+    if (!upsertResponse.ok) {
+      const errorText = await upsertResponse.text();
+      throw new Error(`Mautic upsert failed: ${upsertResponse.status} ${errorText}`);
+    }
+
+    const upsertResult = await upsertResponse.json();
+    console.log('[LeadIngest] Mautic upsert completed | contactId=' + upsertResult.contactId);
+
+    // Check if should enroll in high-value campaign
+    const shouldEnroll = checkHighValueEnrollment(lead);
+    
+    if (shouldEnroll.shouldEnroll) {
+      console.log('[LeadIngest] Enrolling in campaign | reason=' + shouldEnroll.reason + ' | campaignId=' + shouldEnroll.campaignId);
+      
+      const enrollPayload = {
+        action: 'add_to_campaign',
+        payload: {
+          email: lead.email,
+          campaignId: shouldEnroll.campaignId,
+        },
+      };
+
+      const enrollResponse = await fetch('/.netlify/functions/mautic-sync', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Correlation-ID': correlationId,
+        },
+        body: JSON.stringify(enrollPayload),
+      });
+
+      if (!enrollResponse.ok) {
+        const errorText = await enrollResponse.text();
+        throw new Error(`Campaign enrollment failed: ${enrollResponse.status} ${errorText}`);
+      }
+
+      console.log('[LeadIngest] Campaign enrollment completed | campaignId=' + shouldEnroll.campaignId);
+    } else {
+      console.log('[LeadIngest] Skipping campaign enrollment | reason=' + shouldEnroll.reason);
+    }
+  } catch (error) {
+    // Log but don't throw - this is best-effort
+    console.error('[LeadIngest] Mautic sync error:', error.message);
+  }
+}
+
+/**
+ * Check if lead should be enrolled in high-value campaign
+ * 
+ * Simplified version of addToCampaignIfHighValue decider
+ */
+function checkHighValueEnrollment(lead) {
+  const enrollmentEnabled = process.env.MAUTIC_ENROLLMENT_ENABLED === 'true';
+  
+  if (!enrollmentEnabled) {
+    return { shouldEnroll: false, reason: 'Enrollment disabled' };
+  }
+
+  const campaignId = process.env.MAUTIC_CAMPAIGN_HIGH_VALUE;
+  
+  if (!campaignId || campaignId.includes('placeholder')) {
+    return { shouldEnroll: false, reason: 'Campaign not configured' };
+  }
+
+  // Check eligible stages if configured
+  const eligibleStagesStr = process.env.MAUTIC_ELIGIBLE_STAGES || '';
+  const eligibleStages = eligibleStagesStr
+    .split(',')
+    .map(s => s.trim().toLowerCase())
+    .filter(s => s.length > 0);
+
+  if (eligibleStages.length > 0 && lead.status) {
+    const leadStage = lead.status.toLowerCase();
+    if (!eligibleStages.includes(leadStage)) {
+      return {
+        shouldEnroll: false,
+        reason: `Stage '${lead.status}' not in eligible stages`,
+      };
+    }
+  }
+
+  // Check property value threshold
+  const thresholdStr = process.env.MAUTIC_HIGH_VALUE_THRESHOLD;
+  const threshold = thresholdStr ? parseFloat(thresholdStr) : null;
+
+  if (threshold !== null && !isNaN(threshold)) {
+    const propertyValue = lead.property?.estimatedValue;
+    
+    if (!propertyValue || propertyValue < threshold) {
+      return {
+        shouldEnroll: false,
+        reason: `Property value ${propertyValue || 0} below threshold ${threshold}`,
+      };
+    }
+  }
+
+  return {
+    shouldEnroll: true,
+    reason: 'Meets high-value criteria',
+    campaignId,
+  };
 }
 
 /**

@@ -10,7 +10,10 @@ export default defineConfig({
       '__tests__/airtable-sync.test.js',
       '__tests__/webhook-inbound.test.js',
       '__tests__/lead-ingest-enhanced.test.js',
-      '__tests__/health.test.js'
+      '__tests__/health.test.js',
+      '__tests__/mautic-sync.test.ts',
+      '__tests__/mautic-webhook.spec.ts',
+      '__tests__/enroll.integration.spec.ts'
     ],
     // Exclude tests that need refactoring for proper async mocking
     exclude: [
