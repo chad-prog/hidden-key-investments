@@ -70,7 +70,7 @@ function compact(obj: Record<string, any>): Record<string, any> {
  * @returns Mautic contact object with empty values pruned
  */
 export function hkiToMauticContact(lead: HKILead): MauticContact {
-  const mauticContact: MauticContact = {
+  const mauticContact: Record<string, any> = {
     email: lead.email,
   };
 
@@ -114,7 +114,7 @@ export function hkiToMauticContact(lead: HKILead): MauticContact {
     mauticContact.last_platform_update = lead.updated_at;
   }
 
-  return compact(mauticContact);
+  return compact(mauticContact) as MauticContact;
 }
 
 /**
