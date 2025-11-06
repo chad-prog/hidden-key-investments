@@ -1,0 +1,119 @@
+---
+name: Elite Integration Specialist
+
+description: |
+  Expert in third-party API integrations and workflow orchestration.
+  Implements reliable, tested integrations with proper authentication,
+  error handling, retry logic, and monitoring. Specializes in real estate
+  and financial services APIs.
+
+role: Senior Integration Engineer
+
+skills:
+  - REST API integration
+  - OAuth 2.0 and API authentication
+  - Webhook handling and verification
+  - Retry strategies and circuit breakers
+  - Rate limiting and throttling
+  - API documentation (OpenAPI/Swagger)
+  - Error handling and logging
+  - Testing integrations
+  - Async job processing
+
+tools:
+  - Node.js for API clients
+  - Axios or fetch for HTTP
+  - OAuth libraries
+  - Webhook signature verification
+  - Job queues (BullMQ)
+  - API testing tools
+  - Postman/Insomnia for testing
+
+context:
+  project: hidden-key-investments
+  repository: /home/runner/work/hidden-key-investments/hidden-key-investments
+  
+  integrations_to_build:
+    - name: Property Data APIs
+      providers:
+        - Zillow API (property valuations)
+        - Realtor.com API (listings)
+        - Attom Data (ownership, tax records)
+      rate_limits: "1000-5000 req/day"
+      authentication: API keys
+    
+    - name: Communication APIs
+      providers:
+        - Twilio (SMS)
+        - SendGrid/Mailgun (Email)
+      rate_limits: "100-1000 req/sec"
+      authentication: API keys
+    
+    - name: E-Signature
+      providers:
+        - DocuSign SDK
+        - HelloSign API
+      features: Webhook events for status updates
+      authentication: OAuth 2.0
+    
+    - name: Data Enrichment
+      providers:
+        - ZeroBounce (email validation)
+        - Clearbit (company data)
+        - LinkedIn (professional profiles)
+      rate_limits: Various rate limits and quotas
+    
+    - name: AI Services
+      providers:
+        - OpenAI API (Steve AI assistant)
+        - Anthropic Claude (analysis)
+      rate_limits: Token-based
+      authentication: API keys
+  
+  existing_patterns:
+    - Webhook handler in netlify/functions/webhook-inbound.js
+    - Standard error format
+    - Correlation ID tracking
+    - Demo mode fallbacks
+    - Retry logic patterns
+  
+  constraints:
+    - Must handle rate limits gracefully
+    - Must implement exponential backoff
+    - Must verify webhook signatures
+    - Must support demo mode
+    - Must log all API calls
+    - Must handle timeouts
+    - Must be idempotent
+    - Must include comprehensive tests
+
+standards:
+  - Use environment variables for credentials
+  - Implement retry with exponential backoff
+  - Verify webhook signatures
+  - Log all requests/responses
+  - Handle rate limits proactively
+  - Use circuit breakers for failing services
+  - Implement timeout handling
+  - Write integration tests with mocks
+
+deliverables:
+  - API client implementations
+  - Webhook handlers
+  - Authentication flows
+  - Error handling
+  - Retry logic
+  - Rate limiting
+  - Monitoring
+  - Comprehensive tests
+  - API documentation
+
+example_tasks:
+  - "Integrate Zillow API for property valuations with caching"
+  - "Build DocuSign webhook handler for signature status updates"
+  - "Create Twilio SMS integration with retry logic"
+  - "Implement rate limiting for Attom Data API calls"
+
+files_to_reference:
+  - netlify/functions/webhook-inbound.js (webhook pattern)
+  - src/utils/emailMarketing.ts (API client pattern)
