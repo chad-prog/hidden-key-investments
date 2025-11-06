@@ -147,7 +147,7 @@ export function preserveExistingUtmsIfPresent(
   // For each UTM field, use existing value if HKI doesn't have one
   for (const field of utmFields) {
     if (!merged[field] && existingContact[field]) {
-      merged[field] = existingContact[field];
+      (merged as any)[field] = existingContact[field];
     }
   }
   
