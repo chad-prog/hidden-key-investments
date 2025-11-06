@@ -11,6 +11,7 @@
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
     "test:functions": "cd netlify/functions && npm test",
+    "test:smoke": "vitest run netlify/functions/__tests__/*.spec.ts src/lib/**/__tests__/*.spec.ts",
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
     "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix",
     "docs:lint": "node scripts/lint-docs.cjs",
