@@ -18,7 +18,8 @@
     "docs:catalog": "node scripts/generate-docs-catalog.cjs",
     "docs:analyze": "bash scripts/analyze-docs-migration.sh",
     "docs:organize": "bash scripts/organize-docs.sh",
-    "docs:api": "node scripts/generate-api-docs.cjs"
+    "docs:api": "node scripts/generate-api-docs.cjs",
+    "agents:validate": "python3 scripts/validate-agents.py"
   },
   "dependencies": {
     "2": "^3.0.0",

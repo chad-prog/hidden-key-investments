@@ -251,8 +251,30 @@ files_to_reference:
 ## 📞 Need Help?
 
 - See [CUSTOM-AGENT-GUIDE.md](../../CUSTOM-AGENT-GUIDE.md) for detailed guidance
+- See [CUSTOM-AGENTS-QUICK-REF.md](../../CUSTOM-AGENTS-QUICK-REF.md) for quick reference
+- See [CUSTOM-AGENTS-EXAMPLES.md](../../CUSTOM-AGENTS-EXAMPLES.md) for real-world examples
 - See [HOW-AI-HELPS-YOUR-VISION.md](../../HOW-AI-HELPS-YOUR-VISION.md) for platform overview
 - See [IMPLEMENTATION-ROADMAP.md](../../IMPLEMENTATION-ROADMAP.md) for phase breakdown
+
+---
+
+## 🔧 Validation
+
+To validate all agent configurations:
+
+```bash
+# Run validation script
+npm run agents:validate
+
+# Or run directly
+python3 scripts/validate-agents.py
+```
+
+This checks that all agent YAML files:
+- Have valid YAML syntax
+- Include all required fields
+- Follow proper structure
+- Have substantial content
 
 ---
 
