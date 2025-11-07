@@ -6,6 +6,10 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  contents: read
+  statuses: write
+
 jobs:
   smoke-prod:
     name: Run Smoke Tests on Production
