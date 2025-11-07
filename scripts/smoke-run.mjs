@@ -81,13 +81,19 @@ async function makeRequest(url, options = {}) {
   log(`\n📡 Request: ${options.method || 'GET'} ${url}`);
   log(`   Correlation-Id: ${correlationId}`);
   if (options.body) {
-    log(`   Body: ${JSON.stringify(options.body).substring(0, 100)}...`);
+    const bodyPreview = typeof options.body === 'string' ? options.body : JSON.stringify(options.body);
+    log(`   Body: ${bodyPreview.substring(0, 100)}...`);
   }
+
+  // Stringify body if it's an object
+  const body = options.body && typeof options.body === 'object' ? 
+    JSON.stringify(options.body) : options.body;
 
   try {
     const response = await fetch(url, {
       ...options,
       headers,
+      body,
     });
 
     const responseCorrelationId = response.headers.get('x-correlation-id');
@@ -172,7 +178,7 @@ async function testMauticPing() {
   try {
     const response = await makeRequest(url, {
       method: 'POST',
-      body: JSON.stringify({ action: 'ping' }),
+      body: { action: 'ping' },
     });
 
     if (!response.ok) {
@@ -216,7 +222,7 @@ async function testInvestorOnboard() {
       headers: {
         'Origin': config.origin,
       },
-      body: JSON.stringify(testData),
+      body: testData,
     });
 
     if (!response.ok) {
@@ -260,11 +266,11 @@ async function testAddToCampaign(contactId) {
       headers: {
         'Origin': config.origin,
       },
-      body: JSON.stringify({
+      body: {
         action: 'add_to_campaign',
         contactId: contactId,
         campaignId: parseInt(config.campaign, 10),
-      }),
+      },
     });
 
     if (!response.ok) {

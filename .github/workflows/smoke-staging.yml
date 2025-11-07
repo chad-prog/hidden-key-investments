@@ -92,10 +92,12 @@ jobs:
       - name: Post or update PR comment
         if: always() && github.event_name == 'pull_request'
         uses: actions/github-script@v7
+        env:
+          LOG_TAIL: ${{ steps.read-log.outputs.LOG_TAIL }}
         with:
           script: |
             const outcome = '${{ steps.smoke.outcome }}';
-            const logTail = `${{ steps.read-log.outputs.LOG_TAIL }}`;
+            const logTail = process.env.LOG_TAIL;
             
             const body = `## 🧪 Smoke Test Results - Staging
             
