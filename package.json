@@ -19,7 +19,10 @@
     "docs:analyze": "bash scripts/analyze-docs-migration.sh",
     "docs:organize": "bash scripts/organize-docs.sh",
     "docs:api": "node scripts/generate-api-docs.cjs",
-    "agents:validate": "python3 scripts/validate-agents.py"
+    "agents:validate": "python3 scripts/validate-agents.py",
+    "smoke": "node scripts/smoke-run.mjs",
+    "smoke:staging": "node scripts/smoke-run.mjs --base=$SMOKE_BASE --origin=$SMOKE_ORIGIN --campaign=$MAUTIC_CAMPAIGN_INVESTOR_WELCOME",
+    "smoke:prod": "node scripts/smoke-run.mjs --base=$SMOKE_BASE --origin=$SMOKE_ORIGIN --campaign=$MAUTIC_CAMPAIGN_INVESTOR_WELCOME"
   },
   "dependencies": {
     "2": "^3.0.0",
