@@ -1,0 +1,158 @@
+name: Smoke Test - Production
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      smoke_base:
+        description: 'Base URL for smoke test'
+        required: false
+        default: ''
+      smoke_origin:
+        description: 'Origin for CORS validation'
+        required: false
+        default: ''
+      campaign_id:
+        description: 'Mautic campaign ID'
+        required: false
+        default: ''
+
+jobs:
+  smoke-test:
+    runs-on: ubuntu-latest
+    name: Run Smoke Tests
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run smoke tests
+        id: smoke
+        env:
+          SMOKE_BASE: ${{ inputs.smoke_base || secrets.SMOKE_BASE_PROD }}
+          SMOKE_ORIGIN: ${{ inputs.smoke_origin || secrets.SMOKE_ORIGIN_PROD }}
+          MAUTIC_CAMPAIGN_INVESTOR_WELCOME: ${{ inputs.campaign_id || secrets.MAUTIC_CAMPAIGN_INVESTOR_WELCOME_PROD }}
+        run: |
+          echo "Running smoke tests against: $SMOKE_BASE"
+          node scripts/smoke-run.mjs
+        continue-on-error: true
+      
+      - name: Set commit status
+        if: always() && github.event_name == 'push'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const outcome = '${{ steps.smoke.outcome }}';
+            const state = outcome === 'success' ? 'success' : 'failure';
+            const description = outcome === 'success' ? 
+              'Smoke tests passed' : 
+              'Smoke tests failed - check logs';
+            
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.sha,
+              state: state,
+              target_url: `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+              description: description,
+              context: 'smoke/prod'
+            });
+      
+      - name: Upload smoke test logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-test-logs-production
+          path: smoke.log
+          retention-days: 90
+      
+      - name: Read smoke test log
+        if: always()
+        id: read-log
+        run: |
+          if [ -f smoke.log ]; then
+            # Get last 50 lines of log
+            echo "LOG_TAIL<<EOF" >> $GITHUB_OUTPUT
+            tail -n 50 smoke.log >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          else
+            echo "LOG_TAIL=No log file found" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Write job summary
+        if: always()
+        run: |
+          echo "## Smoke Test Results - Production" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Status**: ${{ steps.smoke.outcome == 'success' && '✅ PASS' || '❌ FAIL' }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Environment**: Production" >> $GITHUB_STEP_SUMMARY
+          echo "**Base URL**: \`${{ secrets.SMOKE_BASE_PROD }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Commit**: \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Timestamp**: $(date -u +'%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Log Tail (last 50 lines)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "${{ steps.read-log.outputs.LOG_TAIL }}" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+      
+      - name: Auto-rollback on failure
+        if: steps.smoke.outcome != 'success' && secrets.NETLIFY_AUTH_TOKEN != '' && secrets.NETLIFY_SITE_ID_PROD != ''
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID_PROD }}
+        run: |
+          echo "🔄 Smoke tests failed - attempting auto-rollback"
+          
+          # Fetch recent deploys
+          DEPLOYS=$(curl -s -H "Authorization: Bearer $NETLIFY_AUTH_TOKEN" \
+            "https://api.netlify.com/api/v1/sites/$NETLIFY_SITE_ID/deploys?per_page=10")
+          
+          # Find the previous ready deploy (not the current one)
+          PREVIOUS_DEPLOY=$(echo "$DEPLOYS" | jq -r '
+            [.[] | select(.state == "ready")] | 
+            sort_by(.published_at) | 
+            reverse | 
+            .[1].id
+          ')
+          
+          if [ -z "$PREVIOUS_DEPLOY" ] || [ "$PREVIOUS_DEPLOY" = "null" ]; then
+            echo "❌ Could not find previous deploy to rollback to"
+            exit 1
+          fi
+          
+          echo "📦 Rolling back to deploy: $PREVIOUS_DEPLOY"
+          
+          # Restore previous deploy
+          RESTORE_RESULT=$(curl -s -X POST \
+            -H "Authorization: Bearer $NETLIFY_AUTH_TOKEN" \
+            "https://api.netlify.com/api/v1/sites/$NETLIFY_SITE_ID/deploys/$PREVIOUS_DEPLOY/restore")
+          
+          echo "✅ Rollback completed"
+          echo "Previous deploy restored: $PREVIOUS_DEPLOY"
+          
+          # Log to summary
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 🔄 Auto-Rollback Executed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Previous Deploy ID**: \`$PREVIOUS_DEPLOY\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Reason**: Smoke tests failed" >> $GITHUB_STEP_SUMMARY
+          echo "**Timestamp**: $(date -u +'%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Fail job if smoke tests failed
+        if: steps.smoke.outcome != 'success'
+        run: |
+          echo "❌ Smoke tests failed"
+          exit 1
