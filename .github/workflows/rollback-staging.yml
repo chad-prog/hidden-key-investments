@@ -12,6 +12,8 @@ jobs:
   rollback:
     runs-on: ubuntu-latest
     name: Rollback Staging Deployment
+    permissions:
+      contents: read
     
     steps:
       - name: Checkout code
