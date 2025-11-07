@@ -1,0 +1,273 @@
+name: Rollback Staging Deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      deploy_id:
+        description: 'Specific Netlify deploy ID to restore (leave empty for previous ready deploy)'
+        required: false
+        type: string
+
+jobs:
+  rollback-staging:
+    name: Rollback to Previous Staging Deployment
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Perform rollback
+        id: rollback
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const https = require('https');
+            
+            console.log('🔄 Starting staging rollback...');
+            
+            const siteId = process.env.NETLIFY_SITE_ID_STAGING;
+            const authToken = process.env.NETLIFY_AUTH_TOKEN;
+            const targetDeployId = process.env.DEPLOY_ID || '';
+            
+            if (!siteId) {
+              core.setFailed('NETLIFY_SITE_ID_STAGING secret is not configured');
+              return;
+            }
+            
+            if (!authToken) {
+              core.setFailed('NETLIFY_AUTH_TOKEN secret is not configured');
+              return;
+            }
+            
+            // Function to make Netlify API request
+            function netlifyRequest(method, path, data = null) {
+              return new Promise((resolve, reject) => {
+                const options = {
+                  hostname: 'api.netlify.com',
+                  path: path,
+                  method: method,
+                  headers: {
+                    'Authorization': `Bearer ${authToken}`,
+                    'Content-Type': 'application/json'
+                  }
+                };
+                
+                const req = https.request(options, (res) => {
+                  let body = '';
+                  res.on('data', (chunk) => body += chunk);
+                  res.on('end', () => {
+                    if (res.statusCode >= 200 && res.statusCode < 300) {
+                      resolve(JSON.parse(body));
+                    } else {
+                      reject(new Error(`HTTP ${res.statusCode}: ${body}`));
+                    }
+                  });
+                });
+                
+                req.on('error', reject);
+                if (data) req.write(JSON.stringify(data));
+                req.end();
+              });
+            }
+            
+            try {
+              let deployToRestore;
+              
+              if (targetDeployId) {
+                // Restore specific deployment
+                console.log(`Restoring specific deployment: ${targetDeployId}`);
+                deployToRestore = await netlifyRequest('GET', `/api/v1/sites/${siteId}/deploys/${targetDeployId}`);
+              } else {
+                // Find previous ready deployment
+                console.log('Fetching recent deployments...');
+                const deployments = await netlifyRequest('GET', `/api/v1/sites/${siteId}/deploys?per_page=20`);
+                
+                // Find the current production deploy
+                const currentDeploy = deployments.find(d => d.published_at);
+                
+                // Find previous ready deployment (not the current one)
+                deployToRestore = deployments.find((d, idx) => 
+                  d.state === 'ready' && 
+                  d.published_at && 
+                  d.id !== (currentDeploy ? currentDeploy.id : '')
+                );
+                
+                if (!deployToRestore) {
+                  core.setFailed('No previous ready deployment found for rollback');
+                  return;
+                }
+              }
+              
+              console.log(`Found deployment to restore: ${deployToRestore.id}`);
+              console.log(`  Created: ${deployToRestore.created_at}`);
+              console.log(`  Branch: ${deployToRestore.branch}`);
+              console.log(`  Context: ${deployToRestore.context}`);
+              console.log(`  Commit: ${deployToRestore.commit_ref}`);
+              
+              // Restore the deployment
+              console.log('Restoring deployment...');
+              await netlifyRequest('POST', `/api/v1/sites/${siteId}/deploys/${deployToRestore.id}/restore`);
+              
+              console.log('✅ Successfully rolled back staging deployment');
+              
+              // Store deploy info for later steps
+              core.setOutput('deploy_id', deployToRestore.id);
+              core.setOutput('deploy_url', deployToRestore.deploy_ssl_url || deployToRestore.ssl_url);
+              core.setOutput('branch', deployToRestore.branch);
+              core.setOutput('commit', deployToRestore.commit_ref);
+              core.setOutput('created_at', deployToRestore.created_at);
+              
+              // Add to job summary
+              core.summary
+                .addHeading('🔄 Staging Rollback Completed', 2)
+                .addRaw(`Successfully rolled back to deployment \`${deployToRestore.id}\``)
+                .addBreak()
+                .addBreak()
+                .addRaw('**Deployment Details:**')
+                .addBreak()
+                .addRaw(`- **Deploy ID:** ${deployToRestore.id}`)
+                .addBreak()
+                .addRaw(`- **Branch:** ${deployToRestore.branch}`)
+                .addBreak()
+                .addRaw(`- **Commit:** ${deployToRestore.commit_ref}`)
+                .addBreak()
+                .addRaw(`- **Created:** ${deployToRestore.created_at}`)
+                .addBreak()
+                .addRaw(`- **URL:** ${deployToRestore.deploy_ssl_url || deployToRestore.ssl_url}`)
+                .write();
+              
+            } catch (error) {
+              console.error('❌ Rollback failed:', error.message);
+              core.setFailed(`Rollback failed: ${error.message}`);
+            }
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID_STAGING: ${{ secrets.NETLIFY_SITE_ID_STAGING }}
+          DEPLOY_ID: ${{ inputs.deploy_id }}
+
+      - name: Announce to Slack
+        if: success() && secrets.SLACK_WEBHOOK_ALL_HANDS != ''
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const https = require('https');
+            const url = require('url');
+            
+            const webhookUrl = process.env.SLACK_WEBHOOK_ALL_HANDS;
+            const deployId = process.env.DEPLOY_ID;
+            const deployUrl = process.env.DEPLOY_URL;
+            const branch = process.env.BRANCH;
+            const commit = process.env.COMMIT;
+            const createdAt = process.env.CREATED_AT;
+            
+            // Heroic Ceremony Block Kit message
+            const message = {
+              blocks: [
+                {
+                  type: "header",
+                  text: {
+                    type: "plain_text",
+                    text: "🦸 Heroic Deployment Rollback! 🦸",
+                    emoji: true
+                  }
+                },
+                {
+                  type: "section",
+                  text: {
+                    type: "mrkdwn",
+                    text: `*Staging deployment has been rolled back!*\n\nThe previous stable deployment has been restored to protect our users. 🛡️`
+                  }
+                },
+                {
+                  type: "section",
+                  fields: [
+                    {
+                      type: "mrkdwn",
+                      text: `*Deploy ID:*\n\`${deployId}\``
+                    },
+                    {
+                      type: "mrkdwn",
+                      text: `*Branch:*\n${branch}`
+                    },
+                    {
+                      type: "mrkdwn",
+                      text: `*Commit:*\n\`${commit ? commit.substring(0, 8) : 'N/A'}\``
+                    },
+                    {
+                      type: "mrkdwn",
+                      text: `*Created:*\n${new Date(createdAt).toLocaleString()}`
+                    }
+                  ]
+                },
+                {
+                  type: "section",
+                  text: {
+                    type: "mrkdwn",
+                    text: `*Restored URL:*\n${deployUrl}`
+                  }
+                },
+                {
+                  type: "context",
+                  elements: [
+                    {
+                      type: "mrkdwn",
+                      text: `🎖️ Rollback performed by GitHub Actions • <${context.payload.repository.html_url}/actions/runs/${context.runId}|View Workflow>`
+                    }
+                  ]
+                },
+                {
+                  type: "divider"
+                },
+                {
+                  type: "section",
+                  text: {
+                    type: "mrkdwn",
+                    text: "✨ *Crisis averted! Peace is restored to the realm.* ✨"
+                  }
+                }
+              ]
+            };
+            
+            // Send to Slack
+            const parsedUrl = url.parse(webhookUrl);
+            const options = {
+              hostname: parsedUrl.hostname,
+              path: parsedUrl.path,
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            };
+            
+            return new Promise((resolve, reject) => {
+              const req = https.request(options, (res) => {
+                let body = '';
+                res.on('data', (chunk) => body += chunk);
+                res.on('end', () => {
+                  if (res.statusCode === 200) {
+                    console.log('✅ Slack notification sent successfully');
+                    resolve();
+                  } else {
+                    console.error(`❌ Slack notification failed: ${res.statusCode} ${body}`);
+                    reject(new Error(`Slack notification failed: ${res.statusCode}`));
+                  }
+                });
+              });
+              
+              req.on('error', reject);
+              req.write(JSON.stringify(message));
+              req.end();
+            });
+        env:
+          SLACK_WEBHOOK_ALL_HANDS: ${{ secrets.SLACK_WEBHOOK_ALL_HANDS }}
+          DEPLOY_ID: ${{ steps.rollback.outputs.deploy_id }}
+          DEPLOY_URL: ${{ steps.rollback.outputs.deploy_url }}
+          BRANCH: ${{ steps.rollback.outputs.branch }}
+          COMMIT: ${{ steps.rollback.outputs.commit }}
+          CREATED_AT: ${{ steps.rollback.outputs.created_at }}
