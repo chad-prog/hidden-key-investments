@@ -1,0 +1,125 @@
+name: Smoke Test - Production
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  smoke-prod:
+    name: Run Smoke Tests on Production
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      
+      - name: Run smoke test
+        id: smoke
+        continue-on-error: true
+        env:
+          SMOKE_BASE: ${{ secrets.SMOKE_BASE_PROD }}
+          SMOKE_ORIGIN: ${{ secrets.SMOKE_ORIGIN_PROD }}
+          MAUTIC_CAMPAIGN_INVESTOR_WELCOME: ${{ secrets.MAUTIC_CAMPAIGN_INVESTOR_WELCOME_PROD }}
+          MAUTIC_BASE_URL: ${{ secrets.MAUTIC_BASE_URL }}
+          MAUTIC_CLIENT_ID: ${{ secrets.MAUTIC_CLIENT_ID }}
+          MAUTIC_CLIENT_SECRET: ${{ secrets.MAUTIC_CLIENT_SECRET }}
+          MAUTIC_WEBHOOK_SECRET: ${{ secrets.MAUTIC_WEBHOOK_SECRET }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          node scripts/smoke-run.mjs
+      
+      - name: Set commit status
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const state = '${{ steps.smoke.outcome }}' === 'success' ? 'success' : 'failure';
+            const description = state === 'success' 
+              ? 'Production smoke tests passed' 
+              : 'Production smoke tests failed';
+            
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.sha,
+              state: state,
+              target_url: `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+              description: description,
+              context: 'smoke/prod'
+            });
+      
+      - name: Upload smoke log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-prod-log
+          path: smoke.log
+          if-no-files-found: warn
+      
+      - name: Auto-rollback on failure
+        if: |
+          steps.smoke.outcome != 'success' &&
+          secrets.NETLIFY_AUTH_TOKEN != '' &&
+          secrets.NETLIFY_SITE_ID_PROD != ''
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID_PROD }}
+        run: |
+          echo "🚨 Smoke test failed! Attempting auto-rollback..."
+          
+          # Fetch list of recent deploys
+          DEPLOYS=$(curl -s -X GET \
+            "https://api.netlify.com/api/v1/sites/${NETLIFY_SITE_ID}/deploys?per_page=10" \
+            -H "Authorization: Bearer ${NETLIFY_AUTH_TOKEN}")
+          
+          # Find the previous ready deploy (skip the current one)
+          CURRENT_DEPLOY=$(echo "$DEPLOYS" | jq -r '.[0].id')
+          PREVIOUS_DEPLOY=$(echo "$DEPLOYS" | jq -r '.[] | select(.state == "ready") | .id' | sed -n '2p')
+          
+          if [ -z "$PREVIOUS_DEPLOY" ]; then
+            echo "❌ No previous ready deploy found. Cannot rollback."
+            exit 1
+          fi
+          
+          echo "📦 Current deploy: $CURRENT_DEPLOY"
+          echo "⏪ Rolling back to: $PREVIOUS_DEPLOY"
+          
+          # Restore the previous deploy
+          RESTORE_RESPONSE=$(curl -s -X POST \
+            "https://api.netlify.com/api/v1/sites/${NETLIFY_SITE_ID}/deploys/${PREVIOUS_DEPLOY}/restore" \
+            -H "Authorization: Bearer ${NETLIFY_AUTH_TOKEN}")
+          
+          echo "✅ Rollback initiated"
+          echo "$RESTORE_RESPONSE" | jq '.'
+          
+          # Update commit status to indicate rollback
+          echo "ROLLBACK_DEPLOY_ID=${PREVIOUS_DEPLOY}" >> $GITHUB_ENV
+      
+      - name: Update commit status with rollback info
+        if: env.ROLLBACK_DEPLOY_ID != ''
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.sha,
+              state: 'failure',
+              target_url: `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+              description: `Smoke failed, rolled back to ${process.env.ROLLBACK_DEPLOY_ID}`,
+              context: 'smoke/prod'
+            });
+      
+      - name: Fail if smoke test failed
+        if: steps.smoke.outcome != 'success'
+        run: |
+          echo "❌ Production smoke tests failed"
+          exit 1
