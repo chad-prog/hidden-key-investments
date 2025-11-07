@@ -80,7 +80,6 @@ jobs:
           echo "**Status**: ${{ steps.smoke.outcome == 'success' && '✅ PASS' || '❌ FAIL' }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Environment**: Staging" >> $GITHUB_STEP_SUMMARY
-          echo "**Base URL**: \`${{ secrets.SMOKE_BASE_STAGING }}\`" >> $GITHUB_STEP_SUMMARY
           echo "**Timestamp**: $(date -u +'%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Log Tail (last 50 lines)" >> $GITHUB_STEP_SUMMARY

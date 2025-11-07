@@ -67,6 +67,8 @@ const logError = (message) => {
 };
 
 // Stable test UUID for idempotent testing
+// Note: Multiple concurrent runs are acceptable as the test data is designed to be idempotent
+// The same UUID ensures that smoke tests don't create new records on every run
 const TEST_INVESTOR_UUID = '00000000-0000-0000-0000-000000000001';
 
 // HTTP helper
@@ -82,7 +84,8 @@ async function makeRequest(url, options = {}) {
   log(`   Correlation-Id: ${correlationId}`);
   if (options.body) {
     const bodyPreview = typeof options.body === 'string' ? options.body : JSON.stringify(options.body);
-    log(`   Body: ${bodyPreview.substring(0, 100)}...`);
+    const needsTruncation = bodyPreview.length > 100;
+    log(`   Body: ${bodyPreview.substring(0, 100)}${needsTruncation ? '...' : ''}`);
   }
 
   // Stringify body if it's an object
@@ -104,10 +107,13 @@ async function makeRequest(url, options = {}) {
     const contentType = response.headers.get('content-type');
     if (contentType && contentType.includes('application/json')) {
       data = await response.json();
-      log(`   Data: ${JSON.stringify(data).substring(0, 200)}...`);
+      const dataStr = JSON.stringify(data);
+      const needsTruncation = dataStr.length > 200;
+      log(`   Data: ${dataStr.substring(0, 200)}${needsTruncation ? '...' : ''}`);
     } else {
       data = await response.text();
-      log(`   Data: ${data.substring(0, 200)}...`);
+      const needsTruncation = data.length > 200;
+      log(`   Data: ${data.substring(0, 200)}${needsTruncation ? '...' : ''}`);
     }
 
     return {
