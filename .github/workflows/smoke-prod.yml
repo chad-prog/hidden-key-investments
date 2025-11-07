@@ -1,0 +1,255 @@
+name: Smoke Tests - Production
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  statuses: write
+
+jobs:
+  smoke-prod:
+    name: Run Production Smoke Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Set commit status - pending
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.sha,
+              state: 'pending',
+              context: 'smoke/prod',
+              description: 'Running production smoke tests...',
+            });
+      
+      - name: Run smoke tests
+        id: smoke
+        env:
+          SMOKE_BASE: ${{ secrets.SMOKE_BASE_PROD }}
+          SMOKE_ORIGIN: ${{ secrets.SMOKE_ORIGIN_PROD }}
+          MAUTIC_CAMPAIGN_INVESTOR_WELCOME: ${{ secrets.MAUTIC_CAMPAIGN_INVESTOR_WELCOME_PROD }}
+          CI: true
+        run: |
+          echo "Running smoke tests against production..."
+          node scripts/smoke-run.mjs 2>&1 | tee smoke-output.log
+          SMOKE_EXIT_CODE=${PIPESTATUS[0]}
+          echo "exit_code=$SMOKE_EXIT_CODE" >> $GITHUB_OUTPUT
+          
+          if [ "$SMOKE_EXIT_CODE" = "0" ]; then
+            echo "status=success" >> $GITHUB_OUTPUT
+            echo "description=All production smoke tests passed" >> $GITHUB_OUTPUT
+          else
+            echo "status=failure" >> $GITHUB_OUTPUT
+            echo "description=Production smoke tests failed - rollback initiated" >> $GITHUB_OUTPUT
+          fi
+          
+          exit $SMOKE_EXIT_CODE
+        continue-on-error: true
+      
+      - name: Upload smoke test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: smoke-test-results-prod
+          path: |
+            smoke-test-results.json
+            smoke-output.log
+          retention-days: 90
+      
+      - name: Get previous Netlify deploy
+        id: get-previous-deploy
+        if: steps.smoke.outputs.exit_code != '0' && secrets.NETLIFY_AUTH_TOKEN != '' && secrets.NETLIFY_SITE_ID_PROD != ''
+        run: |
+          echo "Fetching previous ready deploy..."
+          
+          DEPLOYS=$(curl -s -H "Authorization: Bearer ${{ secrets.NETLIFY_AUTH_TOKEN }}" \
+            "https://api.netlify.com/api/v1/sites/${{ secrets.NETLIFY_SITE_ID_PROD }}/deploys?per_page=10")
+          
+          # Find the most recent "ready" deploy that's not the current one
+          PREVIOUS_DEPLOY_ID=$(echo "$DEPLOYS" | jq -r '
+            .[] | 
+            select(.state == "ready") | 
+            select(.commit_ref == "refs/heads/main") |
+            .id' | head -n 2 | tail -n 1)
+          
+          if [ -z "$PREVIOUS_DEPLOY_ID" ] || [ "$PREVIOUS_DEPLOY_ID" = "null" ]; then
+            echo "No previous ready deploy found"
+            echo "found=false" >> $GITHUB_OUTPUT
+          else
+            echo "Previous deploy ID: $PREVIOUS_DEPLOY_ID"
+            echo "found=true" >> $GITHUB_OUTPUT
+            echo "deploy_id=$PREVIOUS_DEPLOY_ID" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Rollback to previous deploy
+        id: rollback
+        if: steps.smoke.outputs.exit_code != '0' && steps.get-previous-deploy.outputs.found == 'true'
+        run: |
+          echo "Rolling back to deploy: ${{ steps.get-previous-deploy.outputs.deploy_id }}"
+          
+          RESPONSE=$(curl -s -X POST \
+            -H "Authorization: Bearer ${{ secrets.NETLIFY_AUTH_TOKEN }}" \
+            "https://api.netlify.com/api/v1/sites/${{ secrets.NETLIFY_SITE_ID_PROD }}/deploys/${{ steps.get-previous-deploy.outputs.deploy_id }}/restore")
+          
+          echo "$RESPONSE" | jq .
+          
+          # Check if rollback was successful
+          if echo "$RESPONSE" | jq -e '.state' > /dev/null; then
+            echo "✅ Rollback initiated successfully"
+            echo "success=true" >> $GITHUB_OUTPUT
+          else
+            echo "❌ Rollback failed"
+            echo "success=false" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Create summary
+        if: always()
+        run: |
+          echo "# 🔥 Production Smoke Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ steps.smoke.outputs.exit_code }}" = "0" ]; then
+            echo "## ✅ Status: PASS" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "## ❌ Status: FAIL" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Commit:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Branch:** \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Triggered by:** @${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -f smoke-test-results.json ]; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Test Summary" >> $GITHUB_STEP_SUMMARY
+            echo "- **Passed:** $(jq -r '.passed' smoke-test-results.json)" >> $GITHUB_STEP_SUMMARY
+            echo "- **Failed:** $(jq -r '.failed' smoke-test-results.json)" >> $GITHUB_STEP_SUMMARY
+            echo "- **Duration:** $(jq -r '.duration' smoke-test-results.json)ms" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ "${{ steps.smoke.outputs.exit_code }}" != "0" ]; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### 🔄 Rollback Status" >> $GITHUB_STEP_SUMMARY
+            
+            if [ "${{ steps.rollback.outputs.success }}" = "true" ]; then
+              echo "✅ **Automatic rollback completed successfully**" >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "Restored to previous deploy: \`${{ steps.get-previous-deploy.outputs.deploy_id }}\`" >> $GITHUB_STEP_SUMMARY
+            elif [ "${{ steps.get-previous-deploy.outputs.found }}" = "false" ]; then
+              echo "⚠️ **No previous deploy found for automatic rollback**" >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "Manual intervention required - see [docs/GUARDRAILS-FAILSAFES.md](../docs/GUARDRAILS-FAILSAFES.md#manual-rollback)" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "❌ **Automatic rollback failed**" >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "Manual rollback required - see [docs/GUARDRAILS-FAILSAFES.md](../docs/GUARDRAILS-FAILSAFES.md#manual-rollback)" >> $GITHUB_STEP_SUMMARY
+            fi
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📊 Detailed Logs" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          tail -n 30 smoke-output.log >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Notify Slack on failure
+        if: steps.smoke.outputs.exit_code != '0' && secrets.SLACK_WEBHOOK_ALL_HANDS != ''
+        run: |
+          ROLLBACK_MSG=""
+          if [ "${{ steps.rollback.outputs.success }}" = "true" ]; then
+            ROLLBACK_MSG="✅ Automatic rollback completed to deploy \`${{ steps.get-previous-deploy.outputs.deploy_id }}\`"
+          else
+            ROLLBACK_MSG="⚠️ Manual rollback required"
+          fi
+          
+          curl -X POST ${{ secrets.SLACK_WEBHOOK_ALL_HANDS }} \
+            -H 'Content-Type: application/json' \
+            -d "{
+              \"text\": \"🚨 Production Smoke Tests Failed\",
+              \"blocks\": [
+                {
+                  \"type\": \"header\",
+                  \"text\": {
+                    \"type\": \"plain_text\",
+                    \"text\": \"🚨 Production Smoke Tests Failed\"
+                  }
+                },
+                {
+                  \"type\": \"section\",
+                  \"fields\": [
+                    {
+                      \"type\": \"mrkdwn\",
+                      \"text\": \"*Commit:*\\n\`${{ github.sha }}\`\"
+                    },
+                    {
+                      \"type\": \"mrkdwn\",
+                      \"text\": \"*Branch:*\\n\`${{ github.ref_name }}\`\"
+                    },
+                    {
+                      \"type\": \"mrkdwn\",
+                      \"text\": \"*Triggered by:*\\n@${{ github.actor }}\"
+                    },
+                    {
+                      \"type\": \"mrkdwn\",
+                      \"text\": \"*Rollback:*\\n${ROLLBACK_MSG}\"
+                    }
+                  ]
+                },
+                {
+                  \"type\": \"actions\",
+                  \"elements\": [
+                    {
+                      \"type\": \"button\",
+                      \"text\": {
+                        \"type\": \"plain_text\",
+                        \"text\": \"View Workflow\"
+                      },
+                      \"url\": \"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"
+                    }
+                  ]
+                }
+              ]
+            }"
+      
+      - name: Set commit status - final
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.sha,
+              state: '${{ steps.smoke.outputs.status }}',
+              context: 'smoke/prod',
+              description: '${{ steps.smoke.outputs.description }}',
+              target_url: '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}',
+            });
+      
+      - name: Fail job if smoke tests failed
+        if: steps.smoke.outputs.exit_code != '0'
+        run: |
+          echo "❌ Production smoke tests failed"
+          echo "See workflow summary for details and rollback status"
+          exit 1
