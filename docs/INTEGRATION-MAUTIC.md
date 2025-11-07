@@ -336,9 +336,32 @@ If you see "Failed to get access token" errors:
 5. **Email Templates**: Sync email templates from Mautic
 6. **A/B Testing**: Integrate Mautic A/B test results
 
+## Investor Experience Addendum
+
+This section documents how the Investor Experience (docs/INVESTOR-EXPERIENCE-FLOW.md) is wired into Mautic.
+
+Key additions:
+- Campaign: create "Investor Welcome — Elite Track" in Mautic. Use campaign ID in env var `MAUTIC_CAMPAIGN_INVESTOR_WELCOME`.
+- When a new lead is upserted, call mautic-sync upsert_contact and then add_to_campaign.
+- Ensure the webhook in Mautic includes: `mautic.lead_channel_subscription_changed`, `mautic.email_on_bounce`, and complaint events (already documented).
+- Map HKI investor fields to Mautic custom fields (see docs/MAUTIC-INVESTOR-MAPPING.md).
+- Confirm that unsubscribe events from Mautic trigger mautic-webhook to update Supabase leads.
+
+Developer notes:
+- Use netlify/functions/investor-onboard.ts as intake function that calls mautic-sync.
+- Use Handlebars-style merge tags in templates: e.g. `{{investor.firstName}}`.
+- Include tracking pixel and list-unsubscribe header in SendGrid to maximize deliverability.
+
+Testing:
+- Use demo mode of mautic-sync for initial tests (see above). Then switch to production credentials.
+- Run Litmus/email rendering tests against src/email-templates/welcome.mjml compiled HTML and text.
+
 ## Related Documentation
 
 - [Lead Management Guide](./MVP-LEAD-MANAGEMENT-GUIDE.md)
 - [Webhook Integration](./WEBHOOK-INTEGRATION.md)
 - [Environment Setup](./ENVIRONMENT-SETUP.md)
 - [API Reference](./API-REFERENCE.md)
+- [Investor Experience Flow](./INVESTOR-EXPERIENCE-FLOW.md)
+- [Investor Welcome Sequence](./INVESTOR-WELCOME-SEQUENCE.md)
+- [Mautic Investor Mapping](./MAUTIC-INVESTOR-MAPPING.md)

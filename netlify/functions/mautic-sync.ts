@@ -232,7 +232,7 @@ async function upsertContact(
   config: MauticConfig,
   payload: z.infer<typeof UpsertContactPayloadSchema>['payload'],
   correlationId: string
-): Promise<any> {
+): Promise<{ success: true; contactId: string; action: 'created' | 'updated' }> {
   const token = await getAccessToken(config);
   
   // Import mapper
@@ -293,7 +293,7 @@ async function addToCampaign(
   mauticContactId: string,
   campaignId: string,
   correlationId: string
-): Promise<any> {
+): Promise<{ success: true; message: string }> {
   const token = await getAccessToken(config);
   
   const url = `${config.baseUrl}/api/campaigns/${campaignId}/contact/${mauticContactId}/add`;
@@ -322,7 +322,7 @@ async function addToCampaign(
 // Handler
 // ============================================================================
 
-export const handler: Handler = async (event: HandlerEvent, context: HandlerContext) => {
+export const handler: Handler = async (event: HandlerEvent, _context: HandlerContext) => {
   const correlationId = event.headers['x-correlation-id'] || randomUUID();
   const startTime = Date.now();
 
