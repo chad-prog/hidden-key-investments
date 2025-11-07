@@ -22,15 +22,21 @@ type Payload = {
 }
 
 // Environment variables expected:
-// MAUTIC_SYNC_URL (or call local netlify function endpoint), MAUTIC_ENROLLMENT_CAMPAIGN_ID
-const MAUTIC_SYNC_URL = process.env.MAUTIC_SYNC_URL || 'https://your-site.netlify.app/.netlify/functions/mautic-sync'
-const MAUTIC_CAMPAIGN_INVESTOR_WELCOME = process.env.MAUTIC_CAMPAIGN_INVESTOR_WELCOME || process.env.MAUTIC_CAMPAIGN_HIGH_VALUE || '123'
+// MAUTIC_SYNC_URL - URL to mautic-sync function (defaults to relative path)
+// MAUTIC_CAMPAIGN_INVESTOR_WELCOME - Campaign ID for investor welcome flow (required)
+// NODE_ENV - Environment (production, staging, development)
+// ALLOWED_ORIGIN - Allowed origin for CORS in production
+const MAUTIC_SYNC_URL = process.env.MAUTIC_SYNC_URL || '/.netlify/functions/mautic-sync';
+const MAUTIC_CAMPAIGN_INVESTOR_WELCOME = process.env.MAUTIC_CAMPAIGN_INVESTOR_WELCOME || process.env.MAUTIC_CAMPAIGN_HIGH_VALUE;
 
-export const handler: Handler = async (event: HandlerEvent, context: HandlerContext) => {
-  // CORS headers
-  // Note: Using '*' for development. In production, restrict to specific domains for security.
+export const handler: Handler = async (event: HandlerEvent, _context: HandlerContext) => {
+  // CORS headers - restrict to specific domain in production
+  const ALLOW_ORIGIN = process.env.NODE_ENV === 'production'
+    ? (process.env.ALLOWED_ORIGIN || 'https://hiddenkeyinvestments.com')
+    : '*';
+  
   const corsHeaders = {
-    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Origin': ALLOW_ORIGIN,
     'Access-Control-Allow-Headers': 'Content-Type',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
   };
@@ -57,7 +63,7 @@ export const handler: Handler = async (event: HandlerEvent, context: HandlerCont
     let body: Payload;
     try {
       body = event.body ? JSON.parse(event.body) : {};
-    } catch (parseError) {
+    } catch (_parseError) {
       return {
         statusCode: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -70,6 +76,14 @@ export const handler: Handler = async (event: HandlerEvent, context: HandlerCont
         statusCode: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         body: JSON.stringify({ ok: false, error: 'email required' })
+      };
+    }
+
+    if (!MAUTIC_CAMPAIGN_INVESTOR_WELCOME) {
+      return {
+        statusCode: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ok: false, error: 'MAUTIC_CAMPAIGN_INVESTOR_WELCOME not configured' })
       };
     }
 
@@ -98,10 +112,10 @@ export const handler: Handler = async (event: HandlerEvent, context: HandlerCont
       throw new Error(`Upsert contact failed: ${upsertResponse.status} ${errorText}`);
     }
 
-    let upsertJson: any;
+    let upsertJson: { data?: { contactId?: string } };
     try {
       upsertJson = await upsertResponse.json();
-    } catch (jsonError) {
+    } catch (_jsonError) {
       throw new Error('Failed to parse upsert response JSON');
     }
 
@@ -126,10 +140,10 @@ export const handler: Handler = async (event: HandlerEvent, context: HandlerCont
       throw new Error(`Add to campaign failed: ${addToCampaign.status} ${errorText}`);
     }
 
-    let campaignJson: any;
+    let campaignJson: { success?: boolean };
     try {
       campaignJson = await addToCampaign.json();
-    } catch (jsonError) {
+    } catch (_jsonError) {
       throw new Error('Failed to parse campaign response JSON');
     }
 
