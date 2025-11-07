@@ -64,11 +64,22 @@ jobs:
           path: smoke.log
           if-no-files-found: warn
       
+      - name: Check rollback prerequisites
+        id: rollback_check
+        if: steps.smoke.outcome != 'success'
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID_PROD }}
+        run: |
+          if [ -n "$NETLIFY_AUTH_TOKEN" ] && [ -n "$NETLIFY_SITE_ID" ]; then
+            echo "rollback_enabled=true" >> $GITHUB_OUTPUT
+          else
+            echo "rollback_enabled=false" >> $GITHUB_OUTPUT
+            echo "⚠️ Auto-rollback disabled: NETLIFY_AUTH_TOKEN or NETLIFY_SITE_ID_PROD not configured"
+          fi
+      
       - name: Auto-rollback on failure
-        if: |
-          steps.smoke.outcome != 'success' &&
-          secrets.NETLIFY_AUTH_TOKEN != '' &&
-          secrets.NETLIFY_SITE_ID_PROD != ''
+        if: steps.rollback_check.outputs.rollback_enabled == 'true'
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID_PROD }}

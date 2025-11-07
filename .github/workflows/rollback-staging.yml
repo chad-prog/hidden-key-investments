@@ -84,6 +84,7 @@ jobs:
           ACTOR: ${{ github.actor }}
         run: |
           DEPLOY_URL="https://app.netlify.com/sites/${NETLIFY_SITE_NAME}/deploys/${DEPLOY_ID}"
+          RESTORE_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           
           # Heroic Ceremony Slack Block Kit message (Tone C)
           cat > slack-payload.json <<EOF
@@ -133,7 +134,7 @@ jobs:
                   },
                   {
                     "type": "mrkdwn",
-                    "text": "*Restoration Time:*\n$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+                    "text": "*Restoration Time:*\n${RESTORE_TIME}"
                   }
                 ]
               },

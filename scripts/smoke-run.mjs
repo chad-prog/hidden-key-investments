@@ -280,7 +280,7 @@ async function main() {
     corsOptions: false,
     mauticPing: false,
     investorUpsert: false,
-    addToCampaign: false
+    addToCampaign: 'skipped'
   };
   
   // Required tests
@@ -295,9 +295,10 @@ async function main() {
     results.addToCampaign = await testAddToCampaign(config.base, contactId, config.campaign);
   } else if (config.campaign && !contactId) {
     log('⚠️  WARNING: Skipping campaign test (no contactId from upsert)');
+    results.addToCampaign = false;
   } else {
     log('⚠️  INFO: Skipping campaign test (no campaign ID provided)');
-    results.addToCampaign = true; // Mark as pass since it's optional
+    results.addToCampaign = 'skipped';
   }
   
   // Summary
@@ -305,7 +306,7 @@ async function main() {
   log(`CORS OPTIONS: ${results.corsOptions ? 'PASS' : 'FAIL'}`);
   log(`Mautic Ping: ${results.mauticPing ? 'PASS' : 'FAIL'}`);
   log(`Investor Upsert: ${results.investorUpsert ? 'PASS' : 'FAIL'}`);
-  log(`Add to Campaign: ${results.addToCampaign ? 'PASS' : 'SKIP/FAIL'}`);
+  log(`Add to Campaign: ${results.addToCampaign === 'skipped' ? 'SKIPPED' : (results.addToCampaign ? 'PASS' : 'FAIL')}`);
   
   // Exit with appropriate code
   const requiredPassed = results.corsOptions && results.mauticPing && results.investorUpsert;
