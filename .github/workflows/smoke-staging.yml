@@ -1,0 +1,129 @@
+name: Smoke Test - Staging
+
+on:
+  pull_request:
+    branches:
+      - staging
+  push:
+    branches:
+      - staging
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  smoke-staging:
+    name: Run Smoke Tests on Staging
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      
+      - name: Run smoke test
+        id: smoke
+        continue-on-error: true
+        env:
+          SMOKE_BASE: ${{ secrets.SMOKE_BASE_STAGING }}
+          SMOKE_ORIGIN: ${{ secrets.SMOKE_ORIGIN_STAGING }}
+          MAUTIC_CAMPAIGN_INVESTOR_WELCOME: ${{ secrets.MAUTIC_CAMPAIGN_INVESTOR_WELCOME_STAGING }}
+          MAUTIC_BASE_URL: ${{ secrets.MAUTIC_BASE_URL }}
+          MAUTIC_CLIENT_ID: ${{ secrets.MAUTIC_CLIENT_ID }}
+          MAUTIC_CLIENT_SECRET: ${{ secrets.MAUTIC_CLIENT_SECRET }}
+          MAUTIC_WEBHOOK_SECRET: ${{ secrets.MAUTIC_WEBHOOK_SECRET }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          node scripts/smoke-run.mjs
+      
+      - name: Get smoke test results
+        id: results
+        if: always()
+        run: |
+          if [ -f smoke.log ]; then
+            echo "LOG_TAIL<<EOF" >> $GITHUB_OUTPUT
+            tail -n 50 smoke.log >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+            
+            if [ "${{ steps.smoke.outcome }}" == "success" ]; then
+              echo "STATUS=✅ PASSED" >> $GITHUB_OUTPUT
+            else
+              echo "STATUS=❌ FAILED" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "LOG_TAIL=No log file found" >> $GITHUB_OUTPUT
+            echo "STATUS=⚠️ ERROR" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Post PR comment
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const status = '${{ steps.results.outputs.STATUS }}';
+            const logTail = `${{ steps.results.outputs.LOG_TAIL }}`;
+            
+            const body = `## Smoke Test Results - Staging
+            
+            **Status**: ${status}
+            
+            ### Log Output (last 50 lines)
+            \`\`\`
+            ${logTail}
+            \`\`\`
+            
+            <details>
+            <summary>View full log</summary>
+            
+            Download the \`smoke.log\` artifact from the workflow run for complete logs.
+            
+            </details>
+            `;
+            
+            // Find existing comment
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            
+            const existingComment = comments.find(comment => 
+              comment.user.login === 'github-actions[bot]' &&
+              comment.body.includes('Smoke Test Results - Staging')
+            );
+            
+            if (existingComment) {
+              // Update existing comment
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existingComment.id,
+                body: body
+              });
+            } else {
+              // Create new comment
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: body
+              });
+            }
+      
+      - name: Upload smoke log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-log
+          path: smoke.log
+          if-no-files-found: warn
+      
+      - name: Fail if smoke test failed
+        if: steps.smoke.outcome != 'success'
+        run: exit 1

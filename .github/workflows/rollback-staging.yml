@@ -1,0 +1,202 @@
+name: Rollback Staging Deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      deploy_id:
+        description: 'Specific deploy ID to restore (leave empty to restore previous ready deploy)'
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  rollback-staging:
+    name: Rollback Staging to Previous Deploy
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      
+      - name: Fetch and restore deploy
+        id: rollback
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID_STAGING }}
+          DEPLOY_ID: ${{ github.event.inputs.deploy_id }}
+        run: |
+          echo "🔍 Fetching deploys..."
+          
+          # Fetch list of recent deploys
+          DEPLOYS=$(curl -s -X GET \
+            "https://api.netlify.com/api/v1/sites/${NETLIFY_SITE_ID}/deploys?per_page=20" \
+            -H "Authorization: Bearer ${NETLIFY_AUTH_TOKEN}")
+          
+          # Determine which deploy to restore
+          if [ -n "$DEPLOY_ID" ]; then
+            RESTORE_DEPLOY_ID="$DEPLOY_ID"
+            echo "📦 Using provided deploy ID: $RESTORE_DEPLOY_ID"
+          else
+            # Find the previous ready deploy (skip the current one)
+            RESTORE_DEPLOY_ID=$(echo "$DEPLOYS" | jq -r '.[] | select(.state == "ready") | .id' | sed -n '2p')
+            
+            if [ -z "$RESTORE_DEPLOY_ID" ]; then
+              echo "❌ No previous ready deploy found. Cannot rollback."
+              exit 1
+            fi
+            
+            echo "📦 Using previous ready deploy: $RESTORE_DEPLOY_ID"
+          fi
+          
+          # Get deploy details for Slack message
+          DEPLOY_INFO=$(echo "$DEPLOYS" | jq -r ".[] | select(.id == \"$RESTORE_DEPLOY_ID\")")
+          DEPLOY_BRANCH=$(echo "$DEPLOY_INFO" | jq -r '.branch // "unknown"')
+          DEPLOY_COMMIT=$(echo "$DEPLOY_INFO" | jq -r '.commit_ref // "unknown"' | cut -c1-7)
+          DEPLOY_CREATED=$(echo "$DEPLOY_INFO" | jq -r '.created_at // "unknown"')
+          
+          echo "RESTORE_DEPLOY_ID=${RESTORE_DEPLOY_ID}" >> $GITHUB_OUTPUT
+          echo "DEPLOY_BRANCH=${DEPLOY_BRANCH}" >> $GITHUB_OUTPUT
+          echo "DEPLOY_COMMIT=${DEPLOY_COMMIT}" >> $GITHUB_OUTPUT
+          echo "DEPLOY_CREATED=${DEPLOY_CREATED}" >> $GITHUB_OUTPUT
+          
+          # Restore the deploy
+          echo "⏪ Restoring deploy ${RESTORE_DEPLOY_ID}..."
+          RESTORE_RESPONSE=$(curl -s -X POST \
+            "https://api.netlify.com/api/v1/sites/${NETLIFY_SITE_ID}/deploys/${RESTORE_DEPLOY_ID}/restore" \
+            -H "Authorization: Bearer ${NETLIFY_AUTH_TOKEN}")
+          
+          echo "✅ Rollback completed"
+          echo "$RESTORE_RESPONSE" | jq '.'
+      
+      - name: Announce to Slack (Heroic Ceremony)
+        if: secrets.SLACK_WEBHOOK_ALL_HANDS != ''
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_ALL_HANDS }}
+          DEPLOY_ID: ${{ steps.rollback.outputs.RESTORE_DEPLOY_ID }}
+          DEPLOY_BRANCH: ${{ steps.rollback.outputs.DEPLOY_BRANCH }}
+          DEPLOY_COMMIT: ${{ steps.rollback.outputs.DEPLOY_COMMIT }}
+          DEPLOY_CREATED: ${{ steps.rollback.outputs.DEPLOY_CREATED }}
+          NETLIFY_SITE_NAME: ${{ vars.NETLIFY_SITE_NAME }}
+          ACTOR: ${{ github.actor }}
+        run: |
+          DEPLOY_URL="https://app.netlify.com/sites/${NETLIFY_SITE_NAME}/deploys/${DEPLOY_ID}"
+          RESTORE_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          
+          # Heroic Ceremony Slack Block Kit message (Tone C)
+          cat > slack-payload.json <<EOF
+          {
+            "text": "🚀 Staging Deploy Heroically Restored",
+            "blocks": [
+              {
+                "type": "header",
+                "text": {
+                  "type": "plain_text",
+                  "text": "🚀 Staging Deploy Heroically Restored",
+                  "emoji": true
+                }
+              },
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*The staging environment has been valiantly restored to a previous state by the mighty powers of automation.*\n\nIn a triumphant act of technical prowess, our infrastructure has been rolled back to ensure stability and reliability for all."
+                }
+              },
+              {
+                "type": "divider"
+              },
+              {
+                "type": "section",
+                "fields": [
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Deploy ID:*\n\`${DEPLOY_ID}\`"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Branch:*\n\`${DEPLOY_BRANCH}\`"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Commit:*\n\`${DEPLOY_COMMIT}\`"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Restored By:*\n${ACTOR}"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Original Deploy Time:*\n${DEPLOY_CREATED}"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Restoration Time:*\n${RESTORE_TIME}"
+                  }
+                ]
+              },
+              {
+                "type": "divider"
+              },
+              {
+                "type": "actions",
+                "elements": [
+                  {
+                    "type": "button",
+                    "text": {
+                      "type": "plain_text",
+                      "text": "🔍 View Deploy in Netlify",
+                      "emoji": true
+                    },
+                    "url": "${DEPLOY_URL}",
+                    "style": "primary"
+                  },
+                  {
+                    "type": "button",
+                    "text": {
+                      "type": "plain_text",
+                      "text": "📊 View Workflow Run",
+                      "emoji": true
+                    },
+                    "url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                  }
+                ]
+              },
+              {
+                "type": "context",
+                "elements": [
+                  {
+                    "type": "mrkdwn",
+                    "text": "✨ _Powered by GitHub Actions & Netlify API_ ✨"
+                  }
+                ]
+              }
+            ]
+          }
+          EOF
+          
+          # Send to Slack
+          curl -X POST \
+            -H "Content-Type: application/json" \
+            -d @slack-payload.json \
+            "$SLACK_WEBHOOK"
+          
+          echo "✅ Slack notification sent with Heroic Ceremony"
+      
+      - name: Summary
+        if: always()
+        run: |
+          echo "## 🚀 Rollback Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Deploy ID**: \`${{ steps.rollback.outputs.RESTORE_DEPLOY_ID }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Branch**: \`${{ steps.rollback.outputs.DEPLOY_BRANCH }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Commit**: \`${{ steps.rollback.outputs.DEPLOY_COMMIT }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Restored By**: ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Staging environment has been heroically restored!" >> $GITHUB_STEP_SUMMARY
