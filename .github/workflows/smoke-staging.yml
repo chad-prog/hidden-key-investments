@@ -1,0 +1,173 @@
+name: Smoke Tests - Staging
+
+on:
+  pull_request:
+    branches: [staging]
+  push:
+    branches: [staging]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  smoke-staging:
+    name: Run Smoke Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run smoke tests
+        id: smoke
+        env:
+          SMOKE_BASE: ${{ secrets.SMOKE_BASE_STAGING }}
+          SMOKE_ORIGIN: ${{ secrets.SMOKE_ORIGIN_STAGING }}
+          MAUTIC_CAMPAIGN_INVESTOR_WELCOME: ${{ secrets.MAUTIC_CAMPAIGN_INVESTOR_WELCOME_STAGING }}
+          CI: true
+        run: |
+          echo "Running smoke tests against staging..."
+          node scripts/smoke-run.mjs 2>&1 | tee smoke-output.log
+          SMOKE_EXIT_CODE=${PIPESTATUS[0]}
+          echo "exit_code=$SMOKE_EXIT_CODE" >> $GITHUB_OUTPUT
+          exit $SMOKE_EXIT_CODE
+        continue-on-error: true
+      
+      - name: Upload smoke test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: smoke-test-results-staging
+          path: |
+            smoke-test-results.json
+            smoke-output.log
+          retention-days: 30
+      
+      - name: Prepare PR comment
+        if: github.event_name == 'pull_request'
+        id: comment
+        run: |
+          if [ "${{ steps.smoke.outputs.exit_code }}" = "0" ]; then
+            STATUS="✅ PASS"
+            EMOJI="✅"
+          else
+            STATUS="❌ FAIL"
+            EMOJI="❌"
+          fi
+          
+          # Get last 50 lines of log
+          LOG_TAIL=$(tail -n 50 smoke-output.log | sed 's/$/  /' | sed 's/^/    /')
+          
+          # Create comment body
+          cat > comment.md << 'EOF'
+          ## $EMOJI Smoke Test Results - Staging
+          
+          **Status:** $STATUS  
+          **Commit:** ${{ github.sha }}  
+          **Workflow:** [View Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+          
+          ### Summary
+          EOF
+          
+          if [ -f smoke-test-results.json ]; then
+            echo "" >> comment.md
+            echo "**Tests Passed:** $(jq -r '.passed' smoke-test-results.json)" >> comment.md
+            echo "**Tests Failed:** $(jq -r '.failed' smoke-test-results.json)" >> comment.md
+            echo "**Duration:** $(jq -r '.duration' smoke-test-results.json)ms" >> comment.md
+          fi
+          
+          cat >> comment.md << 'EOF'
+          
+          ### Log Output (last 50 lines)
+          <details>
+          <summary>Click to expand</summary>
+          
+          ```
+          $LOG_TAIL
+          ```
+          
+          </details>
+          
+          ---
+          
+          💡 **Next Steps:**
+          - ✅ **PASS**: Safe to merge and deploy
+          - ❌ **FAIL**: Review logs, fix issues, and re-run tests
+          
+          📊 [Download full results artifact](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+          EOF
+          
+          # Replace variables
+          sed -i "s|\$EMOJI|$EMOJI|g" comment.md
+          sed -i "s|\$STATUS|$STATUS|g" comment.md
+          sed -i "s|\$LOG_TAIL|$LOG_TAIL|g" comment.md
+          
+          echo "comment_file=comment.md" >> $GITHUB_OUTPUT
+      
+      - name: Find existing comment
+        if: github.event_name == 'pull_request'
+        id: find-comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const comments = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            
+            const botComment = comments.data.find(comment => {
+              return comment.user.type === 'Bot' && 
+                     comment.body.includes('Smoke Test Results - Staging');
+            });
+            
+            return botComment ? botComment.id : null;
+      
+      - name: Create or update PR comment
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const commentBody = fs.readFileSync('${{ steps.comment.outputs.comment_file }}', 'utf8');
+            const commentId = ${{ steps.find-comment.outputs.result }};
+            
+            if (commentId) {
+              // Update existing comment
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: commentId,
+                body: commentBody,
+              });
+              console.log('Updated existing comment');
+            } else {
+              // Create new comment
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: commentBody,
+              });
+              console.log('Created new comment');
+            }
+      
+      - name: Fail job if smoke tests failed
+        if: steps.smoke.outputs.exit_code != '0'
+        run: |
+          echo "❌ Smoke tests failed with exit code ${{ steps.smoke.outputs.exit_code }}"
+          exit 1
