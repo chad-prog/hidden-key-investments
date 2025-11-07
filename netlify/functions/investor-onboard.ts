@@ -28,6 +28,7 @@ const MAUTIC_CAMPAIGN_INVESTOR_WELCOME = process.env.MAUTIC_CAMPAIGN_INVESTOR_WE
 
 export const handler: Handler = async (event: HandlerEvent, context: HandlerContext) => {
   // CORS headers
+  // Note: Using '*' for development. In production, restrict to specific domains for security.
   const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'Content-Type',
@@ -53,7 +54,17 @@ export const handler: Handler = async (event: HandlerEvent, context: HandlerCont
   }
 
   try {
-    const body: Payload = event.body ? JSON.parse(event.body) : {};
+    let body: Payload;
+    try {
+      body = event.body ? JSON.parse(event.body) : {};
+    } catch (parseError) {
+      return {
+        statusCode: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ok: false, error: 'Invalid JSON in request body' })
+      };
+    }
+
     if (!body?.email) {
       return {
         statusCode: 400,
@@ -83,27 +94,44 @@ export const handler: Handler = async (event: HandlerEvent, context: HandlerCont
     });
 
     if (!upsertResponse.ok) {
-      throw new Error(`Upsert contact failed: ${upsertResponse.status}`);
+      const errorText = await upsertResponse.text();
+      throw new Error(`Upsert contact failed: ${upsertResponse.status} ${errorText}`);
     }
 
-    const upsertJson = await upsertResponse.json();
+    let upsertJson: any;
+    try {
+      upsertJson = await upsertResponse.json();
+    } catch (jsonError) {
+      throw new Error('Failed to parse upsert response JSON');
+    }
 
     // 3) Add to campaign (investor welcome)
+    const contactId = upsertJson?.data?.contactId;
+    if (!contactId) {
+      throw new Error('No contact ID returned from upsert operation');
+    }
+
     const addToCampaign = await fetch(MAUTIC_SYNC_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         action: 'add_to_campaign',
-        mauticContactId: upsertJson?.data?.contactId || undefined,
+        mauticContactId: contactId,
         campaignId: MAUTIC_CAMPAIGN_INVESTOR_WELCOME
       })
     });
 
     if (!addToCampaign.ok) {
-      throw new Error(`Add to campaign failed: ${addToCampaign.status}`);
+      const errorText = await addToCampaign.text();
+      throw new Error(`Add to campaign failed: ${addToCampaign.status} ${errorText}`);
     }
 
-    const campaignJson = await addToCampaign.json();
+    let campaignJson: any;
+    try {
+      campaignJson = await addToCampaign.json();
+    } catch (jsonError) {
+      throw new Error('Failed to parse campaign response JSON');
+    }
 
     return {
       statusCode: 200,
