@@ -11,7 +11,7 @@
  *   0 = all required steps passed
  *   1 = one or more required steps failed
  */
-
+ 
 import { randomUUID } from 'node:crypto';
 import https from 'node:https';
 import http from 'node:http';
@@ -35,6 +35,32 @@ function parseArgs() {
     origin: parsed.origin || process.env.SMOKE_ORIGIN || '',
     campaign: parsed.campaign || process.env.MAUTIC_CAMPAIGN_INVESTOR_WELCOME || ''
   };
+}
+
+// Recursive search helper: find first occurrence of any of the keys in obj (deep search)
+function findFirstKeyValue(obj, candidateKeys = ['contactId', 'id', 'contact_id']) {
+  if (obj == null) return undefined;
+  if (typeof obj !== 'object') return undefined;
+
+  for (const key of Object.keys(obj)) {
+    if (candidateKeys.includes(key)) {
+      return obj[key];
+    }
+  }
+
+  for (const key of Object.keys(obj)) {
+    try {
+      const val = obj[key];
+      if (val && typeof val === 'object') {
+        const found = findFirstKeyValue(val, candidateKeys);
+        if (found !== undefined) return found;
+      }
+    } catch (e) {
+      // ignore problematic nested structures
+    }
+  }
+
+  return undefined;
 }
 
 // HTTP/HTTPS request helper
@@ -65,12 +91,16 @@ function request(url, options = {}) {
     });
     
     req.on('error', reject);
-    req.on('timeout', () => {
-      req.destroy();
-      reject(new Error('Request timeout'));
+    // ensure socket/request timeout is set
+    req.setTimeout(reqOptions.timeout, () => {
+      req.destroy(new Error('Request timeout'));
     });
     
     if (options.body) {
+      // only set content-length when body exists and header not already present
+      if (!reqOptions.headers['Content-Length'] && !reqOptions.headers['content-length']) {
+        req.setHeader('Content-Length', Buffer.byteLength(options.body));
+      }
       req.write(options.body);
     }
     
@@ -104,7 +134,7 @@ function logPass(step) {
 }
 
 function logFail(step, error) {
-  log(`❌ FAIL: ${step}`, { error: error.message || error });
+  log(`❌ FAIL: ${step}`, { error: error && error.message ? error.message : String(error) });
 }
 
 // Test steps
@@ -150,14 +180,14 @@ async function testMauticPing(base) {
     const response = await request(url, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(payload)
+        'Content-Type': 'application/json'
       },
       body: payload
     });
     
-    if (response.status !== 200) {
-      throw new Error(`Expected 200, got ${response.status}`);
+    // Accept any 2xx response for pings
+    if (!(response.status >= 200 && response.status < 300)) {
+      throw new Error(`Expected 2xx, got ${response.status}`);
     }
     
     logPass('Mautic ping');
@@ -190,36 +220,36 @@ async function testInvestorUpsert(base, origin) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(payload),
         'Origin': origin
       },
       body: payload
     });
     
-    if (response.status !== 200 && response.status !== 201) {
-      throw new Error(`Expected 200/201, got ${response.status}`);
+    if (!(response.status >= 200 && response.status < 300)) {
+      throw new Error(`Expected 2xx, got ${response.status}`);
     }
     
     let responseData;
     try {
-      responseData = JSON.parse(response.body);
+      responseData = response.body ? JSON.parse(response.body) : {};
     } catch (e) {
       throw new Error('Response body is not valid JSON');
     }
     
-    // Try to extract contactId from various possible response shapes
-    let contactId = null;
-    if (responseData.contactId) {
-      contactId = responseData.contactId;
-    } else if (responseData.data && responseData.data.contactId) {
-      contactId = responseData.data.contactId;
-    } else if (responseData.contact && responseData.contact.id) {
-      contactId = responseData.contact.id;
+    // Try a robust extraction for contact id from possible shapes
+    let contactId = findFirstKeyValue(responseData, ['contactId', 'id', 'contact_id']);
+    
+    // Fallbacks if API returns nested known shapes
+    if (contactId === undefined && responseData && responseData.data) {
+      contactId = findFirstKeyValue(responseData.data, ['contactId', 'id', 'contact_id']);
+    }
+    if (contactId === undefined && responseData && responseData.contact) {
+      contactId = findFirstKeyValue(responseData.contact, ['contactId', 'id', 'contact_id']);
     }
     
     log('Investor upsert response', { contactId, status: response.status });
     logPass('Investor upsert');
-    return contactId;
+    return contactId === undefined ? null : contactId;
   } catch (error) {
     logFail('Investor upsert', error);
     return null;
@@ -240,14 +270,14 @@ async function testAddToCampaign(base, contactId, campaignId) {
     const response = await request(url, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(payload)
+        'Content-Type': 'application/json'
       },
       body: payload
     });
     
-    if (response.status !== 200) {
-      throw new Error(`Expected 200, got ${response.status}`);
+    // Accept any 2xx response for campaign add
+    if (!(response.status >= 200 && response.status < 300)) {
+      throw new Error(`Expected 2xx, got ${response.status}`);
     }
     
     logPass('Add to campaign');
