@@ -11,13 +11,18 @@
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
     "test:functions": "cd netlify/functions && npm test",
+    "test:smoke": "vitest run netlify/functions/__tests__/*.spec.ts src/lib/**/__tests__/*.spec.ts",
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
     "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix",
     "docs:lint": "node scripts/lint-docs.cjs",
     "docs:catalog": "node scripts/generate-docs-catalog.cjs",
     "docs:analyze": "bash scripts/analyze-docs-migration.sh",
     "docs:organize": "bash scripts/organize-docs.sh",
-    "docs:api": "node scripts/generate-api-docs.cjs"
+    "docs:api": "node scripts/generate-api-docs.cjs",
+    "agents:validate": "python3 scripts/validate-agents.py",
+    "smoke": "node scripts/smoke-run.mjs",
+    "smoke:staging": "node scripts/smoke-run.mjs --base=$SMOKE_BASE --origin=$SMOKE_ORIGIN --campaign=$MAUTIC_CAMPAIGN_INVESTOR_WELCOME",
+    "smoke:prod": "node scripts/smoke-run.mjs --base=$SMOKE_BASE --origin=$SMOKE_ORIGIN --campaign=$MAUTIC_CAMPAIGN_INVESTOR_WELCOME"
   },
   "dependencies": {
     "2": "^3.0.0",

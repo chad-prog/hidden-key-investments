@@ -9,7 +9,7 @@ publish = "dist"
 [functions]
   directory = "netlify/functions"
   node_bundler = "esbuild"
-  included_files = ["src/maya/**"]
+  included_files = ["src/maya/**", "src/lib/mappers/**"]
 
 [dev]
   command = "npm run dev"

@@ -1,4 +1,3 @@
-```yaml
 ---
 name: Email Template Builder Specialist
 description: |
@@ -36,17 +35,17 @@ context:
     - Deal announcements
   
   brand_guidelines:
-    - Colors: Primary #1e40af, Secondary #f59e0b
-    - Font: Inter
-    - Logo: Available in public/logo.png
-    - Tone: Professional, trustworthy, exclusive
+    - "Colors: Primary #1e40af, Secondary #f59e0b"
+    - "Font: Inter"
+    - "Logo: Available in public/logo.png"
+    - "Tone: Professional, trustworthy, exclusive"
   
   personalization_fields:
-    - {{investor.firstName}}
-    - {{investor.lastName}}
-    - {{opportunity.address}}
-    - {{opportunity.value}}
-    - {{user.name}}
+    - "{{investor.firstName}}"
+    - "{{investor.lastName}}"
+    - "{{opportunity.address}}"
+    - "{{opportunity.value}}"
+    - "{{user.name}}"
   
   constraints:
     - Must work in all major email clients
@@ -82,5 +81,3 @@ example_tasks:
 files_to_reference:
   - src/utils/emailMarketing.ts (email sending logic)
   - Brand guidelines in docs/
----
-```

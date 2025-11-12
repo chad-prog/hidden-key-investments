@@ -49,14 +49,14 @@ Answer these questions:
    # SendGrid (Email)
    # Sign up: https://signup.sendgrid.com
    # Create API key: Settings > API Keys > Create API Key
-   # Save: SENDGRID_API_KEY=SG.xxxxx
+   # Save: SENDGRID_API_KEY=your_sendgrid_api_key_here
    
    # Twilio (SMS)
    # Sign up: https://www.twilio.com/try-twilio
    # Get credentials: Account > Keys & Credentials
    # Save: 
-   #   TWILIO_ACCOUNT_SID=ACxxxx
-   #   TWILIO_AUTH_TOKEN=xxxx
+   #   TWILIO_ACCOUNT_SID=your_twilio_account_sid_here
+   #   TWILIO_AUTH_TOKEN=your_twilio_auth_token_here
    #   TWILIO_PHONE_NUMBER=+1xxxxxxxx
    ```
 

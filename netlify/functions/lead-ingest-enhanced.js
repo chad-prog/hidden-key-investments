@@ -121,7 +121,7 @@ export async function handler(event) {
     const lead = await persistLead(leadData, correlationId);
     
     // Trigger workflows asynchronously (don't wait)
-    triggerWorkflows(lead).catch(err => {
+    triggerWorkflows(lead, correlationId).catch(err => {
       console.error('[LeadIngest] Workflow trigger failed:', err);
     });
     
@@ -241,9 +241,119 @@ async function persistLead(leadData, correlationId) {
 }
 
 /**
+ * Sync lead to Mautic CRM
+ */
+async function syncToMautic(lead, correlationId) {
+  try {
+    // Skip if Mautic not configured
+    if (!process.env.MAUTIC_BASE_URL) {
+      console.log('[LeadIngest] Mautic not configured, skipping sync');
+      return;
+    }
+
+    // Build Mautic sync URL
+    const baseUrl = process.env.BASE_URL || process.env.SITE_URL || process.env.URL;
+    if (!baseUrl) {
+      console.log('[LeadIngest] No base URL configured for Mautic sync');
+      return;
+    }
+
+    const mauticSyncUrl = `${baseUrl}/.netlify/functions/mautic-sync`;
+
+    // Map lead to HKI schema for Mautic
+    const hkiLead = {
+      id: lead.id,
+      updated_at: lead.updated_at,
+      crm_status: lead.status,
+      consent: {
+        marketing_opt_in: lead.marketing_opt_in,
+      },
+      ml: {
+        score: lead.score,
+      },
+      contact: {
+        email: lead.email,
+        first_name: lead.first_name,
+        last_name: lead.last_name,
+        phone: lead.phone,
+        company: lead.property?.company,
+      },
+      utm: lead.utm_params,
+    };
+
+    // Call mautic-sync to upsert contact
+    const upsertResponse = await fetch(mauticSyncUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Correlation-ID': correlationId,
+      },
+      body: JSON.stringify({
+        action: 'upsert_contact',
+        payload: hkiLead,
+      }),
+    });
+
+    if (!upsertResponse.ok) {
+      throw new Error(`Mautic sync failed: ${upsertResponse.status}`);
+    }
+
+    const upsertResult = await upsertResponse.json();
+    console.log('[LeadIngest] Mautic contact synced:', {
+      leadId: lead.id,
+      mauticContactId: upsertResult.data?.contactId,
+      action: upsertResult.data?.action,
+    });
+
+    // Check if lead should be enrolled in high-value campaign
+    const { shouldEnrollInHighValueCampaign } = await import('../../src/lib/mautic/deciders.js');
+    const enrollmentDecision = shouldEnrollInHighValueCampaign(lead.score, lead.status);
+
+    if (enrollmentDecision.shouldEnroll && upsertResult.data?.contactId) {
+      console.log('[LeadIngest] Enrolling in campaign:', {
+        leadId: lead.id,
+        reason: enrollmentDecision.reason,
+      });
+
+      const enrollResponse = await fetch(mauticSyncUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Correlation-ID': correlationId,
+        },
+        body: JSON.stringify({
+          action: 'add_to_campaign',
+          mauticContactId: String(upsertResult.data.contactId),
+          campaignId: enrollmentDecision.campaignId,
+        }),
+      });
+
+      if (!enrollResponse.ok) {
+        throw new Error(`Campaign enrollment failed: ${enrollResponse.status}`);
+      }
+
+      console.log('[LeadIngest] Campaign enrollment successful');
+    }
+
+  } catch (error) {
+    // Log error but don't fail lead ingestion
+    console.error('[LeadIngest] Mautic sync failed (non-blocking):', {
+      leadId: lead.id,
+      error: error.message,
+      correlationId,
+    });
+  }
+}
+
+/**
  * Trigger automated workflows
  */
-async function triggerWorkflows(lead) {
+async function triggerWorkflows(lead, correlationId) {
+  // Sync to Mautic (best-effort, non-blocking)
+  syncToMautic(lead, correlationId).catch(err => {
+    console.error('[LeadIngest] Mautic sync error:', err);
+  });
+
   // TODO: Implement workflow engine integration for serverless functions
   // The workflow engine currently resides in the frontend src directory
   // and needs to be refactored for serverless function use

@@ -1,0 +1,19 @@
+Hi {{investor.firstName}},
+
+I'm really glad you reached out.
+
+Most people who start looking into real estate investing want the same thing you do:
+- Predictable returns
+- Real assets that hold value
+- Income that doesn't depend on the economy being "perfect"
+
+That's why Hidden Key Investments exists. We specialize in off-market, professionally underwritten multi-family opportunities designed to preserve capital, produce stable cash flow, and deliver long-term appreciation.
+
+What to expect next:
+https://your-site.com/what-to-expect?utm_source=newsletter&utm_medium=email&utm_campaign=welcome
+
+Talk soon,
+{{user.name}}
+Hidden Key Investments
+
+If you no longer want these emails, unsubscribe: {{unsubscribe_link}}

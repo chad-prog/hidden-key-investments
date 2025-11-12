@@ -4,7 +4,46 @@ A production-ready, AI-powered platform for Elite real-estate investors with lea
 
 ---
 
-## 🚀 NEW: SendGrid + Twilio Communication System!
+## 🤖 NEW: Custom Agent Development System!
+
+**Build faster with specialized AI agents! Delegate tasks to expert agents for frontend, backend, ML, integrations, and more!**
+
+### ✨ What Are Custom Agents?
+
+Custom agents are specialized AI assistants configured with specific expertise to handle different aspects of platform development. Think of them as your expert team members!
+
+### 🎯 Available Agents:
+
+- **Elite Frontend Developer** - React, TypeScript, UI components
+- **Elite Backend Developer** - Serverless functions, APIs, databases  
+- **Elite ML Engineer** - Machine learning models, analytics
+- **Elite Integration Specialist** - Third-party APIs, webhooks
+- **Elite DevOps Engineer** - Infrastructure, CI/CD, monitoring
+- **Elite Database Architect** - Schema design, query optimization
+- **Email Template Builder** - Email templates, marketing
+
+### 📖 Quick Start:
+
+```bash
+# Read the quick reference guide
+cat CUSTOM-AGENTS-QUICK-REF.md
+
+# View available agents
+ls .github/agents/
+
+# Read detailed guide
+cat CUSTOM-AGENT-GUIDE.md
+```
+
+### 📚 Documentation:
+
+- 🚀 **[Quick Reference](CUSTOM-AGENTS-QUICK-REF.md)** - Start here!
+- 📘 **[Agent Directory](.github/agents/README.md)** - All available agents
+- 📖 **[Custom Agent Guide](CUSTOM-AGENT-GUIDE.md)** - Complete guide and templates
+
+---
+
+## 🚀 SendGrid + Twilio Communication System!
 
 **Complete email and SMS integration with visual workflow builder!**
 

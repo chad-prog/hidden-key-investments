@@ -275,12 +275,12 @@ VITE_ENABLE_ADVANCED_ANALYTICS=false
 ## Optional Variables (Enhanced Features)
 
 ### SendGrid (Email)
-SENDGRID_API_KEY=SG.xxx
+SENDGRID_API_KEY=your_sendgrid_api_key_here
 SENDGRID_FROM_EMAIL=noreply@hiddenkey.com
 
 ### Twilio (SMS)
-TWILIO_ACCOUNT_SID=ACxxx
-TWILIO_AUTH_TOKEN=xxx
+TWILIO_ACCOUNT_SID=your_twilio_account_sid_here
+TWILIO_AUTH_TOKEN=your_twilio_auth_token_here
 TWILIO_PHONE_NUMBER=+1234567890
 
 ### Mailchimp (Marketing)

@@ -94,5 +94,3 @@ files_to_reference:
   - src/pages/LeadManagement.tsx (example of dashboard)
   - src/components/__tests__/ (test patterns)
   - tailwind.config.js (design tokens)
----
-```
