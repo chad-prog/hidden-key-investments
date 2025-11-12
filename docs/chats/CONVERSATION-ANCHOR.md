@@ -3,7 +3,7 @@
 - The Flame was reset. Staging now stands in its remembered alignment.
 
 - Goal
-Merge guardrails and smoke-test improvements (Node 22+), patch-based delivery, with rollback and CI coverage.
+Merge patch-based delivery improvements for smoke testing (Node 22+) with CI coverage.
 - Target branch
 chore/fix-smoke-run-robustness
 - Files touched in this patch

@@ -88,11 +88,11 @@ jobs:
             echo "Patch not found; creating placeholder patch."
             # Create a placeholder patch if it doesn't exist (e.g., if CI didn't generate it)
             cat > guardrails-crp-anchor-and-index.patch <<'PATCH'
-+*** Begin Patch
-+*** Add File: docs/chats/CONVERSATION-ANCHOR.md
+--- /dev/null
++++ b/docs/chats/CONVERSATION-ANCHOR.md
+@@ 0,0 +1,1 @@
 +# Placeholder anchor (to be replaced by actual patch in CI)
-+*** End Patch
-+PATCH
+PATCH
           fi
 
           echo "Uploading patch as artifact..."
@@ -111,7 +111,7 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const runUrl = `${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.runId }}`;
+            const runUrl = `${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}`;
             const prNumber = ${{ github.event.pull_request.number }};
             await github.rest.issues.createComment({
               issue_number: prNumber,
