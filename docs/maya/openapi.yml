@@ -59,7 +59,7 @@ components:
             mitigations: { type: array, items: { type: string } }
         explainability:
           type: object
-          required: [scoring_logic, feature_attribution]
+          required: [scoring_logic]
           properties:
             scoring_logic: { type: string }
             feature_attribution:
