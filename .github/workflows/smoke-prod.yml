@@ -85,11 +85,11 @@ jobs:
             echo "Patch not found; creating placeholder patch."
             # Create a placeholder patch if it doesn't exist (e.g., if CI didn't generate it)
             cat > guardrails-crp-anchor-and-index.patch <<'PATCH'
-+*** Begin Patch
-+*** Add File: docs/chats/CONVERSATION-ANCHOR.md
+--- /dev/null
++++ b/docs/chats/CONVERSATION-ANCHOR.md
+@@ 0,0 +1,1 @@
 +# Placeholder anchor (to be replaced by actual patch in CI)
-+*** End Patch
-+PATCH
+PATCH
           fi
 
           echo "Uploading patch as artifact..."
