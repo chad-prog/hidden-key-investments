@@ -13,11 +13,11 @@ export const CamelDealInput = z.object({
 
 export const SnakeDealInput = z.object({
   address: z.string().min(1),
-  purchase_price: z.number(),
-  down_payment: z.number(),
-  interest_rate: z.number(),
-  term_years: z.number().int(),
-  rent_monthly: z.number(),
-  vacancy_pct: z.number(),
-  op_ex_monthly: z.number()
+  purchase_price: z.number().nonnegative(),
+  down_payment: z.number().min(0).max(1),
+  interest_rate: z.number().nonnegative(),
+  term_years: z.number().int().min(1),
+  rent_monthly: z.number().nonnegative(),
+  vacancy_pct: z.number().min(0).max(1),
+  op_ex_monthly: z.number().nonnegative()
 });
