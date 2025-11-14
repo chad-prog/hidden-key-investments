@@ -1,5 +1,5 @@
 import type { Handler } from "@netlify/functions";
-import { AnalysisResultZ, DealZ } from "../../src/maya/zodSchemas";
+import { normalizeDealInput } from "../../src/maya/schemaAdapter";
 
 // Import crypto at the module level for efficiency
 import * as nodeCrypto from "node:crypto";
@@ -24,21 +24,13 @@ async function computeDealAnalysis(deal: any) {
 export const handler: Handler = async (event) => {
   try {
     const raw = event.body || "{}";
-    // helpful server logs
-    console.log("[analyzeDeal] incoming body:", raw);
-    const input = DealZ.parse(JSON.parse(raw));
+    console.log("Analyzing deal...", { incoming_body: raw });
+    const input = normalizeDealInput(raw));
     const result = await computeDealAnalysis(input);
-    const safe = AnalysisResultZ.parse(result); // server-side guard
-    return { statusCode: 200, body: JSON.stringify(safe) };
+    return { statusCode: 200, body: JSON.stringify(result) };
   } catch (err: any) {
-    // expose Zod issues during dev so we can fix fast
-    const zodIssues = err?.issues ?? undefined;
-    const msg = err?.message || "Bad Request";
-    console.error("[analyzeDeal] error:", msg, zodIssues ?? "");
-    return {
-      statusCode: 400,
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ error: msg, issues: zodIssues }, null, 2)
+
     };
+	
   }
 };

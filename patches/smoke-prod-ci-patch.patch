@@ -22,39 +22,38 @@
            name: smoke-prod-log
            path: smoke-prod.log
 +      - name: Generate and Attach CRP Patch
-+        if: github.event.pull_request != null
++        if: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false }}
 +        run: |
-+          echo "Preparing patch bundle..."
-+          if [ -f guardrails-crp-anchor-and-index.patch ]; then
-+            echo "Patch found."
++          echo "Preparing CRP patch bundle..."
++          mkdir -p artifacts
++          if [ -f patches/guardrails-crp-anchor-and-index.patch ]; then
++            cp patches/guardrails-crp-anchor-and-index.patch artifacts/
 +          else
-+            echo "Patch not found; creating placeholder patch."
-+            cat > guardrails-crp-anchor-and-index.patch <<'PATCH'
++            echo "No local patch found; creating placeholder"
++            cat > artifacts/guardrails-crp-anchor-and-index.patch <<'PATCH'
 +*** Begin Patch
 +*** Add File: docs/chats/CONVERSATION-ANCHOR.md
-+# Placeholder anchor (to be replaced by actual patch in CI)
++# Placeholder CRP anchor. Replace with real patch on mainline.
 +*** End Patch
 +PATCH
 +          fi
-+          echo "Uploading patch as artifact..."
-+          mkdir -p artifacts
-+          cp guardrails-crp-anchor-and-index.patch artifacts/
 +      - name: Upload CRP Patch Artifact
++        if: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false }}
 +        uses: actions/upload-artifact@v4
 +        with:
 +          name: guardrails-crp-anchor-and-index.patch
 +          path: artifacts/guardrails-crp-anchor-and-index.patch
 +      - name: Comment with Patch URL
-+        if: github.event.pull_request != null
++        if: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false }}
 +        uses: actions/github-script@v7
 +        with:
 +          script: |
 +            const runUrl = `${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}`;
 +            const prNumber = ${{ github.event.pull_request.number }};
-+            await github.rest.issues.createComment({
++            github.rest.issues.createComment({
 +              issue_number: prNumber,
 +              owner: context.repo.owner,
 +              repo: context.repo.repo,
-+              body: `CRP patch bundle attached to this PR (Artifacts tab): ${runUrl}`
++              body: `CRP patch bundle attached to this PR as an artifact. Download here: ${runUrl}`
 +            });
 *** End Patch
