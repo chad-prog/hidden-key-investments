@@ -8,7 +8,7 @@ Netlify function verification, Maya analyzeDeal schema adapter, and ready-made P
 ──────────────────────────────────────────────────────────────────────────────
 QUICK START (5 steps)
 ──────────────────────────────────────────────────────────────────────────────
-1) Unzip this archive at the repo root of Hidden Key Investments.
+1) These files are included in the PR. After merging, they will be available at the repo root of Hidden Key Investments.
 
 2) Apply CRP & anchors patch (adds docs/chats/CONVERSATION-ANCHOR.md, docs/CRP-ANCHORS.md):
    bash scripts/apply-patch.sh patches/guardrails-crp-anchor-and-index.patch
