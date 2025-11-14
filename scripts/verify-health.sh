@@ -8,4 +8,4 @@ if [[ -z "${BASE}" ]]; then
 fi
 FUNC="$BASE/.netlify/functions/health"
 echo "→ GET ${FUNC}"
-curl -sS "${FUNC}" | jq . || curl -sS "${FUNC}"
+curl -fsS "${FUNC}" | if command -v jq >/dev/null; then jq .; else cat; fi
