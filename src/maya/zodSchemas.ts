@@ -3,7 +3,7 @@ import { z } from 'zod';
 export const CamelDealInput = z.object({
   address: z.string().min(1),
   purchasePrice: z.number(),
-  downPaymentPct: z.number(),        // 0..1
+  downPaymentPct: z.number().min(0).max(1),        // 0..1
   interestRatePct: z.number(),       // APR, e.g., 6.5
   amortYears: z.number().int(),
   grossRentsMonthly: z.number(),
