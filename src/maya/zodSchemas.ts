@@ -4,7 +4,7 @@ export const CamelDealInput = z.object({
   address: z.string().min(1),
   purchasePrice: z.number().positive(),
   downPaymentPct: z.number(),        // 0..1
-  interestRatePct: z.number(),       // APR, e.g., 6.5
+  interestRatePct: z.number().positive().max(100),       // APR, e.g., 6.5
   amortYears: z.number().int(),
   grossRentsMonthly: z.number().nonnegative(),
   vacancyPct: z.number(),            // 0..1
