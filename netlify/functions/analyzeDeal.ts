@@ -25,7 +25,7 @@ export const handler: Handler = async (event) => {
   try {
     const raw = event.body || "{}";
     console.log("Analyzing deal...", { incoming_body: raw });
-    const input = normalizeDealInput(raw));
+    const input = normalizeDealInput(raw);
     const result = await computeDealAnalysis(input);
     return { statusCode: 200, body: JSON.stringify(result) };
   } catch (err: any) {
