@@ -17,4 +17,4 @@ PAYLOAD='{
   "vacancy_pct": 0.05,
   "op_ex_monthly": 1200
 }'
-echo "${PAYLOAD}" | tee /dev/stderr | curl -sS -X POST "${FUNC}" -H "Content-Type: application/json" -d @- | jq . || true
+echo "${PAYLOAD}" | tee /dev/stderr | curl -fsS -X POST "${FUNC}" -H "Content-Type: application/json" -d @- | if command -v jq >/dev/null; then jq .; else cat; fi
