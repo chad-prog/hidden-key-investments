@@ -26,7 +26,6 @@ QUICK START (5 steps)
    git commit -m "chore(ci): CRP anchors, patch-attachment CI, deal analyzer adapter & verifiers"
    git push -u origin chore/fix-smoke-run-robustness
 
-Use docs/PR-DESCRIPTION.md as the PR body.
 
 ──────────────────────────────────────────────────────────────────────────────
 WHAT’S INSIDE
