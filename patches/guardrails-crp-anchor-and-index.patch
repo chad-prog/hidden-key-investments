@@ -41,9 +41,7 @@
 +- Reuse in future sessions
 +  - When starting a new chat, say “load CRP anchor” or paste this anchor from docs/chats/CONVERSATION-ANCHOR.md to re-establish context.
 +
-+- Optional: If you’d like, I can also pin this anchor in a centralized place (e.g., root docs) with a short index, so you can locate CRP anchors quickly in future sessions.
-+
-+- Would you like me to proceed with applying this patch to your repo now, or would you prefer I adjust any details first?
++- Optional: I can also pin this anchor centrally (root docs) with a short index, to locate CRP anchors quickly.
 *** End Patch
 *** Begin Patch
 *** Add File: docs/CRP-ANCHORS.md
@@ -51,8 +49,8 @@
 +
 +- Anchor Summary
 +  - Latest CRP: docs/chats/CONVERSATION-ANCHOR.md
-+  - Description: Centralized index for Conversation Recover Protocol anchors to enable quick reinit of context in future conversations.
-+  - Last Updated: 2025-11-09
++  - Description: Centralized index for CRP anchors to enable quick reinit of context.
++  - Last Updated: 2025-11-12
 +
 +- Anchors
 +  - CRP: docs/chats/CONVERSATION-ANCHOR.md
@@ -61,11 +59,5 @@
 +
 +- How to use
 +  - When starting a new chat, reference the anchor by path or say: “load CRP anchor”
-+  - For quick checks, read the CHATS anchor content at docs/chats/CONVERSATION-ANCHOR.md
 +
-+- Patch references
-+  - The patch for this PR includes the two files above; you can also view PR description in docs/PR-DESCRIPTION.md
-+
-+- Patch/application notes
-+  - The patch is intended for one-click application in your repo
 *** End Patch

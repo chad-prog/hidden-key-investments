@@ -1,0 +1,37 @@
+// IntelliJ / VSCode REST Client file
+// Set this at top for convenience:
+// @base = https://deploy-preview-XX--hidden-key-investments.netlify.app
+
+### Health
+GET {{base}}/.netlify/functions/health
+
+### Analyze Deal (snake_case)
+POST {{base}}/.netlify/functions/analyzeDeal
+Content-Type: application/json
+
+{
+  "address": "123 Test St",
+  "purchase_price": 350000,
+  "down_payment": 0.25,
+  "interest_rate": 6.5,
+  "term_years": 30,
+  "rent_monthly": 4200,
+  "vacancy_pct": 0.05,
+  "op_ex_monthly": 1200
+}
+
+### Analyze Deal (camelCase via adapter expectation)
+# If your backend imports the adapter, camelCase can be accepted as-is.
+POST {{base}}/.netlify/functions/analyzeDeal
+Content-Type: application/json
+
+{
+  "address": "123 Test St",
+  "purchasePrice": 350000,
+  "downPaymentPct": 0.25,
+  "interestRatePct": 6.5,
+  "amortYears": 30,
+  "grossRentsMonthly": 4200,
+  "vacancyPct": 0.05,
+  "opExMonthly": 1200
+}

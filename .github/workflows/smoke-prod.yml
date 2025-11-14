@@ -75,7 +75,43 @@ jobs:
           path: smoke.log
           if-no-files-found: warn
 
-# INSERT PATCH ATTACHMENT HERE ⬇️
++      - name: Generate and Attach CRP Patch
++        if: github.event.pull_request != null
++        run: |
++          echo "Preparing patch bundle..."
++          if [ -f guardrails-crp-anchor-and-index.patch ]; then
++            echo "Patch found."
++          else
++            echo "Patch not found; creating placeholder patch."
++            cat > guardrails-crp-anchor-and-index.patch <<'PATCH'
++*** Begin Patch
++*** Add File: docs/chats/CONVERSATION-ANCHOR.md
++# Placeholder anchor (to be replaced by actual patch in CI)
++*** End Patch
++PATCH
++          fi
++          echo "Uploading patch as artifact..."
++          mkdir -p artifacts
++          cp guardrails-crp-anchor-and-index.patch artifacts/
++      - name: Upload CRP Patch Artifact
++        uses: actions/upload-artifact@v4
++        with:
++          name: guardrails-crp-anchor-and-index.patch
++          path: artifacts/guardrails-crp-anchor-and-index.patch
++      - name: Comment with Patch URL
++        if: github.event.pull_request != null
++        uses: actions/github-script@v7
++        with:
++          script: |
++            const runUrl = `${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}`;
++            const prNumber = ${{ github.event.pull_request.number }};
++            await github.rest.issues.createComment({
++              issue_number: prNumber,
++              owner: context.repo.owner,
++              repo: context.repo.repo,
++              body: `CRP patch bundle attached to this PR (Artifacts tab): ${runUrl}`
++            });
+*** End Patch# INSERT PATCH ATTACHMENT HERE ⬇️
       - name: Generate and Attach CRP Patch
         if: github.event_name == 'pull_request'
         run: |
