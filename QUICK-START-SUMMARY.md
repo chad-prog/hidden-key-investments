@@ -101,14 +101,14 @@
 ```bash
 npm install
 npm run dev
-# Open http://localhost:5173
+# Open http://localhost:3000
 ```
 
 ### Access Features
-- **Monitoring:** http://localhost:5173/monitoring
-- **Analytics:** http://localhost:5173/analytics
-- **Workflows:** http://localhost:5173/workflows
-- **Lead Capture:** http://localhost:5173/crm/leads/enhanced
+- **Monitoring:** http://localhost:3000/monitoring
+- **Analytics:** http://localhost:3000/analytics
+- **Workflows:** http://localhost:3000/workflows
+- **Lead Capture:** http://localhost:3000/crm/leads/enhanced
 
 ### Build & Test
 ```bash

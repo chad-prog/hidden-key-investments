@@ -380,7 +380,7 @@ function App() {
 # Start dev server
 npm run dev
 
-# Navigate to http://localhost:5173/leads
+# Navigate to http://localhost:3000/leads
 
 # Test filters
 # Test sorting

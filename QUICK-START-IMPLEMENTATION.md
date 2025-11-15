@@ -399,7 +399,7 @@ Regardless of which path you choose, these are common first steps:
    cd hidden-key-investments
    npm install
    npm run dev
-   # Verify app runs at http://localhost:5173
+   # Verify app runs at http://localhost:3000
    ```
 
 2. **Review Current Components**

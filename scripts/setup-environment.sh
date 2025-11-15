@@ -171,10 +171,9 @@ display_next_steps() {
       echo "2. Start the development server:"
       echo -e "   ${BLUE}npm run dev${NC}"
       echo ""
-      echo "3. Run tests in watch mode:"
-      echo -e "   ${BLUE}npm run test:watch${NC}"
+      echo "3. Make sure it builds: npm run build"
+      echo "4. View the app at: http://localhost:3000"
       echo ""
-      echo "4. View the app at: http://localhost:5173"
       ;;
     staging)
       echo "1. Configure Netlify environment variables"

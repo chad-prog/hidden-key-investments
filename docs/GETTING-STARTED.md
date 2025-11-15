@@ -25,7 +25,7 @@ This checks:
 npm run dev
 ```
 
-Open http://localhost:5173 in your browser.
+Open http://localhost:3000 in your browser.
 
 **You should see**: The Hidden Key Investments landing page in demo mode.
 

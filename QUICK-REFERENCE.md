@@ -10,7 +10,7 @@
 ```bash
 # First time setup
 npm install
-npm run dev                # Start dev server (http://localhost:5173)
+npm run dev                # Start dev server (http://localhost:3000)
 
 # Check platform health
 bash scripts/check-platform-status.sh
@@ -26,7 +26,7 @@ cat NEXT-STEPS-GUIDE.md   # What to do next
 
 ```bash
 # Start development server
-npm run dev                # Vite dev server on port 5173
+npm run dev                # Vite dev server on port 3000
 
 # Run tests
 npm test                   # Run all tests once
@@ -126,7 +126,9 @@ node -v                    # Node version (should be >= 18)
 npm -v                     # npm version
 
 # Check what's running
-lsof -i :5173              # Check what's on dev port
+# Utilities
+lsof -i :3000              # Check what's on dev port
+netstat -ano | findstr :3000  # Windows
 ps aux | grep node         # Find Node processes
 
 # Clean builds
@@ -283,8 +285,12 @@ npm test
 
 ### Port already in use
 ```bash
-# Find and kill process on port 5173
-lsof -ti:5173 | xargs kill -9
+```bash
+```bash
+# Find and kill process on port 3000
+lsof -ti:3000 | xargs kill -9
+```
+```
 npm run dev
 ```
 
@@ -349,7 +355,7 @@ scripts/                  # Utility scripts
 
 | Problem | Solution |
 |---------|----------|
-| Dev server won't start | `lsof -ti:5173 \| xargs kill -9` then `npm run dev` |
+| Dev server won't start | `lsof -ti:3000 \\| xargs kill -9` then `npm run dev` |
 | Tests failing | `rm -rf node_modules/.vite && npm test` |
 | Build errors | `rm -rf dist && npm run build` |
 | Dependency issues | `rm -rf node_modules && npm install` |

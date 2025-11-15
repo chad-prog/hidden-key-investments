@@ -500,4 +500,4 @@ open https://hidden-key-staging.netlify.app
 **Need Help?**
 - Review [Netlify Documentation](https://docs.netlify.com/)
 - Check [Supabase Documentation](https://supabase.com/docs)
-- See [TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md)
+- See [GETTING-STARTED.md](docs/GETTING-STARTED.md)

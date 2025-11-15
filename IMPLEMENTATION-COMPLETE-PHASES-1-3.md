@@ -64,7 +64,7 @@ terraform apply
 - ✅ Recent incidents tracking
 - ✅ Integration status display
 
-**Access:** `http://localhost:5173/monitoring`
+**Access:** `http://localhost:3000/monitoring`
 
 **Metrics Tracked:**
 - System status (healthy/warning/error)
@@ -93,7 +93,7 @@ terraform apply
 - ✅ Mobile responsive
 - ✅ Accessibility compliant (ARIA)
 
-**Access:** `http://localhost:5173/crm/leads/enhanced`
+**Access:** `http://localhost:3000/crm/leads/enhanced`
 
 **Enhancements over basic form:**
 - 60% better user experience
@@ -142,7 +142,7 @@ terraform apply
 - ✅ Lead source breakdown
 - ✅ Deal stage distribution
 
-**Access:** `http://localhost:5173/analytics`
+**Access:** `http://localhost:3000/analytics`
 
 **Steve AI Foundation:**
 - AI-powered insights display
@@ -178,7 +178,7 @@ terraform apply
 - ✅ Recent execution logs
 - ✅ Performance metrics by workflow
 
-**Access:** `http://localhost:5173/workflows`
+**Access:** `http://localhost:3000/workflows`
 
 **Templates Available:**
 1. **Welcome Email Series** - Automated welcome sequence for new leads
@@ -462,15 +462,15 @@ npm install
 npm run dev
 
 # Open in browser
-http://localhost:5173
+http://localhost:3000
 ```
 
 ### Access New Features
 
-1. **Monitoring Dashboard:** `http://localhost:5173/monitoring`
-2. **Analytics Dashboard:** `http://localhost:5173/analytics`
-3. **Workflow Builder:** `http://localhost:5173/workflows`
-4. **Enhanced Lead Capture:** `http://localhost:5173/crm/leads/enhanced`
+1. **Monitoring Dashboard:** `http://localhost:3000/monitoring`
+2. **Analytics Dashboard:** `http://localhost:3000/analytics`
+3. **Workflow Builder:** `http://localhost:3000/workflows`
+4. **Enhanced Lead Capture:** `http://localhost:3000/crm/leads/enhanced`
 
 ### Using AI Agents
 

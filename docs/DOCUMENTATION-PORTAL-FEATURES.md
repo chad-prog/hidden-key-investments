@@ -35,7 +35,7 @@ The Documentation Portal is now a world-class, enterprise-grade documentation sy
 npm run dev
 
 # Navigate to the documentation portal
-# Open http://localhost:5173/docs in your browser
+# Open http://localhost:3000/docs in your browser
 ```
 
 ### Basic Usage

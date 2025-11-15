@@ -29,7 +29,7 @@ Visit the interactive documentation portal in your browser:
 
 ```bash
 npm run dev
-# Navigate to http://localhost:5173/docs
+# Navigate to http://localhost:3000/docs
 ```
 
 The portal provides:

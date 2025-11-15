@@ -354,5 +354,5 @@ bash scripts/validate-staging.sh https://your-preview-url.netlify.app
 
 **Need Help?** 
 - Check [QUICK-REFERENCE.md](QUICK-REFERENCE.md) for common commands
-- Review [TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) for solutions
+- Review [GETTING-STARTED.md](docs/GETTING-STARTED.md) for solutions
 - See [CONTRIBUTING.md](CONTRIBUTING.md) for development guidelines

@@ -539,7 +539,7 @@ git checkout -b infra/sentry-activation
 **Path 3: Learning Mode**
 ```bash
 npm run dev
-# Explore the app at http://localhost:5173
+# Explore the app at http://localhost:3000
 # Read through code in src/
 ```
 

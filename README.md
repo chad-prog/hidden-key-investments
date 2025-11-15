@@ -80,10 +80,10 @@ cat CUSTOM-AGENT-GUIDE.md
 ```bash
 # Access Template Management
 npm run dev
-# Navigate to http://localhost:5173/templates
+# Navigate to http://localhost:3000/templates
 
 # Access Workflow Builder
-# Navigate to http://localhost:5173/workflows
+# Navigate to http://localhost:3000/workflows
 ```
 
 ### 📚 Documentation
@@ -102,7 +102,7 @@ npm run dev
 
 ```bash
 npm run dev
-# Navigate to http://localhost:5173/docs
+# Navigate to http://localhost:3000/docs
 ```
 
 ### ✨ NEW Features in v2.0:
@@ -165,7 +165,7 @@ npm run docs:analyze
 
 ### 📖 Quick Links
 
-- 🌟 **[Interactive Portal](http://localhost:5173/docs)** - Start here! (requires `npm run dev`)
+- 🌟 **[Interactive Portal](http://localhost:3000/docs)** - Start here! (requires `npm run dev`)
 - 📘 **[Portal Features Guide](docs/DOCUMENTATION-PORTAL-FEATURES.md)** - Complete feature documentation
 - 📖 **[Documentation System Guide](DOCUMENTATION-SYSTEM-GUIDE.md)** - Learn how to use the portal
 - 📚 **[Documentation Index](DOCUMENTATION-INDEX.md)** - Master navigation hub
@@ -274,7 +274,7 @@ npm install
 npm run dev
 ```
 
-**That's it!** The app works in demo mode without any API keys. Open http://localhost:5173
+**That's it!** The app works in demo mode without any API keys. Open http://localhost:3000
 
 📖 **Full Guide:** [docs/QUICK-START.md](docs/QUICK-START.md)
 

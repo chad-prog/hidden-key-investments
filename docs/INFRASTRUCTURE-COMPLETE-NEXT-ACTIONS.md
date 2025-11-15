@@ -298,7 +298,7 @@ ls netlify/functions/
 # Start dev server
 npm run dev
 
-# Visit http://localhost:5173
+# Visit http://localhost:3000
 # Test lead capture form
 # Check demo mode functionality
 ```

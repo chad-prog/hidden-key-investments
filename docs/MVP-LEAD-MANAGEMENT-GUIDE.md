@@ -111,7 +111,7 @@ Updated application routing to support CRM pages:
    ```
 
 2. **Navigate to the Lead List**:
-   - Open http://localhost:5173/crm/leads
+  - Open http://localhost:3000/crm/leads
    - View all leads with summary statistics
 
 3. **Filter and Search**:

@@ -44,7 +44,7 @@ API AND NOT deprecated
 ```
 
 **How to Use:**
-1. Navigate to the documentation portal at `http://localhost:5173/docs`
+1. Navigate to the documentation portal at `http://localhost:3000/docs`
 2. Use the search box at the top of the sidebar
 3. Type your query with operators (AND, OR, NOT)
 4. Click the help icon (?) for operator reference

@@ -146,7 +146,7 @@ bash scripts/validate-infrastructure.sh
 3. **Test Locally** (15 min)
    ```bash
    npm run dev
-   # Navigate to http://localhost:5173/leads
+   # Navigate to http://localhost:3000/leads
    # Test the UI (will use demo data initially)
    ```
 

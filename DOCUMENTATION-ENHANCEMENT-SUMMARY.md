@@ -57,7 +57,7 @@ Successfully implemented a comprehensive documentation enhancement system that t
 - 📊 **Statistics dashboard** - View counts and metrics
 - 📱 **Mobile-responsive** - Works on all devices
 
-**Access:** `http://localhost:5173/docs` (after `npm run dev`)
+**Access:** `http://localhost:3000/docs` (after `npm run dev`)
 
 ### 2. Documentation Linter
 
@@ -191,7 +191,7 @@ npm run docs:analyze
 **Access the Portal:**
 ```bash
 npm run dev
-# Navigate to http://localhost:5173/docs
+# Navigate to http://localhost:3000/docs
 ```
 
 **Features to try:**
@@ -265,7 +265,7 @@ npm run docs:catalog
 
 ### Getting Started (25 minutes)
 1. [DOCUMENTATION-SYSTEM-GUIDE.md](DOCUMENTATION-SYSTEM-GUIDE.md) (10 min)
-2. [Documentation Portal](http://localhost:5173/docs) (10 min exploration)
+2. [Documentation Portal](http://localhost:3000/docs) (10 min exploration)
 3. Try search and filtering (5 min)
 
 ### For Contributors (45 minutes)
