@@ -322,7 +322,7 @@ VITE_ENABLE_LEGAL_DOCS=false
 
 ## 📚 Related Documentation
 
-- [Environment Variables Reference](docs/ENVIRONMENT-VARIABLES.md)
+- [Environment Variables Reference](ENVIRONMENT-VARIABLES.md)
 - [Staging Setup Guide](docs/STAGING-SETUP.md)
 - [Deployment Guide](DEPLOYMENT-GUIDE.md)
 - [Security Best Practices](CONTRIBUTING.md#security)

@@ -29,8 +29,6 @@ export const handler: Handler = async (event) => {
     const result = await computeDealAnalysis(input);
     return { statusCode: 200, body: JSON.stringify(result) };
   } catch (err: any) {
-
-    };
-	
+    return { statusCode: 400, body: JSON.stringify({ error: err.message }) };
   }
 };

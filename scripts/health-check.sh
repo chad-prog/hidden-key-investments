@@ -13,7 +13,10 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # Get environment URL from argument or use localhost
-ENV_URL="${1:-http://localhost:5173}"
+# Default to local dev if no URL provided
+ENV_URL="${1:-http://localhost:3000}"
+
+# Test URLs
 
 echo ""
 echo "🏥 Health Check Validation"
@@ -63,15 +66,9 @@ check_json_endpoint() {
 check_endpoint "/" "200" "Frontend"
 
 # Check API endpoints (if serverless functions are running)
-if [ "$ENV_URL" != "http://localhost:5173" ]; then
-    echo ""
-    echo "📡 Checking API Endpoints..."
-    echo "------------------------------"
-    
-    check_json_endpoint "/.netlify/functions/lead-ingest-enhanced" "Lead Ingest API"
-    check_json_endpoint "/.netlify/functions/webhook-inbound" "Webhook API"
-    check_json_endpoint "/.netlify/functions/investor" "Investor API"
-    check_json_endpoint "/.netlify/functions/opportunity" "Opportunity API"
+# Only check functions for deployed environments
+if [ "$ENV_URL" != "http://localhost:3000" ]; then
+  check_functions
 fi
 
 echo ""
@@ -79,7 +76,7 @@ echo "📊 Environment Validation"
 echo "------------------------------"
 
 # Check if Sentry is configured
-if [ "$ENV_URL" != "http://localhost:5173" ]; then
+if [ "$ENV_URL" != "http://localhost:3000" ]; then
     echo -n "Checking Sentry configuration... "
     if curl -s "$ENV_URL" | grep -q "sentry.io"; then
         echo -e "${GREEN}✅ Sentry configured${NC}"
