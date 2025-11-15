@@ -322,7 +322,7 @@ VITE_ENABLE_LEGAL_DOCS=false
 
 ## 📚 Related Documentation
 
-- [Environment Variables Reference](ENVIRONMENT-VARIABLES.md)
+- [Environment Variables Reference](docs/ENVIRONMENT-VARIABLES.md)
 - [Staging Setup Guide](docs/STAGING-SETUP.md)
 - [Deployment Guide](DEPLOYMENT-GUIDE.md)
 - [Security Best Practices](CONTRIBUTING.md#security)
@@ -354,5 +354,5 @@ bash scripts/validate-staging.sh https://your-preview-url.netlify.app
 
 **Need Help?** 
 - Check [QUICK-REFERENCE.md](QUICK-REFERENCE.md) for common commands
-- Review [TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) for solutions
+- Review [GETTING-STARTED.md](docs/GETTING-STARTED.md) for solutions
 - See [CONTRIBUTING.md](CONTRIBUTING.md) for development guidelines

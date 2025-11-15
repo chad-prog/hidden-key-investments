@@ -39,7 +39,7 @@ A **comprehensive documentation system overhaul** that transforms your 167+ docu
 ### 1. Interactive Documentation Portal (Enhanced)
 **Already Existed - Now Better Documented**
 
-Access at: `http://localhost:5173/docs` (after `npm run dev`)
+Access at: `http://localhost:3000/docs` (after `npm run dev`)
 
 **Features:**
 - 🔍 Full-text search across all 167 files
@@ -139,7 +139,7 @@ npm run docs:catalog
 ### 1. Access the Portal
 ```bash
 npm run dev
-# Open http://localhost:5173/docs
+# Open http://localhost:3000/docs
 ```
 **Use it to:** Search, browse, and discover documentation instantly
 

@@ -227,7 +227,7 @@ npm install
 npm run dev
 
 # 3. Open browser
-open http://localhost:5173/crm/leads
+open http://localhost:3000/crm/leads
 
 # That's it! Demo mode loads automatically with mock data.
 ```
@@ -249,7 +249,7 @@ npm run build
 
 ```bash
 # Validate local development
-bash scripts/validate-deployment.sh http://localhost:5173
+bash scripts/validate-deployment.sh http://localhost:3000
 
 # Validate staging (after deployment)
 bash scripts/validate-deployment.sh https://your-staging-site.netlify.app

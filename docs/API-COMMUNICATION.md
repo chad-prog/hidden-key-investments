@@ -377,7 +377,7 @@ Response includes `demo: true` flag:
 ## Support
 
 For issues or questions:
-- Check [Troubleshooting Guide](./TROUBLESHOOTING.md)
+- Check [GETTING-STARTED.md](./GETTING-STARTED.md)
 - Review [SendGrid Documentation](https://docs.sendgrid.com/)
 - Review [Twilio Documentation](https://www.twilio.com/docs)
 - Contact support@example.com

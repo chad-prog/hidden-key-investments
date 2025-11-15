@@ -410,13 +410,13 @@ SECRETS_SCAN_OMIT_PATHS = "netlify/functions/__tests__/**:docs/**:*.md:scripts/*
 ### Routes Reference
 All CRM routes are now accessible:
 ```
-http://localhost:5173/crm                          # Dashboard
-http://localhost:5173/crm/leads                    # Lead List
-http://localhost:5173/crm/opportunities            # Pipeline
-http://localhost:5173/crm/investors                # Investors
-http://localhost:5173/crm/investors/directory      # Directory
-http://localhost:5173/workflows                    # Workflows
-http://localhost:5173/templates                    # Templates
+http://localhost:3000/crm                          # Dashboard
+http://localhost:3000/crm/leads                    # Lead List
+http://localhost:3000/crm/opportunities            # Pipeline
+http://localhost:3000/crm/investors                # Investors
+http://localhost:3000/crm/investors/directory      # Directory
+http://localhost:3000/workflows                    # Workflows
+http://localhost:3000/templates                    # Templates
 ```
 
 ### Testing Commands

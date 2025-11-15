@@ -21,7 +21,7 @@ npm install
 npm run dev
 
 # 3. Open browser and explore (2 minutes)
-# Visit http://localhost:5173 (or different port if 5173 is in use)
+# Visit http://localhost:3000 (or different port if 3000 is in use)
 # See working LeadTable, OpportunityPipeline, InvestorDirectory
 ```
 
@@ -358,7 +358,7 @@ npm run test:watch  # In separate terminal
 **Action 1: Validate the Platform (15 minutes)**
 ```bash
 npm install && npm run dev
-# Visit http://localhost:5173
+# Visit http://localhost:3000
 # Click through LeadTable, OpportunityPipeline, InvestorDirectory
 # Verify functionality matches your vision
 ```

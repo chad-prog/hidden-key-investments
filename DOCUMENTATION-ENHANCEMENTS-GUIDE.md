@@ -29,7 +29,7 @@ This guide documents all recent enhancements to the documentation system, making
 
 ### Features
 
-The documentation portal at `http://localhost:5173/docs` provides:
+The documentation portal at `http://localhost:3000/docs` provides:
 
 #### 🔍 Full-Text Search
 - Search across all 167 documentation files
@@ -82,7 +82,7 @@ Filter by your role:
 # Start the portal
 npm run dev
 
-# Navigate to http://localhost:5173/docs
+# Navigate to http://localhost:3000/docs
 ```
 
 ---
@@ -312,7 +312,7 @@ A GitHub Actions workflow automatically validates documentation on every push an
 5. **Test in portal:**
    ```bash
    npm run dev
-   # Navigate to http://localhost:5173/docs
+   # Navigate to http://localhost:3000/docs
    ```
 
 6. **Commit changes:**
@@ -352,7 +352,7 @@ A GitHub Actions workflow automatically validates documentation on every push an
 ### Common Questions
 
 **Q: How do I find a specific document?**
-A: Use the interactive portal at http://localhost:5173/docs with full-text search.
+A: Use the interactive portal at http://localhost:3000/docs with full-text search.
 
 **Q: How do I add a new documentation file?**
 A: Use a template from `docs/.templates/`, fill it in, run linter and catalog generator.

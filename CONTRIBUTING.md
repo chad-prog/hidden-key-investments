@@ -36,7 +36,7 @@ npm test
 npm run dev
 ```
 
-The app will run at http://localhost:5173 in **demo mode** (no API keys required).
+The app will run at http://localhost:3000 in **demo mode** (no API keys required).
 
 ## 📋 Development Workflow
 

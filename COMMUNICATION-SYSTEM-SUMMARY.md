@@ -161,10 +161,10 @@ A comprehensive communication system has been successfully implemented for the H
 npm run dev
 
 # Access Template Management
-open http://localhost:5173/templates
+open http://localhost:3000/templates
 
 # Access Workflow Builder
-open http://localhost:5173/workflows
+open http://localhost:3000/workflows
 ```
 
 ### 2. Production Setup

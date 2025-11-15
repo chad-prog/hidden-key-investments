@@ -308,7 +308,7 @@ This documentation suite comprehensively addresses all aspects of the question "
 **Option 1: Immediate Start**
 ```bash
 npm install && npm run dev
-# Open http://localhost:5173
+# Open http://localhost:3000
 # Explore the working platform
 ```
 

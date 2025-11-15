@@ -198,7 +198,7 @@ With features:
 # I'll tell you when ready
 npm run dev
 
-# Open: http://localhost:5173/leads
+# Open: http://localhost:3000/leads
 ```
 
 Test these scenarios:

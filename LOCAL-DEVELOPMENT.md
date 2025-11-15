@@ -37,7 +37,7 @@
    ```bash
    npm run dev
    ```
-   The dev server will start at http://localhost:5173
+   The dev server will start at http://localhost:3000
 
 4. Build for production:
    ```bash
@@ -65,12 +65,12 @@
 
 ### Dev Server Issues
 If the dev server doesn't start:
-1. Check if port 5173 is in use:
+1. Check if port 3000 is in use:
    ```bash
    # Windows
-   netstat -ano | findstr :5173
+   netstat -ano | findstr :3000
    # Unix/macOS
-   lsof -i :5173
+   lsof -i :3000
    ```
 2. Kill any existing processes or change the port in `vite.config.ts`
 

@@ -14,7 +14,7 @@ Welcome to the enhanced documentation system for Hidden Key Investments!
 
 ```bash
 npm run dev
-# Navigate to http://localhost:5173/docs
+# Navigate to http://localhost:3000/docs
 ```
 
 **Portal Features:**

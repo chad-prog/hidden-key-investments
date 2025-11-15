@@ -10,7 +10,7 @@
 ```bash
 # First time setup
 npm install
-npm run dev                # Start dev server (http://localhost:5173)
+npm run dev                # Start dev server (http://localhost:3000)
 
 # Check platform health
 bash scripts/check-platform-status.sh

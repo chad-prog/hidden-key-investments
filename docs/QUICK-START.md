@@ -28,7 +28,7 @@ npm test
 # Start the dev server
 npm run dev
 
-# Open browser to http://localhost:5173
+# Open browser to http://localhost:3000
 ```
 
 ### Step 3: Explore Demo Mode (2 minutes)

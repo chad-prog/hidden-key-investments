@@ -407,6 +407,6 @@ A workflow is an automated sequence of actions triggered by an event:
 ## Next Steps
 
 - Explore [API Documentation](./API-COMMUNICATION.md)
-- Review [Workflow Examples](./WORKFLOW-EXAMPLES.md)
-- Check [Integration Guide](./INTEGRATION-GUIDE.md)
-- Learn about [Advanced Features](./ADVANCED-FEATURES.md)
+- Review [Workflow Examples](./PHASE-2-IMPLEMENTATION-DETAILED.md)
+- Check [Integration Guide](./INTEGRATION-MAUTIC.md)
+- Learn about [Advanced Features](./PHASE-3-7-ADVANCED-FEATURES-GUIDE.md)

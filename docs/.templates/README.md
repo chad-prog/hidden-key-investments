@@ -84,7 +84,7 @@ cp docs/.templates/QUICK-REFERENCE-TEMPLATE.md docs/GIT-QUICK-REFERENCE.md
 7. Test in the documentation portal:
    ```bash
    npm run dev
-   # Navigate to http://localhost:5173/docs
+   # Navigate to http://localhost:3000/docs
    ```
 
 ## Contributing

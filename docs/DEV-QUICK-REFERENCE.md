@@ -10,14 +10,14 @@ npm install
 bash scripts/dev-utils.sh setup-env
 npm run dev
 
-# Open http://localhost:5173
+# Open http://localhost:3000
 ```
 
 ## 📋 Daily Development Commands
 
 ```bash
 # Start development server
-npm run dev                       # Frontend at http://localhost:5173
+npm run dev                       # Frontend at http://localhost:3000
 
 # Run tests
 npm test                          # Main tests (watch mode: npm run test:watch)

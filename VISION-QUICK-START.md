@@ -82,7 +82,7 @@ cat docs/DEPLOYMENT-READINESS-CHECKLIST.md
 # 1. Start development server
 npm run dev
 
-# 2. Open browser to http://localhost:5173
+# 2. Open browser to http://localhost:3000
 
 # 3. Test lead capture form
 # 4. Test CRM features
