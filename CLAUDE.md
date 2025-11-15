@@ -209,7 +209,7 @@ npm test  # Verify setup
 
 # Start dev server
 npm run dev
-# → http://localhost:5173 (demo mode, no API keys needed)
+# → http://localhost:3000 (demo mode, no API keys needed)
 ```
 
 ### 2. Creating a Feature
@@ -405,16 +405,18 @@ export const LeadSchema = z.object({
 export type Lead = z.infer<typeof LeadSchema>;
 
 // Use in API
+// Option 1: Use parse() - throws on validation failure
 export async function createLead(data: unknown): Promise<Lead> {
-  // Validate (throws ZodError if invalid)
-  const validated = LeadSchema.parse(data);
+  const validated = LeadSchema.parse(data); // Throws ZodError if invalid
+  return validated;
+}
 
-  // Or use safeParse for error handling
+// Option 2: Use safeParse() - returns success/error object
+export async function createLeadSafe(data: unknown): Promise<Lead> {
   const result = LeadSchema.safeParse(data);
   if (!result.success) {
     throw new Error(result.error.message);
   }
-
   return result.data;
 }
 ```
@@ -423,12 +425,13 @@ export async function createLead(data: unknown): Promise<Lead> {
 
 ```typescript
 // serverless function pattern
-import { createErrorResponse } from '@/lib/errorHandler';
+import { Handler } from '@netlify/functions';
+import { logError } from '@/lib/observability';
 
-export async function handler(event, context) {
+export const handler: Handler = async (event, context) => {
   try {
     // Validate input
-    const data = RequestSchema.parse(JSON.parse(event.body));
+    const data = RequestSchema.parse(JSON.parse(event.body || '{}'));
 
     // Process
     const result = await processData(data);
@@ -440,13 +443,21 @@ export async function handler(event, context) {
       body: JSON.stringify({ success: true, data: result }),
     };
   } catch (error) {
+    // Log error for observability
+    logError(error instanceof Error ? error : new Error(String(error)));
+
     // Structured error response
-    return createErrorResponse(error, {
-      correlationId: event.requestContext?.requestId,
-      context: { function: 'handler-name' },
-    });
+    return {
+      statusCode: error instanceof Error && 'status' in error ? (error as any).status : 500,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        success: false,
+        error: error instanceof Error ? error.message : 'An unknown error occurred',
+        correlationId: context.requestId,
+      }),
+    };
   }
-}
+};
 ```
 
 ### State Management (Zustand)
@@ -478,7 +489,10 @@ export const useLeadStore = create<LeadState>((set, get) => ({
       const leads = await response.json();
       set({ leads, isLoading: false });
     } catch (error) {
-      set({ error: error.message, isLoading: false });
+      set({
+        error: error instanceof Error ? error.message : String(error),
+        isLoading: false
+      });
     }
   },
 
@@ -587,8 +601,9 @@ User Input → Validation (Zod) → API Function → Database → Response
 
 **Serverless Function Template:**
 
-```javascript
-// netlify/functions/example.js
+```typescript
+// netlify/functions/example.ts
+import { Handler } from '@netlify/functions';
 import { createClient } from '@supabase/supabase-js';
 import { z } from 'zod';
 
@@ -600,29 +615,30 @@ const RequestSchema = z.object({
 
 // Initialize clients
 const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_ANON_KEY
+  process.env.SUPABASE_URL!,
+  process.env.SUPABASE_ANON_KEY!
 );
 
-export async function handler(event, context) {
-  // CORS headers
+export const handler: Handler = async (event, context) => {
+  // CORS headers - restrict to your domain in production
   const headers = {
     'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Origin': process.env.ALLOWED_ORIGIN || 'http://localhost:3000',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
   };
 
-  // Handle OPTIONS
+  // Handle OPTIONS preflight
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 200, headers, body: '' };
   }
 
   try {
-    // Validate
-    const body = JSON.parse(event.body);
+    // Validate request
+    const body = JSON.parse(event.body || '{}');
     const validated = RequestSchema.parse(body);
 
-    // Process
+    // Process with database
     const { data, error } = await supabase
       .from('table_name')
       .insert(validated)
@@ -631,27 +647,37 @@ export async function handler(event, context) {
 
     if (error) throw error;
 
-    // Success
+    // Success response
     return {
       statusCode: 200,
       headers,
       body: JSON.stringify({ success: true, data }),
     };
   } catch (error) {
-    console.error('Error:', error);
+    // Log error
+    console.error('[example] Error:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
+    // Determine status code
+    const statusCode =
+      error instanceof Error && 'status' in error && typeof (error as any).status === 'number'
+        ? (error as any).status
+        : 500;
 
     // Error response
     return {
-      statusCode: error.status || 500,
+      statusCode,
       headers,
       body: JSON.stringify({
         success: false,
-        error: error.message,
+        error: error instanceof Error ? error.message : 'An unknown error occurred',
         correlationId: context.requestId,
       }),
     };
   }
-}
+};
 ```
 
 ### Demo Mode Pattern
@@ -925,25 +951,33 @@ bash scripts/dev-utils.sh pre-commit
 
 ```typescript
 // Use structured logging
-import { logger } from '@/lib/logger';
+import { createLogger } from '@/lib/observability';
+
+const logger = createLogger({ component: 'LeadService' });
 
 logger.info('Processing lead', { leadId, status });
 logger.error('Failed to process', { error, context });
 
 // In serverless functions
 console.log('[INFO]', { message, data });
-console.error('[ERROR]', { error: error.message, stack: error.stack });
+console.error('[ERROR]', {
+  error: error instanceof Error ? error.message : String(error),
+  stack: error instanceof Error ? error.stack : undefined
+});
 
-// Sentry for production errors
-import * as Sentry from '@sentry/react';
+// Error tracking with observability
+import { errorTracker } from '@/lib/observability';
 
 try {
   // risky operation
 } catch (error) {
-  Sentry.captureException(error, {
-    tags: { component: 'LeadForm' },
-    extra: { leadId, userData },
-  });
+  errorTracker.captureException(
+    error instanceof Error ? error : new Error(String(error)),
+    {
+      component: 'LeadForm',
+      metadata: { leadId, userData },
+    }
+  );
   throw error;
 }
 ```
@@ -1135,7 +1169,7 @@ npm run docs:api           # Generate API docs
 
 ### Useful Links
 
-- **Documentation Portal**: http://localhost:5173/docs (when running)
+- **Documentation Portal**: http://localhost:3000/docs (when running)
 - **Netlify Dashboard**: https://app.netlify.com
 - **Supabase Dashboard**: https://app.supabase.com
 - **Sentry Dashboard**: https://sentry.io
